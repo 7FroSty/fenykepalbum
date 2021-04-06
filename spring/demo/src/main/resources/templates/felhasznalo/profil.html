@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil</title>
+</head>
+<body>
+    <h1>Profilom</h1>
+    <p>Sikeres bejelentkezés</p>
+    <div th:if="${felhasznalo != null}">
+        <p>Név: <span th:text="${felhasznalo.getNev()}"></span></p>
+        <p>Email: <span th:text="${felhasznalo.getEmail()}"></span></p>
+        <p>Admin: <span th:text="*{felhasznalo.isAdmin}"></span></p>
+    </div>
+</body>
+</html>

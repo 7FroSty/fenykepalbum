@@ -2,10 +2,11 @@
 <html lang="hu" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Bejelentkezés</title>
 </head>
 <body>
-<form action="#" th:action="@{/bejelentkezesSubmit}" method="post" enctype="multipart/form-data">
+<p th:if="${hiba != null}" th:text="${hiba}">
+<form action="#" th:action="@{/felhasznalo/bejelentkezesPost}" method="post" enctype="multipart/form-data">
     <label>email: <input type="text" name="email" required></label> <br>
     <label>Jelszó: <input type="password" name="jelszo" required></label> <br>
     <input type="submit" name="submit-btn" value="Bejelentkezes">

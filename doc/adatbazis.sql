@@ -20,13 +20,13 @@ DROP SEQUENCE verseny_seq;
 DROP SEQUENCE nevezes_seq;
 
 
-CREATE SEQUENCE felhasznalo_seq;
-CREATE SEQUENCE kategoria_seq;
-CREATE SEQUENCE kulcsszo_seq;
-CREATE SEQUENCE kep_seq;
-CREATE SEQUENCE bejegyzes_seq;
-CREATE SEQUENCE verseny_seq;
-CREATE SEQUENCE nevezes_seq;
+CREATE SEQUENCE felhasznalo_seq START WITH 1000;
+CREATE SEQUENCE kategoria_seq START WITH 1000;
+CREATE SEQUENCE kulcsszo_seq START WITH 1000;
+CREATE SEQUENCE kep_seq START WITH 1000;
+CREATE SEQUENCE bejegyzes_seq START WITH 1000;
+CREATE SEQUENCE verseny_seq START WITH 1000;
+CREATE SEQUENCE nevezes_seq START WITH 1000;
 
 CREATE TABLE Felhasznalo(
     id NUMBER(10) DEFAULT felhasznalo_seq.NEXTVAL NOT NULL,
@@ -38,21 +38,21 @@ CREATE TABLE Felhasznalo(
     utca VARCHAR2(50) NOT NULL,
     hazszam VARCHAR2(50) NOT NULL,
     admin NUMBER(1) DEFAULT 0 NOT NULL,
-    PRIMARY KEY(id),
-    UNIQUE(email)
+    CONSTRAINT felhasznalo_pk_id PRIMARY KEY(id),
+    CONSTRAINT felhasznalo_u_email UNIQUE(email)
 );
 
 CREATE TABLE Kategoria(
     id NUMBER(10) DEFAULT kategoria_seq.NEXTVAL NOT NULL,
     nev VARCHAR2(50) NOT NULL,
-    PRIMARY KEY(id),
-    UNIQUE(nev)
+    CONSTRAINT kategoria_pk_id PRIMARY KEY(id),
+    CONSTRAINT kategoria_u_nev UNIQUE(nev)
 );
 
 CREATE TABLE Kulcsszo(
     id NUMBER(10) DEFAULT kulcsszo_seq.NEXTVAL NOT NULL,
     nev VARCHAR2(50) NOT NULL,
-    PRIMARY KEY(id)
+    CONSTRAINT kulcsszo_pk_id PRIMARY KEY(id)
 );
 
 CREATE TABLE Kep(
@@ -63,26 +63,26 @@ CREATE TABLE Kep(
     tartalom CLOB NOT NULL,
     idopont TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     telepules VARCHAR2(50),
-    PRIMARY KEY(id),
-    FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
-    FOREIGN KEY(kategoria_id) REFERENCES Kategoria(id) ON DELETE CASCADE
+    CONSTRAINT kep_pk_id PRIMARY KEY(id),
+    CONSTRAINT kep_fk_felhasznalo_id FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
+    CONSTRAINT kep_fk_kategoria_id FOREIGN KEY(kategoria_id) REFERENCES Kategoria(id) ON DELETE CASCADE
 );
 
 CREATE TABLE KepKulcsszo(
     kep_id NUMBER(10) NOT NULL,
     kulcsszo_id NUMBER(10) NOT NULL,
-    PRIMARY KEY(kep_id, kulcsszo_id),
-    FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE,
-    FOREIGN KEY(kulcsszo_id) REFERENCES Kulcsszo(id) ON DELETE CASCADE
+    CONSTRAINT kepkulcsszo_pk PRIMARY KEY(kep_id, kulcsszo_id),
+    CONSTRAINT kepkulcsszo_fk_kep_id FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE,
+    CONSTRAINT kepkulcsszo_fk_kulcsszo_id FOREIGN KEY(kulcsszo_id) REFERENCES Kulcsszo(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Ertekeles(
     felhasznalo_id NUMBER(10) NOT NULL,
     kep_id NUMBER(10) NOT NULL,
     csillagok NUMBER(1) NOT NULL,
-    PRIMARY KEY(felhasznalo_id, kep_id),
-    FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
-    FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE
+    CONSTRAINT ertekeles_pk PRIMARY KEY(felhasznalo_id, kep_id),
+    CONSTRAINT ertekeles_fk_felhasznalo_id FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
+    CONSTRAINT ertekeles_fk_kep_id FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Komment(
@@ -90,18 +90,18 @@ CREATE TABLE Komment(
     kep_id NUMBER(10) NOT NULL,
     szoveg VARCHAR2(1000) NOT NULL,
     idopont TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(felhasznalo_id, kep_id),
-    FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
-    FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE
+    CONSTRAINT komment_pk PRIMARY KEY(felhasznalo_id, kep_id),
+    CONSTRAINT komment_fk_felhasznalo_id FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
+    CONSTRAINT komment_fk_kep_id FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE
 );
 
 CREATE TABLE KepMegtekintes(
     felhasznalo_id NUMBER(10) NOT NULL,
     kep_id NUMBER(10) NOT NULL,
     idopont TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(felhasznalo_id, kep_id),
-    FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id),
-    FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE
+    CONSTRAINT kepmegtekintes_pk PRIMARY KEY(felhasznalo_id, kep_id),
+    CONSTRAINT kepmegtekintes_fk_fel_id FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id),
+    CONSTRAINT kepmegtekintes_fk_kep_id FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Bejegyzes(
@@ -110,31 +110,60 @@ CREATE TABLE Bejegyzes(
     cim VARCHAR2(100) NOT NULL,
     szoveg VARCHAR2(1000) NOT NULL,
     idopont TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(id),
-    FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE
+    CONSTRAINT bejegyzes_pk_id PRIMARY KEY(id),
+    CONSTRAINT bejegyzes_fk_fel_id FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Verseny(
     id NUMBER(10) DEFAULT verseny_seq.NEXTVAL NOT NULL,
     szavazas_kezdete TIMESTAMP NOT NULL,
     szavazas_vege TIMESTAMP NOT NULL,
-    PRIMARY KEY(id)
+    CONSTRAINT verseny_pk_id PRIMARY KEY(id)
 );
 
 CREATE TABLE Nevezes(
     id NUMBER(10) DEFAULT nevezes_seq.NEXTVAL NOT NULL,
     verseny_id NUMBER(10) NOT NULL,
     kep_id NUMBER(10) NOT NULL,
-    PRIMARY KEY(id),
-    UNIQUE(verseny_id, kep_id),
-    FOREIGN KEY(verseny_id) REFERENCES Verseny(id) ON DELETE CASCADE,
-    FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE
+    CONSTRAINT nevezes_pk_id PRIMARY KEY(id),
+    CONSTRAINT nevezes_u_verseny_kep_id UNIQUE(verseny_id, kep_id),
+    CONSTRAINT nevezes_fk_verseny_id FOREIGN KEY(verseny_id) REFERENCES Verseny(id) ON DELETE CASCADE,
+    CONSTRAINT nevezes_fk_kep_id FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Szavazat(
     nevezes_id NUMBER(10) NOT NULL,
     felhasznalo_id NUMBER(10) NOT NULL,
-    PRIMARY KEY(nevezes_id, felhasznalo_id),
-    FOREIGN KEY(nevezes_id) REFERENCES Nevezes(id) ON DELETE CASCADE,
-    FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE
+    CONSTRAINT szavazat_pk PRIMARY KEY(nevezes_id, felhasznalo_id),
+    CONSTRAINT szavazat_fk_nevezes_id FOREIGN KEY(nevezes_id) REFERENCES Nevezes(id) ON DELETE CASCADE,
+    CONSTRAINT szavazat_fk_fel_id FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE
 );
+
+
+-- Procedures, Functions
+
+CREATE OR REPLACE PROCEDURE FELHASZNALOREGISZTRACIO (
+    p_nev IN VARCHAR2,
+    p_email IN VARCHAR2,
+    p_jelszo IN VARCHAR2,
+    p_iranyitoszam IN NUMBER,
+    p_telepules IN VARCHAR2,
+    p_utca IN VARCHAR2,
+    p_hazszam IN VARCHAR2,
+    p_error OUT NUMBER
+    -- Errors:
+    -- 0: No error
+    -- 1: Duplicate email error
+    -- 10: Other error
+) AS 
+BEGIN
+    p_error := 0;
+    INSERT INTO Felhasznalo(nev, email, jelszo, iranyitoszam, telepules, utca, hazszam)
+    VALUES(p_nev, p_email, p_jelszo, '1234', 'telepules', 'utca', 'hsz');
+    
+EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        p_error := 1;
+    WHEN OTHERS THEN
+        p_error := 10;
+END FELHASZNALOREGISZTRACIO;

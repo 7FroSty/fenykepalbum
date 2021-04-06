@@ -3,12 +3,11 @@ package hu.fenykep.demo.controller;
 import hu.fenykep.demo.model.Felhasznalo;
 import hu.fenykep.demo.repository.FelhasznaloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.time.DayOfWeek;
 import java.util.List;
 
 @Controller
@@ -19,32 +18,18 @@ public class HtmlController {
     private FelhasznaloRepository felhasznaloRepository;
 
     @GetMapping("")
-    public String index() throws Exception {
+    public String index(Model model) throws Exception {
         try {
-            this.run();
+            this.runTeszt();
         }
         catch (Exception e){
 
         }
+        model.addAttribute("hiba", "Hibauzenet");
         return "/index";
     }
 
-    @GetMapping("sikeres")
-    public String sikeres(){
-        return "/sikeres";
-    }
-
-    @GetMapping("sikertelen")
-    public String sikertelen(){
-        return "/sikertelen";
-    }
-
-    @GetMapping("bejelentkezes")
-    public String bejelentkezes(){
-        return "/bejelentkezes";
-    }
-
-    public void run() throws Exception {
+    public void runTeszt() throws Exception {
         System.out.println("alma");
 
         String sql = "SELECT * FROM Felhasznalo";

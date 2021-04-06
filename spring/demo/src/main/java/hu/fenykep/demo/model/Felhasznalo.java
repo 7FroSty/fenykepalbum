@@ -16,7 +16,7 @@ public class Felhasznalo {
         this.email=email;
     }
 
-    public Felhasznalo(String nev, String email, String jelszo, int iranyitoszam,
+    public Felhasznalo(int id, String nev, String email, String jelszo, int iranyitoszam,
                        String telepules, String utca, String hazszam, Boolean admin){
         this.nev=nev;
         this.email=email;
@@ -30,10 +30,10 @@ public class Felhasznalo {
 
     @Override
     public String toString(){
-        return this.nev;
+        return "Felhasznalo[" + this.email + ", " + this.nev + "]";
     }
 
-    public Boolean getAdmin() {
+    public Boolean isAdmin() {
         return admin;
     }
 
