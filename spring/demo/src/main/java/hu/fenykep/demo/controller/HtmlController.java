@@ -1,6 +1,7 @@
 package hu.fenykep.demo.controller;
 
 import hu.fenykep.demo.model.Felhasznalo;
+import hu.fenykep.demo.repository.FelhasznaloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,6 +15,8 @@ import java.util.List;
 public class HtmlController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private FelhasznaloRepository felhasznaloRepository;
 
     @GetMapping("")
     public String index() throws Exception {
@@ -31,8 +34,7 @@ public class HtmlController {
 
         String sql = "SELECT * FROM Felhasznalo";
 
-        List<Felhasznalo> felhasznalok = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Felhasznalo.class));
+        List<Felhasznalo> felhasznalok = felhasznaloRepository.findAll();
 
         felhasznalok.forEach(System.out :: println);
     }

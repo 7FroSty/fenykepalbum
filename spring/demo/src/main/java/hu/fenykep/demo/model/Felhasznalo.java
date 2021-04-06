@@ -11,6 +11,11 @@ public class Felhasznalo {
     private int hazszam;
     private Boolean admin;
 
+    public Felhasznalo(String nev, String email){
+        this.nev=nev;
+        this.email=email;
+    }
+
     @Override
     public String toString(){
         return this.nev;
