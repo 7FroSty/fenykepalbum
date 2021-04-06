@@ -29,6 +29,21 @@ public class HtmlController {
         return "/index";
     }
 
+    @GetMapping("sikeres")
+    public String sikeres(){
+        return "/sikeres";
+    }
+
+    @GetMapping("sikertelen")
+    public String sikertelen(){
+        return "/sikertelen";
+    }
+
+    @GetMapping("bejelentkezes")
+    public String bejelentkezes(){
+        return "/bejelentkezes";
+    }
+
     public void run() throws Exception {
         System.out.println("alma");
 

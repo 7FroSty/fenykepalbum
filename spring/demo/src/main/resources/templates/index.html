@@ -6,5 +6,16 @@
 </head>
 <body>
 <p1>Hello World!</p1>
+<form action="#" th:action="@{/register}" method="post" enctype="multipart/form-data">
+    <label>Név: <input type="text" name="name" required></label> <br>
+    <label>E-mail cím: <input type="email" name="email" required></label> <br>
+    <label>Jelszó: <input type="password" name="pwd" required></label> <br>
+    <label>irany: <input type="number" name="irany" required></label><br>
+    <label>telepules: <input type="text" name="tele" required></label><br>
+    <label>utca: <input type="text" name="utca" required></label><br>
+    <label>hazszam: <input type="text" name="haz" required></label><br>
+    <input type="submit" name="submit-btn" value="Regisztráció">
+</form>
+
 </body>
 </html>

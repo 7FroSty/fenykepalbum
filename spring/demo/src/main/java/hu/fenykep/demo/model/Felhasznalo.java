@@ -8,12 +8,24 @@ public class Felhasznalo {
     private int iranyitoszam;
     private String telepules;
     private String utca;
-    private int hazszam;
+    private String hazszam;
     private Boolean admin;
 
     public Felhasznalo(String nev, String email){
         this.nev=nev;
         this.email=email;
+    }
+
+    public Felhasznalo(String nev, String email, String jelszo, int iranyitoszam,
+                       String telepules, String utca, String hazszam, Boolean admin){
+        this.nev=nev;
+        this.email=email;
+        this.jelszo=jelszo;
+        this.iranyitoszam=iranyitoszam;
+        this.telepules=telepules;
+        this.utca=utca;
+        this.hazszam=hazszam;
+        this.admin=admin;
     }
 
     @Override
@@ -29,11 +41,11 @@ public class Felhasznalo {
         this.admin = admin;
     }
 
-    public int getHazszam() {
+    public String getHazszam() {
         return hazszam;
     }
 
-    public void setHazszam(int hazszam) {
+    public void setHazszam(String hazszam) {
         this.hazszam = hazszam;
     }
 
