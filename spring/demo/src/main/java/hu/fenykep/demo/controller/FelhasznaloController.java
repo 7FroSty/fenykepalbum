@@ -41,7 +41,10 @@ public class FelhasznaloController {
         if(felhasznalo == null) {
             return "redirect:/felhasznalo/bejelentkezes";
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> b87fcd374624eca6675fa9a981be710dca89ef51
         model.addAttribute("felhasznalo", felhasznalo);
         return "felhasznalo/profil";
     }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="hu" xmlns:th="http://www.thymeleaf.org/">
+<<<<<<< HEAD
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,3 +49,25 @@
         </div>
     </body>
 </html>
+=======
+<head>
+    <meta charset="UTF-8">
+    <title>Regisztráció</title>
+</head>
+<body>
+<p th:if="${hiba != null}" th:text="${hiba}">
+</p>
+<form action="#" th:action="@{/felhasznalo/regisztracioPost}" method="post" enctype="multipart/form-data">
+    <label>Név: <input type="text" name="name" required></label> <br>
+    <label>E-mail cím: <input type="email" name="email" required></label> <br>
+    <label>Jelszó: <input type="password" name="jelszo" required></label> <br>
+    <label>irany: <input type="number" name="iranyitoszam" required></label><br>
+    <label>telepules: <input type="text" name="telepules" required></label><br>
+    <label>utca: <input type="text" name="utca" required></label><br>
+    <label>hazszam: <input type="text" name="hazszam" required></label><br>
+    <input type="submit" name="submit-btn" value="Regisztráció">
+</form>
+
+</body>
+</html>
+>>>>>>> b87fcd374624eca6675fa9a981be710dca89ef51
