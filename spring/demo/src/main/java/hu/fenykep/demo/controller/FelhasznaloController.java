@@ -38,10 +38,10 @@ public class FelhasznaloController {
     @GetMapping("/felhasznalo/profil")
     public String profil(Model model, HttpSession httpSession) {
         Felhasznalo felhasznalo = (Felhasznalo)httpSession.getAttribute("felhasznalo");
-        if(felhasznalo != null) {
-            model.addAttribute("felhasznalo", felhasznalo);
+        if(felhasznalo == null) {
             return "redirect:/felhasznalo/bejelentkezes";
         }
+        model.addAttribute("felhasznalo", felhasznalo);
         return "felhasznalo/profil";
     }
 
@@ -77,7 +77,7 @@ public class FelhasznaloController {
             FelhasznaloError hiba =
                     FelhasznaloError.toFelhasznaloError(
                             ((BigDecimal) felhasznaloRepository.executeRegisztracio(
-                                    nev, email, jelszo, iranyitoszam, telepules, utca, hazszam
+                                    nev, email, jelszoHash, iranyitoszam, telepules, utca, hazszam
                             ).get("p_error")).intValue()
                     );
 
