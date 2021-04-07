@@ -1,16 +1,49 @@
 <!DOCTYPE html>
 <html lang="hu" xmlns:th="http://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8">
-    <title>Profil</title>
-</head>
-<body>
-    <h1>Profilom</h1>
-    <p>Sikeres bejelentkezés</p>
-    <div th:if="${felhasznalo != null}">
-        <p>Név: <span th:text="${felhasznalo.getNev()}"></span></p>
-        <p>Email: <span th:text="${felhasznalo.getEmail()}"></span></p>
-        <p>Admin: <span th:text="*{felhasznalo.isAdmin}"></span></p>
-    </div>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Profil</title>
+    </head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+        <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
+        <title>HUmmingbird</title>
+    </head>
+    <style>
+    </style>
+    <body>
+        <nav class="navbar navbar-expand-sm justify-content-center">
+            <li class="navbar-brand">
+                <img th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
+            </li>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/index}">Főoldal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/kepek}">Képek</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/versenyek}">Versenyek</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/felhasznalo/bejelentkezes}">Profil</a>
+                </li>
+            </ul>
+            <li class="navbar-brand">
+                <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
+            </li>
+        </nav>
+        <div th:if="${felhasznalo != null}">
+            <p>Név: <span th:text="${felhasznalo.getNev()}"></span></p>
+            <p>Email: <span th:text="${felhasznalo.getEmail()}"></span></p>
+            <p>Admin: <span th:text="*{felhasznalo.isAdmin}"></span></p>
+        </div>
+    </body>
 </html>
+
+<h1>Profilom</h1>
+<p>Sikeres bejelentkezés</p>

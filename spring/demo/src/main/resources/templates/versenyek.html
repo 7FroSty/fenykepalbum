@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
         <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
-        <title>Bejelentkezés - HUmmingbird</title>
+        <title>Versenyek - HUmmingbird</title>
     </head>
     <style>
     </style>
@@ -17,10 +17,10 @@
             </li>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/index}">Főoldal</a>
+                    <a class="nav-link" th:href="@{index}">Főoldal</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/kepek}">Képek</a>
+                    <a class="nav-link"th:href="@{/kepek}">Képek</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/versenyek}">Versenyek</a>
@@ -33,17 +33,5 @@
                 <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
             </li>
         </nav>
-        <div>
-            <p th:if="${hiba != null}" th:text="${hiba}">
-            <form action="#" th:action="@{/felhasznalo/bejelentkezesPost}" method="post" enctype="multipart/form-data">
-                <label>Email: <input type="text" name="email" required></label> <br>
-                <label>Jelszó: <input type="password" name="jelszo" required></label> <br>
-                <input type="submit" name="submit-btn" value="Bejelentkezés">
-            </form>
-            <p>
-                még nem regisztráltál?
-            </p>
-            <a th:href="@{/felhasznalo/regisztracio}">Regisztráció</a>
-        </div>
     </body>
 </html>

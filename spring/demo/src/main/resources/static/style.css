@@ -1,0 +1,34 @@
+*{
+    font-family: Gill sans, sans-serif;
+}
+
+body{
+    background-color: #8DC5D3;
+}
+.navbar{
+    background: #75CDB3;
+    border-bottom-style: solid;
+    border-bottom-width: 5px;
+    border-bottom-color: #543F65;
+    font-variant: all-small-caps;
+}
+
+.nav-item:not(:last-child){
+    border-right: 2px solid #543F65;
+}
+
+.nav-item{
+    padding: 0 25px;
+}
+
+.nav-link{
+    color: #543F65;
+    font-size: 20px;
+}
+.nav-link:hover{
+    color: #E50B7B;
+}
+
+#logoflipped{
+    transform: scaleX(-1);
+}
