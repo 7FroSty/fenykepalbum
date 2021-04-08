@@ -6,6 +6,7 @@ import hu.fenykep.demo.model.Felhasznalo;
 import hu.fenykep.demo.repository.FelhasznaloRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,12 +34,15 @@ public class FelhasznaloController {
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @GetMapping("/felhasznalo/regisztracio")
-    public String regisztracio(Model model) {
+    public String regisztracio() {
         return "/felhasznalo/regisztracio";
     }
 
     @GetMapping("/felhasznalo/bejelentkezes")
-    public String bejelentkezes(Model model) {
+    public String bejelentkezes(Authentication authentication) {
+        if(authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/felhasznalo/profil";
+        }
         return "/felhasznalo/bejelentkezes";
     }
 
@@ -48,20 +52,30 @@ public class FelhasznaloController {
         Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
 
         model.addAttribute("felhasznalo", felhasznalo);
+        model.addAttribute("sajatProfil", true);
         return "/felhasznalo/profil";
     }
 
 
     @GetMapping("/felhasznalo/profil/{id}")
-    public String profilId(@PathVariable("id") int id, Model model, Authentication authentication) {
-        Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+    public String profilId(@PathVariable("id") Integer id, Model model, Authentication authentication) {
+        Felhasznalo felhasznalo = null;
+        if(authentication != null) {
+            felhasznalo = (Felhasznalo) authentication.getPrincipal();
+        }
 
         // Redirect ha be van jelentkezve és a saját ID-ját adta meg
         if (felhasznalo != null && felhasznalo.getId() == id) {
             return "redirect:/felhasznalo/profil";
         }
-        felhasznalo = felhasznaloRepository.getFelhasznaloById(id);
-        model.addAttribute("felhasznalo", felhasznalo);
+        try {
+            felhasznalo = felhasznaloRepository.getFelhasznaloById(id);
+            model.addAttribute("felhasznalo", felhasznalo);
+        }
+        catch (DataAccessException e) {
+            model.addAttribute("felhasznaloNemTalalt", true);
+        }
+
         return "/felhasznalo/profil";
     }
 

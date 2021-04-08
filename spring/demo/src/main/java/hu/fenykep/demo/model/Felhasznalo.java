@@ -26,6 +26,7 @@ public class Felhasznalo implements UserDetails {
 
     public Felhasznalo(int id, String nev, String email, String jelszo, int iranyitoszam,
                        String telepules, String utca, String hazszam, Boolean admin) {
+        this.id = id;
         this.nev = nev;
         this.email = email;
         this.jelszo = jelszo;

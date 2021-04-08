@@ -37,13 +37,13 @@
                 <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
             </li>
         </nav>
+        <div th:if="${felhasznaloNemTalalt}">Ilyen profil nem létezik!</div>
         <div th:if="${felhasznalo != null}">
             <p>Név: <span th:text="${felhasznalo.getNev()}"></span></p>
             <p>Email: <span th:text="${felhasznalo.getEmail()}"></span></p>
             <p>Admin: <span th:text="*{felhasznalo.isAdmin}"></span></p>
+            <a th:if="${sajatProfil && felhasznalo.isAdmin()}" th:href="@{/felhasznalo/admin}">Admin panel</a>
+            <a th:href="@{/felhasznalo/kijelentkezes}">Kijelentkezés</a>
         </div>
     </body>
 </html>
-
-<h1>Profilom</h1>
-<p>Sikeres bejelentkezés</p>

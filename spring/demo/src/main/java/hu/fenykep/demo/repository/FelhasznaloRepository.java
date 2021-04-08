@@ -5,6 +5,7 @@ import hu.fenykep.demo.model.Felhasznalo;
 import oracle.jdbc.OracleType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
@@ -72,7 +73,7 @@ public class FelhasznaloRepository {
         );
     }
 
-    public Felhasznalo getFelhasznaloById(int id) {
+    public Felhasznalo getFelhasznaloById(int id) throws DataAccessException {
         return jdbcTemplate.queryForObject("SELECT * FROM Felhasznalo WHERE id = ?", new Object[]{
                         id
                 }, new int[]{
