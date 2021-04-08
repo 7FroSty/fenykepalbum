@@ -79,6 +79,38 @@ public class FelhasznaloController {
         return "/felhasznalo/profil";
     }
 
+    @GetMapping("/kepfeltoltes")
+    @PreAuthorize("hasRole('FELHASZNALO')")
+    public String kep(Model model, Authentication authentication) {
+        Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+
+        model.addAttribute("felhasznalo", felhasznalo);
+        model.addAttribute("sajatProfil", true);
+        return "/kepfeltoltes";
+    }
+
+    @GetMapping("/kepfeltoltes/{id}")
+    public String kepFeltoltes(@PathVariable("id") Integer id, Model model, Authentication authentication) {
+        Felhasznalo felhasznalo = null;
+        if(authentication != null) {
+            felhasznalo = (Felhasznalo) authentication.getPrincipal();
+        }
+
+        // Redirect ha be van jelentkezve és a saját ID-ját adta meg
+        if (felhasznalo != null && felhasznalo.getId() == id) {
+            return "redirect:/felhasznalo/profil";
+        }
+        try {
+            felhasznalo = felhasznaloRepository.getFelhasznaloById(id);
+            model.addAttribute("felhasznalo", felhasznalo);
+        }
+        catch (DataAccessException e) {
+            model.addAttribute("felhasznaloNemTalalt", true);
+        }
+
+        return "/kepfeltoltes";
+    }
+
     @PostMapping("/felhasznalo/regisztracioPost")
     public ModelAndView regisztracioPost(@RequestParam("name") String nev, @RequestParam("email") String email,
                                          @RequestParam("jelszo") String jelszo, @RequestParam("iranyitoszam") int iranyitoszam,

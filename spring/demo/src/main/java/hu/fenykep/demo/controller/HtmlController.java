@@ -26,11 +26,11 @@ public class HtmlController {
 
         }
         model.addAttribute("hiba", "Hibauzenet");
-        return "/index";
+        return "index";
     }
 
     public void runTeszt() throws Exception {
-        System.out.println("alma");
+        System.out.println("al");
 
         String sql = "SELECT * FROM Felhasznalo";
 
@@ -53,4 +53,6 @@ public class HtmlController {
     public String versenyek() {
         return "versenyek";
     }
+
+
 }
