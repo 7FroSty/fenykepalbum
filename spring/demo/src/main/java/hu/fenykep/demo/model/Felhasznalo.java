@@ -1,6 +1,14 @@
 package hu.fenykep.demo.model;
 
-public class Felhasznalo {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+public class Felhasznalo implements UserDetails {
     private int id;
     private String nev;
     private String email;
@@ -11,25 +19,25 @@ public class Felhasznalo {
     private String hazszam;
     private Boolean admin;
 
-    public Felhasznalo(String nev, String email){
-        this.nev=nev;
-        this.email=email;
+    public Felhasznalo(String nev, String email) {
+        this.nev = nev;
+        this.email = email;
     }
 
     public Felhasznalo(int id, String nev, String email, String jelszo, int iranyitoszam,
-                       String telepules, String utca, String hazszam, Boolean admin){
-        this.nev=nev;
-        this.email=email;
-        this.jelszo=jelszo;
-        this.iranyitoszam=iranyitoszam;
-        this.telepules=telepules;
-        this.utca=utca;
-        this.hazszam=hazszam;
-        this.admin=admin;
+                       String telepules, String utca, String hazszam, Boolean admin) {
+        this.nev = nev;
+        this.email = email;
+        this.jelszo = jelszo;
+        this.iranyitoszam = iranyitoszam;
+        this.telepules = telepules;
+        this.utca = utca;
+        this.hazszam = hazszam;
+        this.admin = admin;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Felhasznalo[" + this.email + ", " + this.nev + "]";
     }
 
@@ -103,6 +111,49 @@ public class Felhasznalo {
 
     public void setUtca(String utca) {
         this.utca = utca;
+    }
+
+    /*
+     * UserDetails metódusok
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorityList = new ArrayList<>();
+        authorityList.add(new SimpleGrantedAuthority("ROLE_FELHASZNALO"));
+        if (this.isAdmin()) {
+            authorityList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        return authorityList;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.getJelszo();
+    }
+
+    @Override
+    public String getUsername() {
+        return this.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
 

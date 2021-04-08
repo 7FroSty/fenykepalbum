@@ -4,26 +4,33 @@ import hu.fenykep.demo.error.FelhasznaloError;
 import hu.fenykep.demo.exception.FelhasznaloException;
 import hu.fenykep.demo.model.Felhasznalo;
 import hu.fenykep.demo.repository.FelhasznaloRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
 @Controller
 public class FelhasznaloController {
     @Autowired
     private FelhasznaloRepository felhasznaloRepository;
+
+    // source: https://howtodoinjava.com/java/regex/java-regex-validate-email-address/
+    private static final String RE_EMAIL = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+    private static final String RE_JELSZO = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$";
+    private static final Pattern patternEmail = Pattern.compile(RE_EMAIL);
+    private static final Pattern patternJelszo = Pattern.compile(RE_JELSZO);
+
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @GetMapping("/felhasznalo/regisztracio")
     public String regisztracio(Model model) {
@@ -36,15 +43,27 @@ public class FelhasznaloController {
     }
 
     @GetMapping("/felhasznalo/profil")
-    public String profil(Model model, HttpSession httpSession) {
-        Felhasznalo felhasznalo = (Felhasznalo)httpSession.getAttribute("felhasznalo");
-        if(felhasznalo == null) {
-            return "redirect:/felhasznalo/bejelentkezes";
-        }
+    @PreAuthorize("hasRole('FELHASZNALO')")
+    public String profil(Model model, Authentication authentication) {
+        Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+
         model.addAttribute("felhasznalo", felhasznalo);
-        return "felhasznalo/profil";
+        return "/felhasznalo/profil";
     }
 
+
+    @GetMapping("/felhasznalo/profil/{id}")
+    public String profilId(@PathVariable("id") int id, Model model, Authentication authentication) {
+        Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+
+        // Redirect ha be van jelentkezve és a saját ID-ját adta meg
+        if (felhasznalo != null && felhasznalo.getId() == id) {
+            return "redirect:/felhasznalo/profil";
+        }
+        felhasznalo = felhasznaloRepository.getFelhasznaloById(id);
+        model.addAttribute("felhasznalo", felhasznalo);
+        return "/felhasznalo/profil";
+    }
 
     @PostMapping("/felhasznalo/regisztracioPost")
     public ModelAndView regisztracioPost(@RequestParam("name") String nev, @RequestParam("email") String email,
@@ -52,15 +71,11 @@ public class FelhasznaloController {
                                          @RequestParam("telepules") String telepules, @RequestParam("utca") String utca,
                                          @RequestParam("hazszam") String hazszam, ModelMap modelMap) {
         try {
-            // source: https://howtodoinjava.com/java/regex/java-regex-validate-email-address/
-            String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-            String jelszoRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$";
-
             if (nev.length() < 3 || nev.length() > 50) {
                 throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_NEV);
-            } else if (email.length() > 50 || !Pattern.compile(emailRegex).matcher(email).matches()) {
+            } else if (email.length() > 50 || !patternEmail.matcher(email).matches()) {
                 throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_EMAIL);
-            } else if (!Pattern.compile(jelszoRegex).matcher(jelszo).matches()) {
+            } else if (!patternJelszo.matcher(jelszo).matches()) {
                 throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_JELSZO);
             } else if (iranyitoszam < 0 || iranyitoszam > 10000) {
                 throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_IRANYITOSZAM);
@@ -72,7 +87,7 @@ public class FelhasznaloController {
                 throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_HAZSZAM);
             }
 
-            String jelszoHash = getSha512Hash(jelszo);
+            String jelszoHash = passwordEncoder.encode(jelszo);
 
             FelhasznaloError hiba =
                     FelhasznaloError.toFelhasznaloError(
@@ -84,6 +99,7 @@ public class FelhasznaloController {
             if (hiba != null) {
                 throw new FelhasznaloException(hiba);
             }
+            System.out.println("WOW");
         } catch (FelhasznaloException e) {
             modelMap.addAttribute("hiba", e.getMessage());
             System.out.println("Regisztrációs hiba: " + e.getMessage());
@@ -94,44 +110,5 @@ public class FelhasznaloController {
             return new ModelAndView("/felhasznalo/regisztracio", modelMap);
         }
         return new ModelAndView("redirect:/felhasznalo/bejelentkezes");
-    }
-
-    @PostMapping("/felhasznalo/bejelentkezesPost")
-    public ModelAndView bejelentkezesPost(@RequestParam("email") String email, @RequestParam("jelszo") String jelszo,
-                                          ModelMap modelMap, HttpSession httpSession) {
-        try {
-            Felhasznalo felhasznalo = felhasznaloRepository.getFelhasznaloByEmail(email);
-
-            if (felhasznalo == null || !felhasznalo.getJelszo().equals(getSha512Hash(jelszo))) {
-                throw new FelhasznaloException(FelhasznaloError.LOG_BEVITEL_EMAILJELSZO);
-            }
-
-            // TODO: Sikeres bejelentkezés, session kezelés
-            httpSession.setAttribute("felhasznalo", felhasznalo);
-            modelMap.addAttribute("felhasznalo", felhasznalo);
-
-        } catch (FelhasznaloException e) {
-            modelMap.addAttribute("hiba", e.getMessage());
-            System.out.println("Bejelentkezés hiba: " + e.getMessage());
-            return new ModelAndView("/felhasznalo/bejelentkezes", modelMap);
-        } catch (Exception e) {
-            modelMap.addAttribute("hiba", "Szerver hiba.");
-            e.printStackTrace();
-            return new ModelAndView("/felhasznalo/bejelentkezes", modelMap);
-        }
-        return new ModelAndView("redirect:/felhasznalo/profil");
-    }
-
-    public String getSha512Hash(String text) throws NoSuchAlgorithmException {
-        // https://www.geeksforgeeks.org/sha-512-hash-in-java/
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        byte[] messageDigest = md.digest(text.getBytes());
-        BigInteger no = new BigInteger(1, messageDigest);
-
-        StringBuilder textHash = new StringBuilder(no.toString(16));
-        while (textHash.length() < 32) {
-            textHash.insert(0, "0");
-        }
-        return textHash.toString();
     }
 }

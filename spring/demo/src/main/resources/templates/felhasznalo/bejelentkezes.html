@@ -5,8 +5,13 @@
     <title>Bejelentkezés</title>
 </head>
 <body>
-<p th:if="${hiba != null}" th:text="${hiba}">
-<form action="#" th:action="@{/felhasznalo/bejelentkezesPost}" method="post" enctype="multipart/form-data">
+<div th:if="${param.hiba}">
+    Hibás Email cím vagy jelszó.
+</div>
+<div th:if="${param.kijelentkezes}">
+    Ki lettél jelentkezve.
+</div>
+<form action="#" th:action="@{/felhasznalo/bejelentkezes}" method="post" enctype="multipart/form-data">
     <label>email: <input type="text" name="email" required></label> <br>
     <label>Jelszó: <input type="password" name="jelszo" required></label> <br>
     <input type="submit" name="submit-btn" value="Bejelentkezes">

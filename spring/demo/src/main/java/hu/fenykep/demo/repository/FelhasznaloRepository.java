@@ -1,9 +1,9 @@
 package hu.fenykep.demo.repository;
 
-import hu.fenykep.demo.exception.FelhasznaloException;
 import hu.fenykep.demo.model.Felhasznalo;
-import hu.fenykep.demo.error.FelhasznaloError;
+
 import oracle.jdbc.OracleType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -11,19 +11,14 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
-
-import java.security.MessageDigest;
 
 
 @Repository
 public class FelhasznaloRepository {
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     public List<Felhasznalo> findAll() {
         return jdbcTemplate.query(
@@ -61,19 +56,37 @@ public class FelhasznaloRepository {
 
     public Felhasznalo getFelhasznaloByEmail(String email) {
         return jdbcTemplate.queryForObject("SELECT * FROM Felhasznalo WHERE email = ?", new Object[]{
-                email
-        }, new int[]{
-                OracleType.VARCHAR2.getVendorTypeNumber()
-        }, (rs, rowNum) -> new Felhasznalo(
-                rs.getInt("id"),
-                rs.getString("nev"),
-                rs.getString("email"),
-                rs.getString("jelszo"),
-                rs.getInt("iranyitoszam"),
-                rs.getString("telepules"),
-                rs.getString("utca"),
-                rs.getString("hazszam"),
-                rs.getBoolean("admin"))
+                        email
+                }, new int[]{
+                        OracleType.VARCHAR2.getVendorTypeNumber()
+                }, (rs, rowNum) -> new Felhasznalo(
+                        rs.getInt("id"),
+                        rs.getString("nev"),
+                        rs.getString("email"),
+                        rs.getString("jelszo"),
+                        rs.getInt("iranyitoszam"),
+                        rs.getString("telepules"),
+                        rs.getString("utca"),
+                        rs.getString("hazszam"),
+                        rs.getBoolean("admin"))
+        );
+    }
+
+    public Felhasznalo getFelhasznaloById(int id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM Felhasznalo WHERE id = ?", new Object[]{
+                        id
+                }, new int[]{
+                        OracleType.NUMBER.getVendorTypeNumber()
+                }, (rs, rowNum) -> new Felhasznalo(
+                        rs.getInt("id"),
+                        rs.getString("nev"),
+                        rs.getString("email"),
+                        rs.getString("jelszo"),
+                        rs.getInt("iranyitoszam"),
+                        rs.getString("telepules"),
+                        rs.getString("utca"),
+                        rs.getString("hazszam"),
+                        rs.getBoolean("admin"))
         );
     }
 }
