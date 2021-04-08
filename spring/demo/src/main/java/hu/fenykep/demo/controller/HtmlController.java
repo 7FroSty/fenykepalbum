@@ -38,4 +38,19 @@ public class HtmlController {
 
         felhasznalok.forEach(System.out :: println);
     }
+
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
+
+    @GetMapping("/kepek")
+    public String kepek() {
+        return "kepek";
+    }
+
+    @GetMapping("/versenyek")
+    public String versenyek() {
+        return "versenyek";
+    }
 }
