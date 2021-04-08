@@ -1,0 +1,38 @@
+.container{
+    background-color: #75CDB3;
+    border: 5px solid #6A385D;
+    border-radius: 5px;
+    margin-top: 50px;
+    width: 700px;
+    text-align: center;
+    font-size: 20px;
+}
+
+h2{
+    text-decoration: underline solid #543F65;
+}
+
+form{
+    padding: 10px;
+}
+
+.form-group{
+    text-align: left;
+}
+
+.form-control{
+    border: 2px solid #6A385D;
+    font-variant: normal;
+}
+
+.btn{
+    color: #000000;
+    font-size: 20px;
+    background-color: #5A7A41;
+    border-color: #6A385D;
+    border-width: 2px;
+}
+
+.btn:hover{
+    background-color: #779721;
+}
