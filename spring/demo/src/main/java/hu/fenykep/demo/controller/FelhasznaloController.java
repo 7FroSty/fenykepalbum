@@ -79,17 +79,17 @@ public class FelhasznaloController {
         return "/felhasznalo/profil";
     }
 
-    @GetMapping("/kepfeltoltes")
+    @GetMapping("/kep/kepFeltoltes")
     @PreAuthorize("hasRole('FELHASZNALO')")
     public String kep(Model model, Authentication authentication) {
         Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
 
         model.addAttribute("felhasznalo", felhasznalo);
         model.addAttribute("sajatProfil", true);
-        return "/kepfeltoltes";
+        return "/kep/kepFeltoltes";
     }
 
-    @GetMapping("/kepfeltoltes/{id}")
+    @GetMapping("/kep/kepFeltoltes/{id}")
     public String kepFeltoltes(@PathVariable("id") Integer id, Model model, Authentication authentication) {
         Felhasznalo felhasznalo = null;
         if(authentication != null) {
@@ -108,7 +108,7 @@ public class FelhasznaloController {
             model.addAttribute("felhasznaloNemTalalt", true);
         }
 
-        return "/kepfeltoltes";
+        return "/kep/kepFeltoltes";
     }
 
     @PostMapping("/felhasznalo/regisztracioPost")

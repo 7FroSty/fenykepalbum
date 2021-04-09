@@ -25,8 +25,13 @@ form{
     font-variant: normal;
 }
 
+.form-control:focus{
+    border-color: #E50B7B;
+    box-shadow: none;
+}
+
 .btn{
-    color: #000000;
+    color: #EBE589;
     font-size: 20px;
     background-color: #5A7A41;
     border-color: #6A385D;
@@ -34,5 +39,6 @@ form{
 }
 
 .btn:hover{
+    color: #EBE589;
     background-color: #779721;
 }

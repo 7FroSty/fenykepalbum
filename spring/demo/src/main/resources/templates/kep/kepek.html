@@ -9,6 +9,28 @@
         <title>Képek - HUmmingbird</title>
     </head>
     <style>
+        .kepnavbar{
+            width: 75%;
+            margin: 50px auto;
+            border: 5px solid #6A385D;
+            border-radius: 5px;
+        }
+
+        .kepnav{
+
+            justify-content: center;
+        }
+
+        .form-control{
+            border: 2px solid #6A385D;
+            font-variant: normal;
+        }
+
+        .form-control:focus{
+            border-color: #E50B7B;
+            box-shadow: none;
+        }
+
     </style>
     <body>
         <nav class="navbar navbar-expand-md justify-content-center">
@@ -20,7 +42,7 @@
                     <a class="nav-link" th:href="@{/index}">Főoldal</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"th:href="@{/kepek}">Képek</a>
+                    <a class="nav-link" th:href="@{/kep/kepek}">Képek</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/versenyek}">Versenyek</a>
@@ -32,6 +54,27 @@
             <li class="navbar-brand">
                 <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
             </li>
+        </nav>
+        <nav class="navbar navbar-expand-xl justify-content-center kepnavbar">
+            <ul class="navbar-nav kepnav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/kep/kepFeltoltes}">Kép feltöltése</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/kep/kepek}">Összes kép</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/versenyek}">Kategóriák</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/felhasznalo/bejelentkezes}">Települések</a>
+                </li>
+                <form class="nav-item form-inline">
+                    <input class="form-control" type="search" placeholder="Keresés" aria-label="Search">
+                    <button type="submit" class="btn nav-link" >Keresés</button>
+                </form>
+            </ul>
+
         </nav>
     </body>
 </html>

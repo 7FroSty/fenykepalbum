@@ -2,17 +2,17 @@
 <html lang="hu" xmlns:th="http://www.thymeleaf.org/">
     <head>
         <meta charset="UTF-8">
-        <title>Profil</title>
-    </head>
-    <head>
-        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/form.css}">
         <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
-        <title>HUmmingbird</title>
+        <title>Profil - HUmmingbird</title>
     </head>
     <style>
+        .adat{
+            font-variant: normal;
+        }
     </style>
     <body>
         <nav class="navbar navbar-expand-md justify-content-center">
@@ -24,7 +24,7 @@
                     <a class="nav-link" th:href="@{/index}">Főoldal</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/kepek}">Képek</a>
+                    <a class="nav-link" th:href="@{/kep/kepek}">Képek</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/versenyek}">Versenyek</a>
@@ -37,13 +37,27 @@
                 <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
             </li>
         </nav>
-        <div th:if="${felhasznaloNemTalalt}">Ilyen profil nem létezik!</div>
-        <div th:if="${felhasznalo != null}">
-            <p>Név: <span th:text="${felhasznalo.getNev()}"></span></p>
-            <p>Email: <span th:text="${felhasznalo.getEmail()}"></span></p>
-            <p>Admin: <span th:text="*{felhasznalo.isAdmin}"></span></p>
-            <a th:if="${sajatProfil && felhasznalo.isAdmin()}" th:href="@{/felhasznalo/admin}">Admin panel</a>
-            <a th:href="@{/felhasznalo/kijelentkezes}">Kijelentkezés</a>
+        <div class="container">
+            <div class="text-danger" th:if="${felhasznaloNemTalalt}">Ilyen profil nem létezik!</div>
+            <div th:if="${felhasznalo != null}">
+                <h2>
+                    Profil
+                </h2>
+                <p>Név: <span class="adat" th:text="${felhasznalo.getNev()}"></span></p>
+                <p>Email: <span class="adat" th:text="${felhasznalo.getEmail()}"></span></p>
+                <p>Irányítószám: <span class="adat" th:text="${felhasznalo.getIranyitoszam()}"></span></p>
+                <p>Település: <span class="adat" th:text="${felhasznalo.getTelepules()}"></span></p>
+                <p>Utca/házszám: <span class="adat" th:text="${felhasznalo.getUtca()}"></span>
+                    <span class="adat" th:text="${felhasznalo.getHazszam()}"></span>
+                </p>
+                <p>Admin: <span class="adat" th:text="*{felhasznalo.isAdmin}"></span></p>
+                <form th:if="${sajatProfil && felhasznalo.isAdmin()}" th:action="@{/felhasznalo/admin}">
+                    <button type="submit" class="btn" name="submit">Admin panel</button>
+                </form>
+                <form th:action="@{/felhasznalo/kijelentkezes}">
+                    <button type="submit" class="btn" name="submit">Kijelentkezés</button>
+                </form>
+            </div>
         </div>
     </body>
 </html>

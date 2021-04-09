@@ -41,18 +41,16 @@ public class HtmlController {
 
     @GetMapping("/index")
     public String index() {
-        return "index";
+        return "/index";
     }
 
-    @GetMapping("/kepek")
+    @GetMapping("/kep/kepek")
     public String kepek() {
-        return "kepek";
+        return "/kep/kepek";
     }
 
     @GetMapping("/versenyek")
     public String versenyek() {
-        return "versenyek";
+        return "/versenyek";
     }
-
-
 }
