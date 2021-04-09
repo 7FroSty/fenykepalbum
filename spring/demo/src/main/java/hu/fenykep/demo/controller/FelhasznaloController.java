@@ -92,12 +92,13 @@ public class FelhasznaloController {
 
         model.addAttribute("felhasznalo", felhasznalo);
         model.addAttribute("sajatProfil", true);
-        return "/kep/kepFeltoltes";
         List<Kategoria> kategoriak = kategoriaRepository.findAll();
         model.addAttribute("kategoriak", kategoriak);
 
         return "/kep/kepFeltoltes";
     }
+
+
 
     @GetMapping("/kep/kepFeltoltes/{id}")
     public String kepFeltoltes(@PathVariable("id") Integer id, Model model, Authentication authentication) {
