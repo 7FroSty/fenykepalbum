@@ -1,8 +1,17 @@
 package hu.fenykep.demo.model;
 
-public class Kategoria {
+import hu.fenykep.demo.repository.KategoriaRepository;
+
+import java.io.Serializable;
+
+public class Kategoria implements Serializable {
     private int id;
     private String nev;
+
+    public Kategoria(int id, String nev){
+        this.id=id;
+        this.nev=nev;
+    }
 
     public int getId() {
         return id;
