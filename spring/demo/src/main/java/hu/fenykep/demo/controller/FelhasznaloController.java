@@ -3,10 +3,8 @@ package hu.fenykep.demo.controller;
 import hu.fenykep.demo.error.FelhasznaloError;
 import hu.fenykep.demo.exception.FelhasznaloException;
 import hu.fenykep.demo.model.Felhasznalo;
-import hu.fenykep.demo.model.Kategoria;
 import hu.fenykep.demo.repository.FelhasznaloRepository;
 
-import hu.fenykep.demo.repository.KategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,16 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.regex.Pattern;
 
 @Controller
 public class FelhasznaloController {
     @Autowired
     private FelhasznaloRepository felhasznaloRepository;
-
-    @Autowired
-    private KategoriaRepository kategoriaRepository;
 
     // source: https://howtodoinjava.com/java/regex/java-regex-validate-email-address/
     private static final String RE_EMAIL = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
@@ -85,42 +79,6 @@ public class FelhasznaloController {
         return "/felhasznalo/profil";
     }
 
-    @GetMapping("/kep/kepFeltoltes")
-    @PreAuthorize("hasRole('FELHASZNALO')")
-    public String kep(Model model, Authentication authentication) {
-        Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
-
-        model.addAttribute("felhasznalo", felhasznalo);
-        model.addAttribute("sajatProfil", true);
-        return "/kep/kepFeltoltes";
-        List<Kategoria> kategoriak = kategoriaRepository.findAll();
-        model.addAttribute("kategoriak", kategoriak);
-
-        return "/kep/kepFeltoltes";
-    }
-
-    @GetMapping("/kep/kepFeltoltes/{id}")
-    public String kepFeltoltes(@PathVariable("id") Integer id, Model model, Authentication authentication) {
-        Felhasznalo felhasznalo = null;
-        if(authentication != null) {
-            felhasznalo = (Felhasznalo) authentication.getPrincipal();
-        }
-
-        // Redirect ha be van jelentkezve és a saját ID-ját adta meg
-        if (felhasznalo != null && felhasznalo.getId() == id) {
-            return "redirect:/felhasznalo/profil";
-        }
-        try {
-            felhasznalo = felhasznaloRepository.getFelhasznaloById(id);
-            model.addAttribute("felhasznalo", felhasznalo);
-        }
-        catch (DataAccessException e) {
-            model.addAttribute("felhasznaloNemTalalt", true);
-        }
-
-        return "/kep/kepFeltoltes";
-    }
-
     @PostMapping("/felhasznalo/regisztracioPost")
     public ModelAndView regisztracioPost(@RequestParam("name") String nev, @RequestParam("email") String email,
                                          @RequestParam("jelszo") String jelszo, @RequestParam("iranyitoszam") int iranyitoszam,
@@ -167,4 +125,6 @@ public class FelhasznaloController {
         }
         return new ModelAndView("redirect:/felhasznalo/bejelentkezes");
     }
+
+
 }
