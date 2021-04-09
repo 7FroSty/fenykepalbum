@@ -16,7 +16,9 @@ public class KategoriaRepository {
     public List<Kategoria> findAll(){
         List<Kategoria> result = jdbcTemplate.query(
                 "SELECT * FROM Kategoria",
-                (rs, rowNum) -> new Kategoria()
+                (rs, rowNum) -> new Kategoria(
+                        rs.getInt("id"),
+                        rs.getString("nev"))
         );
         return result;
     }

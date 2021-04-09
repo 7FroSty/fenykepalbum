@@ -38,7 +38,14 @@
         <label>Kép: <input type="file" accept=".jpg,.png" name="kep" required></label> <br>
         <label>Cím: <input type="text" name="cim" required></label> <br>
         <label>Település: <input type="text" name="telepules" required></label> <br>
-        <label>id: <input type="hidden" name="felhasznalo_id" th:value="*{felhasznalo.getId()}" required></label> <br>
+        <label>Kategória: </label>
+        <select name="kategoria">
+            <th:block th:each="kategoria : ${kategoriak}">
+                <option th:value="${kategoria.getId()}" th:text="${kategoria.getNev()}"></option>
+            </th:block>
+        </select>
+        <br>
+        <input type="hidden" name="felhasznalo_id" th:value="*{felhasznalo.getId()}" required><br>
         <input type="submit" name="submit" value="Feltöltés">
     </form>
 </div>

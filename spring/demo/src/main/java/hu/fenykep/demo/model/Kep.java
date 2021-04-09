@@ -1,9 +1,10 @@
 package hu.fenykep.demo.model;
 
+import java.io.Serializable;
 import java.util.Base64;
 import java.util.Date;
 
-public class Kep {
+public class Kep implements Serializable {
     private int id;
     private int felhasznalo_id;
     private int kategoria_id;
