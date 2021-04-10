@@ -5,10 +5,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/form.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/kepmenu.css}">
         <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
         <title>Képfeltöltés - HUmmingbird</title>
     </head>
-    <style>
+    <style type="text/css">
+        #kepfeltoltes{
+            border: 2px solid #6A385D;
+            border-radius: 5px;
+            font-variant: normal;
+        }
+
+        #kategoria{
+            border: 2px solid #6A385D;
+            border-radius: 5px;
+            font-variant: normal;
+        }
+
+        #kategoria:focus{
+            border-color: #E50B7B;
+        }
     </style>
     <body>
     <nav class="navbar navbar-expand-sm justify-content-center">
@@ -33,20 +50,54 @@
             <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
         </li>
     </nav>
-    <div>
-        <form action="#" th:action="@{/feltoltes}" method="post" enctype="multipart/form-data">
-            <label>Kép: <input type="file" accept=".jpg,.png" name="kep" required></label> <br>
-            <label>Cím: <input type="text" name="cim" required></label> <br>
-            <label>Település: <input type="text" name="telepules" required></label> <br>
-            <label>Kategória: </label>
-            <select name="kategoria">
-                <th:block th:each="kategoria : ${kategoriak}">
-                    <option th:value="${kategoria.getId()}" th:text="${kategoria.getNev()}"></option>
-                </th:block>
-            </select>
-            <br>
-            <input type="hidden" name="felhasznalo_id" th:value="*{felhasznalo.getId()}" required><br>
-            <input type="submit" name="submit" value="Feltöltés">
+    <nav class="navbar navbar-expand-xl justify-content-center kepnavbar">
+        <ul class="navbar-nav kepnav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/kep/kepFeltoltes}">Kép feltöltése</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/kep/kepek}">Összes kép</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/versenyek}">Kategóriák</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/felhasznalo/bejelentkezes}">Települések</a>
+            </li>
+            <form class="nav-item form-inline">
+                <input class="form-control" type="search" placeholder="Keresés" aria-label="Search">
+                <button type="submit" class="btn nav-link" >Keresés</button>
+            </form>
+        </ul>
+    </nav>
+    <div class="container">
+        <h2>
+            Képfeltöltés
+        </h2>
+        <br>
+        <form th:action="@{/feltoltes}" method="post" enctype="multipart/form-data">
+            <div class="form-group custom-file">
+                <label>Kép:</label>
+                <input type="file" id="kepfeltoltes"  accept=".jpg,.png" name="kep" required>
+            </div>
+            <div class="form-group">
+                <label>Cím:</label>
+                <input type="text" class="form-control" name="cim" required>
+            </div>
+            <div class="form-group">
+                <label>Település:</label>
+                <input type="text" class="form-control" name="telepules" required>
+            </div>
+            <div class="form-group">
+                <label>Kategória:</label>
+                <select class="form-select" id="kategoria" name="kategoria">
+                    <th:block th:each="kategoria : ${kategoriak}">
+                        <option th:value="${kategoria.getId()}" th:text="${kategoria.getNev()}"></option>
+                    </th:block>
+                </select>
+            </div>
+            <input type="hidden" name="felhasznalo_id" th:value="*{felhasznalo.getId()}" required>
+            <button type="submit" class="btn gomb" name="submit">Feltöltés</button>
         </form>
     </div>
     </body>
