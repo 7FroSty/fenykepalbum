@@ -1,7 +1,6 @@
 package hu.fenykep.demo.model;
 
 import java.io.Serializable;
-import java.util.Base64;
 import java.util.Date;
 
 public class Kep implements Serializable {
@@ -9,9 +8,22 @@ public class Kep implements Serializable {
     private int felhasznalo_id;
     private int kategoria_id;
     private String cim;
-    private Base64 tartalom;
+    private String tartalom;
     private Date idopont;
     private String telepules;
+
+    public Kep() {
+    }
+
+    public Kep(int id, int felhasznalo_id, int kategoria_id, String cim, String tartalom, Date idopont, String telepules) {
+        this.id = id;
+        this.felhasznalo_id = felhasznalo_id;
+        this.kategoria_id = kategoria_id;
+        this.cim = cim;
+        this.tartalom = tartalom;
+        this.idopont = idopont;
+        this.telepules = telepules;
+    }
 
     public void setTelepules(String telepules) {
         this.telepules = telepules;
@@ -29,11 +41,11 @@ public class Kep implements Serializable {
         return id;
     }
 
-    public Base64 getTartalom() {
+    public String getTartalom() {
         return tartalom;
     }
 
-    public void setTartalom(Base64 tartalom) {
+    public void setTartalom(String tartalom) {
         this.tartalom = tartalom;
     }
 

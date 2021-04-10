@@ -7,6 +7,7 @@ import oracle.jdbc.OracleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
@@ -21,21 +22,21 @@ public class FelhasznaloRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private final RowMapper<Felhasznalo> felhasznaloRowMapper = (rs, rowNum) -> new Felhasznalo(
+            rs.getInt("id"),
+            rs.getString("nev"),
+            rs.getString("email"),
+            rs.getString("jelszo"),
+            rs.getInt("iranyitoszam"),
+            rs.getString("telepules"),
+            rs.getString("utca"),
+            rs.getString("hazszam"),
+            rs.getBoolean("admin"));
+
     public List<Felhasznalo> findAll() {
-        return jdbcTemplate.query(
-                "SELECT * FROM Felhasznalo",
-                (rs, rowNum) -> new Felhasznalo(
-                        rs.getInt("id"),
-                        rs.getString("nev"),
-                        rs.getString("email"),
-                        rs.getString("jelszo"),
-                        rs.getInt("iranyitoszam"),
-                        rs.getString("telepules"),
-                        rs.getString("utca"),
-                        rs.getString("hazszam"),
-                        rs.getBoolean("admin"))
-        );
+        return jdbcTemplate.query("SELECT * FROM Felhasznalo", felhasznaloRowMapper);
     }
+
 
     public Map<String, Object> executeRegisztracio(String nev, String email, String jelszo, int iranyitoszam,
                                                    String telepules, String utca, String hazszam) {
@@ -60,17 +61,7 @@ public class FelhasznaloRepository {
                         email
                 }, new int[]{
                         OracleType.VARCHAR2.getVendorTypeNumber()
-                }, (rs, rowNum) -> new Felhasznalo(
-                        rs.getInt("id"),
-                        rs.getString("nev"),
-                        rs.getString("email"),
-                        rs.getString("jelszo"),
-                        rs.getInt("iranyitoszam"),
-                        rs.getString("telepules"),
-                        rs.getString("utca"),
-                        rs.getString("hazszam"),
-                        rs.getBoolean("admin"))
-        );
+                }, felhasznaloRowMapper);
     }
 
     public Felhasznalo getFelhasznaloById(int id) throws DataAccessException {
@@ -78,16 +69,6 @@ public class FelhasznaloRepository {
                         id
                 }, new int[]{
                         OracleType.NUMBER.getVendorTypeNumber()
-                }, (rs, rowNum) -> new Felhasznalo(
-                        rs.getInt("id"),
-                        rs.getString("nev"),
-                        rs.getString("email"),
-                        rs.getString("jelszo"),
-                        rs.getInt("iranyitoszam"),
-                        rs.getString("telepules"),
-                        rs.getString("utca"),
-                        rs.getString("hazszam"),
-                        rs.getBoolean("admin"))
-        );
+                }, felhasznaloRowMapper);
     }
 }
