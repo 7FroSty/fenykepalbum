@@ -37,7 +37,7 @@
             <h2>
                 Regisztráció
             </h2>
-            <form th:action="@{/felhasznalo/regisztracioPost}" method="post" enctype="multipart/form-data">
+            <form th:action="@{/felhasznalo/regisztracioPost}" method="post">
                 <div class="form-group">
                     <label>Név:</label>
                     <input type="text" class="form-control"name="name" required>
@@ -66,7 +66,7 @@
                     <label>Házszám:</label>
                     <input type="text" class="form-control" name="hazszam" required>
                 </div>
-                <button type="submit" class="btn" name="submit-btn">Regisztráció</button>
+                <button type="submit" class="btn gomb" name="submit-btn">Regisztráció</button>
             </form>
         </div>
     </body>

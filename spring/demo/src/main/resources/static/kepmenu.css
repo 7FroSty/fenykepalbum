@@ -1,0 +1,20 @@
+.kepnavbar{
+    width: 75%;
+    margin: 50px auto;
+    border: 5px solid #6A385D;
+    border-radius: 5px;
+}
+
+.kepnav{
+    justify-content: center;
+}
+
+.form-control{
+    border: 2px solid #6A385D;
+    font-variant: normal;
+}
+
+.form-control:focus{
+    border-color: #E50B7B;
+    box-shadow: none;
+}

@@ -52,10 +52,10 @@
                 </p>
                 <p>Admin: <span class="adat" th:text="*{felhasznalo.isAdmin}"></span></p>
                 <form th:if="${sajatProfil && felhasznalo.isAdmin()}" th:action="@{/felhasznalo/admin}">
-                    <button type="submit" class="btn" name="submit">Admin panel</button>
+                    <button type="submit" class="btn gomb" name="submit">Admin panel</button>
                 </form>
                 <form th:action="@{/felhasznalo/kijelentkezes}">
-                    <button type="submit" class="btn" name="submit">Kijelentkezés</button>
+                    <button type="submit" class="btn gomb" name="submit">Kijelentkezés</button>
                 </form>
             </div>
         </div>
