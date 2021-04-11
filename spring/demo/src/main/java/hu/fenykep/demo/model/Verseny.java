@@ -4,8 +4,34 @@ import java.util.Date;
 
 public class Verseny {
     private int id;
+    private String cim;
+    private String szoveg;
     private Date szavazas_kezdete;
     private Date szavazas_vege;
+
+    public Verseny(int id, String cim, String szoveg, Date szk, Date szv){
+        this.id=id;
+        this.cim=cim;
+        this.szoveg=szoveg;
+        this.szavazas_kezdete=szk;
+        this.szavazas_vege=szv;
+    }
+
+    public String getCim() {
+        return cim;
+    }
+
+    public String getSzoveg() {
+        return szoveg;
+    }
+
+    public void setCim(String cim) {
+        this.cim = cim;
+    }
+
+    public void setSzoveg(String szoveg) {
+        this.szoveg = szoveg;
+    }
 
     public int getId() {
         return id;

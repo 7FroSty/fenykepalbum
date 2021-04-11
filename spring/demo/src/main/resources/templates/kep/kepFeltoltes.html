@@ -96,6 +96,15 @@
                     </th:block>
                 </select>
             </div>
+            <div class="form-group">
+                <label>Verseny:</label>
+                <select class="form-select" id="verseny" name="verseny">
+                        <option value="0" label="nincs kiválasztva"></option>
+                    <th:block th:each="verseny : ${versenyek}">
+                        <option th:value="${verseny.getId()}" th:text="${verseny.getCim()}"></option>
+                    </th:block>
+                </select>
+            </div>
             <input type="hidden" name="felhasznalo_id" th:value="*{felhasznalo.getId()}" required>
             <button type="submit" class="btn gomb" name="submit">Feltöltés</button>
         </form>

@@ -2,9 +2,11 @@ package hu.fenykep.demo.controller;
 
 import hu.fenykep.demo.model.Felhasznalo;
 import hu.fenykep.demo.model.Kategoria;
+import hu.fenykep.demo.model.Verseny;
 import hu.fenykep.demo.repository.FelhasznaloRepository;
 import hu.fenykep.demo.repository.KategoriaRepository;
 import hu.fenykep.demo.repository.KepRepository;
+import hu.fenykep.demo.repository.VersenyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class KepController {
@@ -29,6 +32,9 @@ public class KepController {
 
     @Autowired
     private KategoriaRepository kategoriaRepository;
+
+    @Autowired
+    private VersenyRepository versenyRepository;
 
     @Autowired
     private FelhasznaloRepository felhasznaloRepository;
@@ -43,6 +49,9 @@ public class KepController {
 
         List<Kategoria> kategoriak = kategoriaRepository.findAll();
         model.addAttribute("kategoriak", kategoriak);
+
+        List<Verseny> versenyek = versenyRepository.getActiveVersenyek();
+        model.addAttribute("versenyek", versenyek);
 
         return "/kep/kepFeltoltes";
     }
