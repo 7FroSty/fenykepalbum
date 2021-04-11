@@ -116,6 +116,8 @@ CREATE TABLE Bejegyzes(
 
 CREATE TABLE Verseny(
     id NUMBER(10) DEFAULT verseny_seq.NEXTVAL NOT NULL,
+    cim VARCHAR2(100) NOT NULL,
+    szoveg VARCHAR2(1000) NOT NULL,
     szavazas_kezdete TIMESTAMP NOT NULL,
     szavazas_vege TIMESTAMP NOT NULL,
     CONSTRAINT verseny_pk_id PRIMARY KEY(id)
@@ -139,31 +141,3 @@ CREATE TABLE Szavazat(
     CONSTRAINT szavazat_fk_fel_id FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE
 );
 
-
--- Procedures, Functions
-
-CREATE OR REPLACE PROCEDURE FELHASZNALOREGISZTRACIO (
-    p_nev IN VARCHAR2,
-    p_email IN VARCHAR2,
-    p_jelszo IN VARCHAR2,
-    p_iranyitoszam IN NUMBER,
-    p_telepules IN VARCHAR2,
-    p_utca IN VARCHAR2,
-    p_hazszam IN VARCHAR2,
-    p_error OUT NUMBER
-    -- Errors:
-    -- 0: No error
-    -- 1: Duplicate email error
-    -- 10: Other error
-) AS 
-BEGIN
-    p_error := 0;
-    INSERT INTO Felhasznalo(nev, email, jelszo, iranyitoszam, telepules, utca, hazszam)
-    VALUES(p_nev, p_email, p_jelszo, '1234', 'telepules', 'utca', 'hsz');
-    
-EXCEPTION
-    WHEN DUP_VAL_ON_INDEX THEN
-        p_error := 1;
-    WHEN OTHERS THEN
-        p_error := 10;
-END FELHASZNALOREGISZTRACIO;
