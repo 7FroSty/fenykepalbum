@@ -1,0 +1,37 @@
+.container{
+    background-color: #75CDB3;
+    border: 5px solid #6A385D;
+    border-radius: 5px;
+    margin-top: 50px;
+    width: auto;
+    font-size: 20px;
+}
+
+article{
+    background-color: #EFB261;
+    width: 95%;
+    margin: 50px auto;
+    padding: 0 10px;
+    border: 3px solid #6A385D;
+    border-radius: 5px;
+    overflow-wrap: break-word;
+}
+
+hr{
+    width: 100%;
+    border: 1px solid #6A385D;
+}
+
+h2{
+    padding: 5px;
+    text-decoration: underline solid #543F65;
+    font-variant: normal;
+}
+
+small{
+    font-variant: normal;
+}
+
+p{
+    font-variant: normal;
+}

@@ -5,11 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/bejegyzes.css}">
         <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
         <title>Főoldal - HUmmingbird</title>
     </head>
-    <style>
-    </style>
     <body>
         <nav class="navbar navbar-expand-md justify-content-center">
             <li class="navbar-brand">
@@ -33,16 +32,17 @@
                 <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
             </li>
         </nav>
-        <span>
+        <div class="container">
             <th:block th:each="bejegyzes : ${bejegyzesek}">
-                <div class="bejegyzes">
-                    <h1 th:text="${bejegyzes.getCim()}"></h1>
-                    <h7 th:text="${bejegyzes.getDateAsString()}"></h7>
+                <article>
+                    <h2 th:text="${bejegyzes.getCim()}"></h2>
+                    <span><small th:text="'Szerző: '+${admin.getFelhasznaloById(bejegyzes.getFelhasznalo_id()).getNev()}"></small></span>
+                    <br>
+                    <span><small th:text="'Dátum: '+${bejegyzes.getDateAsString()}"></small></span>
                     <hr>
-                    <h3 th:text="${bejegyzes.getSzoveg()}" ></h3>
-                    <h7 th:text="'Szerző: '+${admin.getFelhasznaloById(bejegyzes.getFelhasznalo_id()).getNev()}"></h7>
-                </div>
+                    <p th:text="${bejegyzes.getSzoveg()}"></p>
+                </article>
             </th:block>
-        </span>
+        </div>
     </body>
 </html>

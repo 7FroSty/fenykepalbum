@@ -66,4 +66,14 @@ public class HtmlController {
     public String versenyek() {
         return "/versenyek";
     }
+
+    @GetMapping("/kep/kategoriak")
+    public String kategoriak() {
+        return "/kep/kategoriak";
+    }
+
+    @GetMapping("/kep/telepulesek")
+    public String telepulesek() {
+        return "/kep/telepulesek";
+    }
 }

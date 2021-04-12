@@ -31,16 +31,3 @@ body{
 #logoflipped{
     transform: scaleX(-1);
 }
-
-.bejegyzes{
-    background-color: #75CDB3;
-    width: 55%;
-    margin: 50px auto;
-    border: 5px solid #6A385D;
-    border-radius: 5px;
-}
-hr{
-    width: 98%;
-    height: 5px;
-    border-width: 5px;
-}
