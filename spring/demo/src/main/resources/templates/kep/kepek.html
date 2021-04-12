@@ -9,7 +9,10 @@
         <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
         <title>Képek - HUmmingbird</title>
     </head>
-    <style>
+    <style type="text/css">
+        .kepnavbar{
+            width: 78%;
+        }
     </style>
     <body>
         <nav class="navbar navbar-expand-md justify-content-center">
@@ -37,7 +40,7 @@
         <nav class="navbar navbar-expand-xl justify-content-center kepnavbar">
             <ul class="navbar-nav kepnav">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/kep/kepFeltoltes}">Kép feltöltése</a>
+                    <a class="nav-link" th:href="@{/kep/kepFeltoltes}">Képfeltöltés</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/kep/kepek}">Összes kép</a>
@@ -48,9 +51,16 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/felhasznalo/bejelentkezes}">Települések</a>
                 </li>
-                <form class="nav-item form-inline">
+                <form class="nav-item form-inline" th:action="@{/kep/kereses}" method="post">
+                    <select class="form-select lista mr-2" name="kereses">
+                        <option value="cim">Cím</option>
+                        <option value="felhasznalo">Felhasználó</option>
+                        <option value="kategoria">Kategória</option>
+                        <option value="kulcsszo">Kulcsszó</option>
+                        <option value="telepules">Település</option>
+                    </select>
                     <input class="form-control" type="search" placeholder="Keresés" aria-label="Search">
-                    <button type="submit" class="btn nav-link" >Keresés</button>
+                    <button type="submit" class="btn nav-link" name="submit">Keresés</button>
                 </form>
             </ul>
         </nav>

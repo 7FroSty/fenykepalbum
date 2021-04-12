@@ -10,13 +10,6 @@
         <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
         <title>Képfeltöltés - HUmmingbird</title>
     </head>
-    <style type="text/css">
-        #kepfeltoltes{
-            border: 2px solid #6A385D;
-            border-radius: 5px;
-            font-variant: normal;
-        }
-    </style>
     <body>
         <nav class="navbar navbar-expand-sm justify-content-center">
             <li class="navbar-brand">
@@ -56,44 +49,5 @@
                 </li>
             </ul>
         </nav>
-        <div class="container">
-            <h2>
-                Képfeltöltés
-            </h2>
-            <br>
-            <form th:action="@{/feltoltes}" method="post" enctype="multipart/form-data">
-                <div class="form-group custom-file">
-                    <label>Kép:</label>
-                    <input type="file" id="kepfeltoltes"  accept=".jpg,.png" name="kep" required>
-                </div>
-                <div class="form-group">
-                    <label>Cím:</label>
-                    <input type="text" class="form-control" name="cim" required>
-                </div>
-                <div class="form-group">
-                    <label>Település:</label>
-                    <input type="text" class="form-control" name="telepules" required>
-                </div>
-                <div class="form-group">
-                    <label>Kategória:</label>
-                    <select class="form-select lista" name="kategoria">
-                        <th:block th:each="kategoria : ${kategoriak}">
-                            <option th:value="${kategoria.getId()}" th:text="${kategoria.getNev()}"></option>
-                        </th:block>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Verseny:</label>
-                    <select class="form-select lista" name="verseny">
-                            <option value="0" label="Nincs kiválasztva"></option>
-                        <th:block th:each="verseny : ${versenyek}">
-                            <option th:value="${verseny.getId()}" th:text="${verseny.getCim()}"></option>
-                        </th:block>
-                    </select>
-                </div>
-                <input type="hidden" name="felhasznalo_id" th:value="*{felhasznalo.getId()}" required>
-                <button type="submit" class="btn gomb" name="submit">Feltöltés</button>
-            </form>
-        </div>
     </body>
 </html>

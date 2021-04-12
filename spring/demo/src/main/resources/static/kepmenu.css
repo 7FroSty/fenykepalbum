@@ -1,5 +1,5 @@
 .kepnavbar{
-    width: 75%;
+    width: 55%;
     margin: 50px auto;
     border: 5px solid #6A385D;
     border-radius: 5px;
@@ -17,4 +17,14 @@
 .form-control:focus{
     border-color: #E50B7B;
     box-shadow: none;
+}
+
+.lista{
+    border: 2px solid #6A385D;
+    border-radius: 5px;
+    font-variant: normal;
+}
+
+.lista:focus{
+    border-color: #E50B7B;
 }
