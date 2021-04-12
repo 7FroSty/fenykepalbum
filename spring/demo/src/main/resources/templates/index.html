@@ -33,5 +33,16 @@
                 <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
             </li>
         </nav>
+        <span>
+            <th:block th:each="bejegyzes : ${bejegyzesek}">
+                <div class="bejegyzes">
+                    <h1 th:text="${bejegyzes.getCim()}"></h1>
+                    <h7 th:text="${bejegyzes.getDateAsString()}"></h7>
+                    <hr>
+                    <h3 th:text="${bejegyzes.getSzoveg()}" ></h3>
+                    <h7 th:text="'Szerző: '+${admin.getFelhasznaloById(bejegyzes.getFelhasznalo_id()).getNev()}"></h7>
+                </div>
+            </th:block>
+        </span>
     </body>
 </html>
