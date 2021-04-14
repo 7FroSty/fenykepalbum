@@ -50,6 +50,7 @@
                 <p>Utca/házszám: <span class="adat" th:text="${felhasznalo.getUtca()}"></span>
                     <span class="adat" th:text="${felhasznalo.getHazszam()}"></span>
                 </p>
+                <a th:href="@{/kep/kepek/felhasznalo/{id}(id=${felhasznalo.getId()})}">Feltöltött képek</a>
                 <p>Admin: <span class="adat" th:text="*{felhasznalo.isAdmin}"></span></p>
                 <form th:if="${sajatProfil}" th:action="@{/felhasznalo/profilModositas}">
                     <button type="submit" class="btn gomb" name="submit">Adatok módosítása</button>
