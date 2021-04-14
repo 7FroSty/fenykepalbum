@@ -11,6 +11,10 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.sql.Clob;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -20,12 +24,27 @@ public class KepRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    private String clobToString(Clob clob) {
+        try {
+            Reader r = clob.getCharacterStream();
+            StringBuilder buffer = new StringBuilder();
+            int ch;
+            while ((ch = r.read()) != -1) {
+                buffer.append((char)ch);
+            }
+            return buffer.toString();
+        } catch (IOException | SQLException ignored){
+
+        }
+        return "";
+    }
+
     private final RowMapper<Kep> kepRowMapper = (rs, i) -> new Kep(
             rs.getInt("id"),
             rs.getInt("felhasznalo_id"),
             rs.getInt("kategoria_id"),
             rs.getString("cim"),
-            rs.getClob("tartalom").toString(),
+            clobToString(rs.getClob("tartalom")),
             rs.getTimestamp("idopont"),
             rs.getString("telepules"));
 
@@ -38,6 +57,15 @@ public class KepRepository {
 
     public List<Kep> findAll() {
         return jdbcTemplate.query("SELECT * FROM Kep", kepRowMapper);
+    }
+
+    public Kep findById(int id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM Kep Where id = ?",
+                new Object[]{
+                        id
+                }, new int[]{
+                        OracleTypes.NUMBER
+                }, kepRowMapper);
     }
 
 

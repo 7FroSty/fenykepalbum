@@ -17,20 +17,13 @@ import java.util.List;
 @Controller
 public class HtmlController {
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
     private FelhasznaloRepository felhasznaloRepository;
+
     @Autowired
     private BejegyzesRepository bejegyzesRepository;
 
-    @GetMapping("")
+    @GetMapping("/")
     public String index(Model model) throws Exception {
-        try {
-            this.runTeszt();
-        }
-        catch (Exception e){
-
-        }
         model.addAttribute("hiba", "Hibauzenet");
 
         List<Bejegyzes> bejegyzesek = bejegyzesRepository.findAll();
@@ -40,40 +33,13 @@ public class HtmlController {
         return "index";
     }
 
-
-
-    public void runTeszt() throws Exception {
-        System.out.println("al");
-
-        String sql = "SELECT * FROM Felhasznalo";
-
-        List<Felhasznalo> felhasznalok = felhasznaloRepository.findAll();
-
-        felhasznalok.forEach(System.out :: println);
-    }
-
     @GetMapping("/index")
     public String index() {
-        return "redirect:";
-    }
-
-    @GetMapping("/kep/kepek")
-    public String kepek() {
-        return "/kep/kepek";
+        return "redirect:/";
     }
 
     @GetMapping("/versenyek")
     public String versenyek() {
         return "/versenyek";
-    }
-
-    @GetMapping("/kep/kategoriak")
-    public String kategoriak() {
-        return "/kep/kategoriak";
-    }
-
-    @GetMapping("/kep/telepulesek")
-    public String telepulesek() {
-        return "/kep/telepulesek";
     }
 }

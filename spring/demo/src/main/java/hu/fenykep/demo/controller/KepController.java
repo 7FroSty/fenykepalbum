@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class KepController {
@@ -94,4 +93,50 @@ public class KepController {
 
         return "index";
     }
+
+    @GetMapping("/kep/kategoriak")
+    public String kategoriak() {
+        return "/kep/kategoriak";
+    }
+
+    @GetMapping("/kep/telepulesek")
+    public String telepulesek() {
+        return "/kep/telepulesek";
+    }
+
+    // összes kép listázása
+    @GetMapping("/kep/kepek")
+    public String kepListaOsszes(Model model) {
+        model.addAttribute("kepek", kepRepository.findAll());
+        model.addAttribute("kepSzuro", "Minden kép");
+        return "/kep/listazas";
+    }
+
+    // Kép megtekintése
+    @GetMapping("/kep/megtekintes/{id}")
+    public String kepMegtekintesId(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("kep", kepRepository.findById(id));
+        return "/kep/megtekintes";
+    }
+
+    // Saját képek
+    /*@GetMapping("/kep/kepek/felhasznalo/")
+    public String kepListaFelhasznalo(Authentication authentication) {
+        if(authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/kep/kepek/felhasznalo/" + ((Felhasznalo) authentication.getPrincipal()).getId();
+        }
+        return "/kep/kepkkek";
+    }
+
+    @GetMapping("/kep/kepek/felhasznalo/{id}")
+    public String kepListaFelhasznaloId(@PathVariable("id") Integer id) {
+        // get kepek by felhasznalo id
+        return "/kep/kekkkkpek";
+    }
+
+    @GetMapping("/kep/kepek/kategoria/{id}")
+    public String kepListaKategoriaId(@PathVariable("id") Integer id) {
+        // get kepek by kategoria id
+        return "/kep/kekasdpek";
+    }*/
 }

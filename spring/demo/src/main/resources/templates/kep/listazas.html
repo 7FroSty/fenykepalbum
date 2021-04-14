@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
         <link rel="stylesheet" type="text/css" th:href="@{/kepmenu.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/kepek.css}">
         <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
         <title>Képek - HUmmingbird</title>
     </head>
@@ -64,5 +65,16 @@
                 </form>
             </ul>
         </nav>
+        <div class="container">
+            <h1 th:if="${kepSzuro}" th:text="${kepSzuro}"></h1>
+            <div id="kepek">
+                <div class="d-flex" th:each="kep : ${kepek}">
+                    <div class="lista-kep">
+                        <img th:src="'data:image/png;base64,' + ${kep.getTartalom()}">
+                        <a class="cim" th:href="@{/kep/megtekintes/{id}(id=${kep.getId()})}" th:text="${kep.getCim()}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
