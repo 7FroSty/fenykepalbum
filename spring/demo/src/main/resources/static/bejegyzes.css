@@ -35,3 +35,34 @@ small{
 p{
     font-variant: normal;
 }
+
+.form-group{
+    text-align: left;
+}
+
+.form-control{
+    border: 2px solid #6A385D;
+    font-variant: normal;
+    background-color: #FFDAB9;
+    color: #543F65;
+}
+
+.form-control:focus{
+    border-color: #E50B7B;
+    box-shadow: none;
+    background-color: #FFDAB9;
+    color: #543F65;
+}
+
+.gomb{
+    color: #EBE589;
+    font-size: 20px;
+    background-color: #5A7A41;
+    border-color: #6A385D;
+    border-width: 2px;
+}
+
+.gomb:hover{
+    color: #EBE589;
+    background-color: #779721;
+}

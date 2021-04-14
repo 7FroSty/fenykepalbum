@@ -32,21 +32,21 @@
                 <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
             </li>
         </nav>
-        <span th:if="${felhasznalo.isAdmin}">
-            <form th:action="@{/bejegyzesFeltoltes}" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>Cím:</label>
-                    <input type="text" class="form-control" name="cim" required>
-                </div>
-                <div class="form-group">
-                    <label>Tartalom:</label>
-                    <input type="text" class="form-control" name="tartalom" required>
-                </div>
-                <input type="hidden" name="admin_id" th:value="*{felhasznalo.getId()}" required>
-                <button type="submit" class="btn gomb" name="submit">Feltöltés</button>
-            </form>
-        </span>
         <div class="container">
+            <span th:if="${felhasznalo.isAdmin}">
+                <form th:action="@{/bejegyzesFeltoltes}" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Cím:</label>
+                        <input type="text" class="form-control" name="cim" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tartalom:</label>
+                        <textarea type="text" class="form-control" name="tartalom" required></textarea>
+                    </div>
+                    <input type="hidden" name="admin_id" th:value="*{felhasznalo.getId()}" required>
+                    <button type="submit" class="btn gomb" name="submit">Feltöltés</button>
+                </form>
+            </span>
             <th:block th:each="bejegyzes : ${bejegyzesek}">
                 <article>
                     <h2 th:text="${bejegyzes.getCim()}"></h2>
@@ -55,7 +55,7 @@
                     <span><small th:text="'Dátum: '+${bejegyzes.getDateAsString()}"></small></span>
                     <span th:if="${felhasznalo.isAdmin()}">
                         <form th:action="@{/bejegyzesTorles}" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}" >
+                            <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}">
                             <button type="submit" class="btn gomb" name="submit">Törlés</button>
                         </form>
                     </span>

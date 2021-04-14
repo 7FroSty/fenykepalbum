@@ -66,11 +66,11 @@
             </ul>
         </nav>
         <div class="container">
-            <h1 th:if="${kepSzuro}" th:text="${kepSzuro}"></h1>
-            <div id="kepek">
-                <div class="d-flex" th:each="kep : ${kepek}">
-                    <div class="lista-kep">
-                        <img th:src="'data:image/png;base64,' + ${kep.getTartalom()}">
+            <h2 th:if="${kepSzuro}" th:text="${kepSzuro}"></h2>
+            <div class="row">
+                <div class="col-sm-3 mb-4" th:each="kep : ${kepek}">
+                    <div class="thumbnail">
+                        <img th:src="'data:image/png;base64,' + ${kep.getTartalom()}" class="img-fluid">
                         <a class="cim" th:href="@{/kep/megtekintes/{id}(id=${kep.getId()})}" th:text="${kep.getCim()}"></a>
                     </div>
                 </div>
