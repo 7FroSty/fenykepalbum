@@ -11,6 +11,8 @@ public class Bejegyzes {
     private String szoveg;
     private Date idopont;
 
+
+
     public Bejegyzes(int id, int felhasznalo_id, String cim, String szoveg, Date idopont){
         this.id=id;
         this.felhasznalo_id=felhasznalo_id;

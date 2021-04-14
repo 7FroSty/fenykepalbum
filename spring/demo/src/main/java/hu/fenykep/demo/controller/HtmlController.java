@@ -5,12 +5,10 @@ import hu.fenykep.demo.model.Felhasznalo;
 import hu.fenykep.demo.repository.BejegyzesRepository;
 import hu.fenykep.demo.repository.FelhasznaloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -23,8 +21,19 @@ public class HtmlController {
     private BejegyzesRepository bejegyzesRepository;
 
     @GetMapping("/")
-    public String index(Model model) throws Exception {
-        model.addAttribute("hiba", "Hibauzenet");
+    public String index(Model model, Authentication authentication) throws Exception {
+        try {
+            Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+            model.addAttribute("felhasznalo", felhasznalo);
+            model.addAttribute("bejegyzesRepository", bejegyzesRepository);
+
+            System.out.println(felhasznalo.isAdmin());
+
+        }catch (Exception e){
+            Felhasznalo felhasznalo = new Felhasznalo(0, "vendeg", "", "", 0,
+                    "", "", "", false);
+            model.addAttribute("felhasznalo", felhasznalo);
+        }
 
         List<Bejegyzes> bejegyzesek = bejegyzesRepository.findAll();
         model.addAttribute("bejegyzesek", bejegyzesek);
