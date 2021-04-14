@@ -57,6 +57,86 @@ public class FelhasznaloController {
     }
 
 
+    @GetMapping("/felhasznalo/profilModositas")
+    @PreAuthorize("hasRole('FELHASZNALO')")
+    public String profilModositas(Model model, Authentication authentication) {
+        Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+
+        model.addAttribute("felhasznalo", felhasznalo);
+        return "/felhasznalo/profilModositas";
+    }
+
+    @PostMapping("/felhasznalo/profilModositasAdatokPost")
+    @PreAuthorize("hasRole('FELHASZNALO')")
+    public ModelAndView profilModositasAdatokPost(@RequestParam("nev") String nev,
+                                            @RequestParam("iranyitoszam") int iranyitoszam,
+                                            @RequestParam("telepules") String telepules,
+                                            @RequestParam("utca") String utca,
+                                            @RequestParam("hazszam") String hazszam,
+                                            ModelMap modelMap, Authentication authentication) {
+        Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+        modelMap.addAttribute("felhasznalo", felhasznalo);
+        try {
+            if (nev.length() < 3 || nev.length() > 50) {
+                throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_NEV);
+            } else if (iranyitoszam < 1000 || iranyitoszam >= 10000) {
+                throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_IRANYITOSZAM);
+            } else if (telepules.length() > 50) {
+                throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_TELEPULES);
+            } else if (utca.length() > 50) {
+                throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_UTCA);
+            } else if (hazszam.length() > 50) {
+                throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_HAZSZAM);
+            }
+
+            felhasznalo.setNev(nev);
+            felhasznalo.setIranyitoszam(iranyitoszam);
+            felhasznalo.setTelepules(telepules);
+            felhasznalo.setUtca(utca);
+            felhasznalo.setHazszam(hazszam);
+
+            felhasznaloRepository.updateFelhasznaloAdatok(felhasznalo);
+        } catch (FelhasznaloException e) {
+            modelMap.addAttribute("modositashiba", e.getMessage());
+            System.out.println("Adatmódosítási hiba: " + e.getMessage());
+            return new ModelAndView("/felhasznalo/profilModositas", modelMap);
+        } catch (Exception e) {
+            modelMap.addAttribute("modositashiba", "Szerver hiba.");
+            e.printStackTrace();
+            return new ModelAndView("/felhasznalo/profilModositas", modelMap);
+        }
+        modelMap.addAttribute("modositassiker", "Sikeres adatmódosítás.");
+        return new ModelAndView("/felhasznalo/profilModositas", modelMap);
+    }
+
+    @PostMapping("/felhasznalo/profilModositasJelszoPost")
+    @PreAuthorize("hasRole('FELHASZNALO')")
+    public ModelAndView profilModositasJelszoPost(@RequestParam("jelszo") String jelszo,
+                                                  ModelMap modelMap, Authentication authentication) {
+        Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+        modelMap.addAttribute("felhasznalo", felhasznalo);
+        try {
+            if (!patternJelszo.matcher(jelszo).matches()) {
+                throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_JELSZO);
+            }
+
+            String jelszoHash = passwordEncoder.encode(jelszo);
+            felhasznalo.setJelszo(jelszoHash);
+
+            felhasznaloRepository.updateFelhasznaloJelszo(felhasznalo);
+        } catch (FelhasznaloException e) {
+            modelMap.addAttribute("modositashiba", e.getMessage());
+            System.out.println("Adatmódosítási hiba: " + e.getMessage());
+            return new ModelAndView("/felhasznalo/profilModositas", modelMap);
+        } catch (Exception e) {
+            modelMap.addAttribute("modositashiba", "Szerver hiba.");
+            e.printStackTrace();
+            return new ModelAndView("/felhasznalo/profilModositas", modelMap);
+        }
+        modelMap.addAttribute("modositassiker", "Sikeres jelszómódosítás.");
+        return new ModelAndView("/felhasznalo/profilModositas", modelMap);
+    }
+
     @GetMapping("/felhasznalo/profil/{id}")
     public String profilId(@PathVariable("id") Integer id, Model model, Authentication authentication) {
         Felhasznalo felhasznalo = null;
@@ -91,7 +171,7 @@ public class FelhasznaloController {
                 throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_EMAIL);
             } else if (!patternJelszo.matcher(jelszo).matches()) {
                 throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_JELSZO);
-            } else if (iranyitoszam < 0 || iranyitoszam > 10000) {
+            } else if (iranyitoszam < 1000 || iranyitoszam >= 10000) {
                 throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_IRANYITOSZAM);
             } else if (telepules.length() > 50) {
                 throw new FelhasznaloException(FelhasznaloError.REG_BEVITEL_TELEPULES);
@@ -113,7 +193,6 @@ public class FelhasznaloController {
             if (hiba != null) {
                 throw new FelhasznaloException(hiba);
             }
-            System.out.println("WOW");
         } catch (FelhasznaloException e) {
             modelMap.addAttribute("hiba", e.getMessage());
             System.out.println("Regisztrációs hiba: " + e.getMessage());

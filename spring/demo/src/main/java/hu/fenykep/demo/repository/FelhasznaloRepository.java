@@ -4,6 +4,7 @@ import hu.fenykep.demo.model.Felhasznalo;
 
 import oracle.jdbc.OracleType;
 
+import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -70,5 +71,30 @@ public class FelhasznaloRepository {
                 }, new int[]{
                         OracleType.NUMBER.getVendorTypeNumber()
                 }, felhasznaloRowMapper);
+    }
+
+    public void updateFelhasznaloAdatok(Felhasznalo felhasznalo) throws DataAccessException{
+        jdbcTemplate.update("UPDATE Felhasznalo SET nev = ?, iranyitoszam = ?," +
+                        "telepules = ?, utca = ?, hazszam = ? WHERE id = ?",
+                new Object[]{
+                        felhasznalo.getNev(), felhasznalo.getIranyitoszam(),
+                        felhasznalo.getTelepules(), felhasznalo.getUtca(), felhasznalo.getHazszam(),
+                        felhasznalo.getId()
+                }, new int[]{
+                        OracleTypes.VARCHAR, OracleTypes.NUMBER,
+                        OracleTypes.VARCHAR, OracleTypes.VARCHAR, OracleTypes.VARCHAR,
+                        OracleTypes.NUMBER
+                });
+    }
+
+    public void updateFelhasznaloJelszo(Felhasznalo felhasznalo) throws DataAccessException{
+        jdbcTemplate.update("UPDATE Felhasznalo SET jelszo = ? WHERE id = ?",
+                new Object[]{
+                        felhasznalo.getJelszo(),
+                        felhasznalo.getId()
+                }, new int[]{
+                        OracleTypes.VARCHAR,
+                        OracleTypes.NUMBER
+                });
     }
 }

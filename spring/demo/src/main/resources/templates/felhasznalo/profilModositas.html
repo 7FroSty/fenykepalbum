@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/form.css}">
+    <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
+    <title>Profil módosítás - HUmmingbird</title>
+</head>
+<style>
+    .adat{
+        font-variant: normal;
+    }
+</style>
+<body>
+<nav class="navbar navbar-expand-md justify-content-center">
+    <li class="navbar-brand">
+        <img th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
+    </li>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/index}">Főoldal</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/kep/kepek}">Képek</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/versenyek}">Versenyek</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/felhasznalo/bejelentkezes}">Profil</a>
+        </li>
+    </ul>
+    <li class="navbar-brand">
+        <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
+    </li>
+</nav>
+<div class="container">
+    <div th:if="${felhasznalo != null}">
+        <h2>
+            Profil Módosítás
+        </h2>
+        <p>Email: <span class="adat" th:text="${felhasznalo.getEmail()}"></span></p>
+        <p>Profil adatok módosítása</p>
+        <p th:if="${modositashiba != null}" th:text="${modositashiba}"></p>
+        <p th:if="${modositassiker != null}" th:text="${modositassiker}"></p>
+        <form th:action="@{/felhasznalo/profilModositasAdatokPost}" th:object="${felhasznalo}" method="post">
+            <div class="form-group">
+                <label>Név:</label>
+                <input type="text" class="form-control" name="nev" th:value="*{getNev()}" required>
+            </div>
+            <div class="form-group">
+                <label>Irányítószám:</label>
+                <input type="number" class="form-control" name="iranyitoszam" th:value="*{getIranyitoszam()}" required>
+            </div>
+            <div class="form-group">
+                <label>Település:</label>
+                <input type="text" class="form-control" name="telepules" th:value="*{getTelepules()}" required>
+            </div>
+            <div class="form-group">
+                <label>Utca:</label>
+                <input type="text" class="form-control" name="utca" th:value="*{getUtca()}" required>
+            </div>
+            <div class="form-group">
+                <label>Házszám:</label>
+                <input type="text" class="form-control" name="hazszam" th:value="*{getHazszam()}" required>
+            </div>
+            <button type="submit" class="btn gomb" name="submit-btn">Módosítás</button>
+        </form>
+        <p>Jelszó módosítása</p>
+        <form th:action="@{/felhasznalo/profilModositasJelszoPost}" th:object="${felhasznalo}" method="post">
+            <div class="form-group">
+                <label>Jelszó:</label>
+                <input type="password" class="form-control" name="jelszo" required>
+            </div>
+            <button type="submit" class="btn gomb" name="submit-btn">Jelszó módosítás</button>
+        </form>
+        <form th:action="@{/felhasznalo/kijelentkezes}">
+            <button type="submit" class="btn gomb" name="submit">Kijelentkezés</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -51,10 +51,13 @@
                     <span class="adat" th:text="${felhasznalo.getHazszam()}"></span>
                 </p>
                 <p>Admin: <span class="adat" th:text="*{felhasznalo.isAdmin}"></span></p>
-                <form th:if="${sajatProfil && felhasznalo.isAdmin()}" th:action="@{/felhasznalo/admin}">
+                <form th:if="${sajatProfil}" th:action="@{/felhasznalo/profilModositas}">
+                    <button type="submit" class="btn gomb" name="submit">Adatok módosítása</button>
+                </form>
+                <form th:if="${sajatProfil} and ${felhasznalo.isAdmin()}" th:action="@{/felhasznalo/admin}">
                     <button type="submit" class="btn gomb" name="submit">Admin panel</button>
                 </form>
-                <form th:action="@{/felhasznalo/kijelentkezes}">
+                <form th:if="${sajatProfil}" th:action="@{/felhasznalo/kijelentkezes}">
                     <button type="submit" class="btn gomb" name="submit">Kijelentkezés</button>
                 </form>
             </div>
