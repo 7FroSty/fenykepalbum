@@ -73,7 +73,7 @@ public class KepController {
             model.addAttribute("felhasznaloNemTalalt", true);
         }
 
-        return "/kep/kepFeltoltes";
+        return "redirect:/kep/kepFeltoltes";
     }
 
     @PostMapping("/feltoltes")
@@ -91,7 +91,7 @@ public class KepController {
 
         kepRepository.executeKepFeltoltes(Integer.parseInt(felhasznalo_id), kategoria_id, cim, encodedString, date, telepules);
 
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/kep/kategoriak")

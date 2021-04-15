@@ -1,9 +1,9 @@
-.container{
+.container-fluid{
     background-color: #75CDB3;
     border: 5px solid #6A385D;
     border-radius: 5px;
     margin-top: 50px;
-    width: auto;
+    width: 85%;
     text-align: center;
     font-size: 20px;
 }
@@ -14,28 +14,38 @@ h2{
     text-decoration: underline solid #543F65;
 }
 
+.row{
+    padding-left: 20px;
+    padding-right: 20px;
+
+}
+
+.col-sm-5cols{
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    width: 20%;
+}
 
 .thumbnail img {
     width: 100%;
     height: 25vh;
-    object-fit:cover;
+    object-fit: cover;
     border: 3px solid #6A385D;
     border-radius: 5px;
 }
 
-.thumbnail .cim{
-    position: absolute;
-    display: block;
-    width: 100%;
-    height: 25vh;
-    opacity: 0;
-    font-size: 1.35rem;
+.thumbnail img:hover{
+    border-color: #E50B7B;
+    transition: .5s;
+    transform: scale(1.05);
+}
+
+.cim{
     font-weight: 600;
-    text-shadow: 1px 1px #75CDB3;
-    transition: 0.2s linear opacity;
+    color: #543F65;
+    font-size: 2vmin;
+    font-variant: none;
+    cursor: default;
 }
-
-.thumbnail .cim:hover {
-    opacity: 1;
-}
-

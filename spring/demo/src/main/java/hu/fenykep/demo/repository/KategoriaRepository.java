@@ -19,5 +19,5 @@ public class KategoriaRepository {
             rs.getString("nev")
     );
 
-    public List<Kategoria> findAll(){ return jdbcTemplate.query("SELECT * FROM Felhasznalo", kategoriaRowMapper);}
+    public List<Kategoria> findAll(){ return jdbcTemplate.query("SELECT * FROM Kategoria", kategoriaRowMapper);}
 }
