@@ -1,12 +1,7 @@
 package hu.fenykep.demo.controller;
 
-import hu.fenykep.demo.model.Felhasznalo;
-import hu.fenykep.demo.model.Kategoria;
-import hu.fenykep.demo.model.Verseny;
-import hu.fenykep.demo.repository.FelhasznaloRepository;
-import hu.fenykep.demo.repository.KategoriaRepository;
-import hu.fenykep.demo.repository.KepRepository;
-import hu.fenykep.demo.repository.VersenyRepository;
+import hu.fenykep.demo.model.*;
+import hu.fenykep.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -37,6 +33,12 @@ public class KepController {
 
     @Autowired
     private FelhasznaloRepository felhasznaloRepository;
+
+    @Autowired
+    private ErtekelesRepository ertekelesRepository;
+
+    @Autowired
+    private KommentRepository kommentRepository;
 
     @GetMapping("/kep/kepFeltoltes")
     @PreAuthorize("hasRole('FELHASZNALO')")
@@ -115,8 +117,29 @@ public class KepController {
     // Kép megtekintése
     @GetMapping("/kep/megtekintes/{id}")
     public String kepMegtekintesId(@PathVariable("id") Integer id, Model model) {
-        model.addAttribute("kep", kepRepository.findById(id));
+        Kep kep = kepRepository.findById(id);
+        kepRepository.getKepAdatok(kep);
+
+        model.addAttribute("kep", kep);
+
+        List<Komment> kommentek = kommentRepository.getKepKommentek(kep);
+        model.addAttribute("kommentek", kommentek);
+
         return "/kep/megtekintes";
+    }
+
+    @GetMapping("/kep/ertekeles/{id}/csillag/{csillagok}")
+    @PreAuthorize("hasRole('FELHASZNALO')")
+    public String kepErtekeles(@PathVariable("id") Integer id,
+                               @PathVariable("csillagok") Integer csillagok,
+                               Authentication authentication) {
+        Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+        if(csillagok >= 0 && csillagok <= 5) {
+            ertekelesRepository.executeKepErtekeles(felhasznalo, id, csillagok);
+        } else {
+            System.out.println("Hiba történt értékelés közben.");
+        }
+        return "redirect:/kep/megtekintes/" + id;
     }
 
     // Saját képek

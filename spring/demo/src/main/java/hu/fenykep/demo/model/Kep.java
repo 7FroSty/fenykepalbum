@@ -6,11 +6,14 @@ import java.util.Date;
 public class Kep implements Serializable {
     private int id;
     private int felhasznalo_id;
+    private Felhasznalo felhasznalo;
     private int kategoria_id;
+    private Kategoria kategoria;
     private String cim;
     private String tartalom;
     private Date idopont;
     private String telepules;
+    private double csillagok; // Átlag: [0; 5]
 
     public Kep() {
     }
@@ -23,6 +26,14 @@ public class Kep implements Serializable {
         this.tartalom = tartalom;
         this.idopont = idopont;
         this.telepules = telepules;
+    }
+
+    public double getCsillagok() {
+        return csillagok;
+    }
+
+    public void setCsillagok(double csillagok) {
+        this.csillagok = csillagok;
     }
 
     public void setTelepules(String telepules) {
@@ -71,6 +82,22 @@ public class Kep implements Serializable {
 
     public void setKategoria_id(int kategoria_id) {
         this.kategoria_id = kategoria_id;
+    }
+
+    public Felhasznalo getFelhasznalo() {
+        return felhasznalo;
+    }
+
+    public void setFelhasznalo(Felhasznalo felhasznalo) {
+        this.felhasznalo = felhasznalo;
+    }
+
+    public Kategoria getKategoria() {
+        return kategoria;
+    }
+
+    public void setKategoria(Kategoria kategoria) {
+        this.kategoria = kategoria;
     }
 
     public String getCim() {

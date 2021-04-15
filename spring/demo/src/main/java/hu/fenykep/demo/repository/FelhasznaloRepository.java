@@ -34,6 +34,11 @@ public class FelhasznaloRepository {
             rs.getString("hazszam"),
             rs.getBoolean("admin"));
 
+    private final RowMapper<Felhasznalo> felhasznaloSafeRowMapper = (rs, rowNum) -> new Felhasznalo(
+            rs.getInt("id"),
+            rs.getString("nev"),
+            rs.getString("email"));
+
     public List<Felhasznalo> findAll() {
         return jdbcTemplate.query("SELECT * FROM Felhasznalo", felhasznaloRowMapper);
     }
@@ -66,11 +71,24 @@ public class FelhasznaloRepository {
     }
 
     public Felhasznalo getFelhasznaloById(int id) throws DataAccessException {
-        return jdbcTemplate.queryForObject("SELECT * FROM Felhasznalo WHERE id = ?", new Object[]{
-                        id
-                }, new int[]{
-                        OracleType.NUMBER.getVendorTypeNumber()
-                }, felhasznaloRowMapper);
+        return getFelhasznaloById(id, false);
+    }
+
+    public Felhasznalo getFelhasznaloById(int id, boolean safe) throws DataAccessException {
+        if(safe) {
+            return jdbcTemplate.queryForObject("SELECT * FROM Felhasznalo WHERE id = ?", new Object[]{
+                    id
+            }, new int[]{
+                    OracleType.NUMBER.getVendorTypeNumber()
+            }, felhasznaloRowMapper);
+        }
+
+        // Jelszó és település adat nélküli
+        return jdbcTemplate.queryForObject("SELECT id, nev, email, admin FROM Felhasznalo WHERE id = ?", new Object[]{
+                id
+        }, new int[]{
+                OracleType.NUMBER.getVendorTypeNumber()
+        }, felhasznaloSafeRowMapper);
     }
 
     public void updateFelhasznaloAdatok(Felhasznalo felhasznalo) throws DataAccessException{

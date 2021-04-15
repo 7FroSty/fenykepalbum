@@ -1,9 +1,12 @@
 package hu.fenykep.demo.repository;
 
+import hu.fenykep.demo.model.Ertekeles;
 import hu.fenykep.demo.model.Felhasznalo;
 import hu.fenykep.demo.model.Kep;
+import hu.fenykep.demo.model.Komment;
 import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -23,6 +26,21 @@ import java.util.*;
 public class KepRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    FelhasznaloRepository felhasznaloRepository;
+
+    @Autowired
+    KepMegtekintesRepository kepMegtekintesRepository;
+
+    @Autowired
+    ErtekelesRepository ertekelesRepository;
+
+    @Autowired
+    KulcsszoRepository kulcsszoRepository;
+
+    @Autowired
+    KategoriaRepository kategoriaRepository;
 
     private String clobToString(Clob clob) {
         try {
@@ -60,12 +78,17 @@ public class KepRepository {
     }
 
     public Kep findById(int id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM Kep Where id = ?",
-                new Object[]{
-                        id
-                }, new int[]{
-                        OracleTypes.NUMBER
-                }, kepRowMapper);
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM Kep Where id = ?",
+                    new Object[]{
+                            id
+                    }, new int[]{
+                            OracleTypes.NUMBER
+                    }, kepRowMapper);
+        }catch (DataAccessException dae) {
+            System.out.println("Ez a kép nem létezik.");
+        }
+        return null;
     }
 
 
@@ -144,5 +167,22 @@ public class KepRepository {
             kepek = (List<Kep>) jdbcCall.execute(kulcsszo, legujabbElol ? 0 : 1, 1).get("c_kepek");
         }
         return kepek;
+    }
+
+
+    public void getKepAdatok(Kep kep) {
+        kep.setFelhasznalo(felhasznaloRepository.getFelhasznaloById(kep.getFelhasznalo_id()));
+        kep.setKategoria(kategoriaRepository.findKategoriaById(kep.getKategoria_id()));
+
+        double atlag = 0.0;
+        List<Ertekeles> ertekelesList = ertekelesRepository.findAllByKep(kep);
+        for (Ertekeles ertekeles : ertekelesList) {
+            atlag += ertekeles.getCsillagok();
+        }
+        if(atlag != 0.0) {
+            atlag /= ertekelesList.size();
+        }
+
+        kep.setCsillagok(atlag);
     }
 }
