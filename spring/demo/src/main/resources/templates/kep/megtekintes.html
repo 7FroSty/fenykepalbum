@@ -69,7 +69,12 @@
     <h2 th:if="${kep == null}">Ez a kép nem létezik.</h2>
     <div class="kep" th:if="${kep != null}">
         <h2 th:text="${kep.getCim()}"></h2>
-
+        <div th:if="${felhasznalo != null} and (${kep.getFelhasznalo_id() == felhasznalo.getId()} or ${felhasznalo.isAdmin()})">
+            <form th:action="@{/kep/keptorles}" method="get" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:value="${kep.getId()}">
+                <button type="submit" class="btn gomb" name="submit">Törlés</button>
+            </form>
+        </div>
         <img th:src="'data:image/png;base64,' + ${kep.getTartalom()}">
         <div>Feltöltötte: <a th:href="@{/felhasznalo/profil/{id}(id=${kep.getFelhasznalo_id()})}"
                              th:text="${kep.getFelhasznalo().getNev()}"></a>

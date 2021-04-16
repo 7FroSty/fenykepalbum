@@ -114,9 +114,14 @@ public class KepController {
 
     // Kép megtekintése
     @GetMapping("/kep/megtekintes/{id}")
-    public String kepMegtekintesId(@PathVariable("id") Integer id, Model model) {
+    public String kepMegtekintesId(@PathVariable("id") Integer id, Model model, Authentication authentication) {
         Kep kep = kepRepository.findById(id);
         if(kep != null) {
+            try {
+                Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+                model.addAttribute("felhasznalo", felhasznalo);
+            }catch (Exception e){
+            }
             kepRepository.getKepAdatok(kep);
             List<Komment> kommentek = kommentRepository.getKepKommentek(kep);
             model.addAttribute("kommentek", kommentek);
@@ -234,5 +239,11 @@ public class KepController {
         model.addAttribute("kepek", kepek);
         model.addAttribute("kepSzuro", szuroStr);
         return "/kep/listazas";
+    }
+
+    @GetMapping("kep/keptorles")
+    public String kepTorles(@RequestParam("id") int id){
+        kepRepository.kepTorles(id);
+        return "redirect:/kep/kepek";
     }
 }

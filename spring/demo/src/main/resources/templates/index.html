@@ -33,7 +33,7 @@
             </li>
         </nav>
         <div class="container">
-            <span th:if="${felhasznalo.isAdmin}">
+            <span th:if="${felhasznalo != null} and ${felhasznalo.isAdmin}">
                 <form th:action="@{/bejegyzesFeltoltes}" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Cím:</label>
@@ -53,7 +53,7 @@
                     <span><small th:text="'Szerző: '+${admin.getFelhasznaloById(bejegyzes.getFelhasznalo_id()).getNev()}"></small></span>
                     <br>
                     <span><small th:text="'Dátum: '+${bejegyzes.getDateAsString()}"></small></span>
-                    <span th:if="${felhasznalo.isAdmin()}">
+                    <span th:if="${felhasznalo != null} and ${felhasznalo.isAdmin()}">
                         <form th:action="@{/bejegyzesModositas}" method="get" enctype="multipart/form-data">
                             <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}">
                             <button type="submit" class="btn gomb" name="submit">Módosítás</button>

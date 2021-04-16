@@ -32,9 +32,6 @@ public class HtmlController {
             System.out.println(felhasznalo.isAdmin());
 
         }catch (Exception e){
-            Felhasznalo felhasznalo = new Felhasznalo(0, "vendeg", "", "", 0,
-                    "", "", "", false);
-            model.addAttribute("felhasznalo", felhasznalo);
         }
 
         List<Bejegyzes> bejegyzesek = bejegyzesRepository.findAll();
@@ -55,7 +52,16 @@ public class HtmlController {
     }
 
     @GetMapping("/bejegyzesModositas")
-    public String bejegyzesModositas(Model model, @RequestParam("bejegyzesId") int id){
+    public String bejegyzesModositas(Model model, @RequestParam("bejegyzesId") int id, Authentication authentication){
+        try {
+            Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+            if(!felhasznalo.isAdmin()){
+                return "redirect:/";
+            }
+
+        }catch (Exception e){
+            return "redirect:/felhasznalo/bejelentkezes";
+        }
         model.addAttribute("bejegyzes", bejegyzesRepository.getBejegyzesById(id));
         return "/bejegyzesModositas";
     }
