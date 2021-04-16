@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -50,5 +52,11 @@ public class HtmlController {
     @GetMapping("/versenyek")
     public String versenyek() {
         return "/versenyek";
+    }
+
+    @GetMapping("/bejegyzesModositas")
+    public String bejegyzesModositas(Model model, @RequestParam("bejegyzesId") int id){
+        model.addAttribute("bejegyzes", bejegyzesRepository.getBejegyzesById(id));
+        return "/bejegyzesModositas";
     }
 }

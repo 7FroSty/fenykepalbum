@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,24 @@ public class BejegyzesRepository {
         jdbcCall.declareParameters(
                 new SqlParameter("p_cim", OracleTypes.VARCHAR),
                 new SqlParameter("p_tartalom", OracleTypes.VARCHAR),
+                new SqlParameter("p_id", OracleTypes.NUMBER)
+        );
+
+        return jdbcCall.execute(cim, tartalom, id);
+    }
+
+    public Bejegyzes getBejegyzesById(int id){
+        Bejegyzes result = jdbcTemplate.query("SELECT * FROM Bejegyzes WHERE id = "+id, bejegyzesRowMapper).get(0);
+        return result;
+    }
+
+    public Map<String, Object> bejegyzesUpdate(int id, String cim, String tartalom){
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("BejegyzesModositas");
+
+        jdbcCall.declareParameters(
+                new SqlParameter("p_cim", OracleTypes.VARCHAR),
+                new SqlParameter("p_szoveg", OracleTypes.VARCHAR),
                 new SqlParameter("p_id", OracleTypes.NUMBER)
         );
 

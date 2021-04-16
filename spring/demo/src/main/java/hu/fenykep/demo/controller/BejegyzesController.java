@@ -3,9 +3,12 @@ package hu.fenykep.demo.controller;
 import hu.fenykep.demo.repository.BejegyzesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Date;
 
 @Controller
 public class BejegyzesController {
@@ -24,5 +27,13 @@ public class BejegyzesController {
                                      @RequestParam("admin_id") int id){
         bejegyzesRepository.executeBejegyzesFeltoltes(cim, tartalom, id);
         return "redirect:/index";
+    }
+
+    @PostMapping("/bejegyzesModositasExecute")
+    public String bejegyzesModositas(@RequestParam("id") int id,
+                                     @RequestParam("cim") String cim,
+                                     @RequestParam("tartalom") String tartalom){
+        bejegyzesRepository.bejegyzesUpdate(id, cim, tartalom);
+        return "redirect:/";
     }
 }

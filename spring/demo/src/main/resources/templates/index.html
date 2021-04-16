@@ -54,6 +54,10 @@
                     <br>
                     <span><small th:text="'Dátum: '+${bejegyzes.getDateAsString()}"></small></span>
                     <span th:if="${felhasznalo.isAdmin()}">
+                        <form th:action="@{/bejegyzesModositas}" method="get" enctype="multipart/form-data">
+                            <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}">
+                            <button type="submit" class="btn gomb" name="submit">Módosítás</button>
+                        </form>
                         <form th:action="@{/bejegyzesTorles}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}">
                             <button type="submit" class="btn gomb" name="submit">Törlés</button>
