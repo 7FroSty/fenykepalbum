@@ -57,7 +57,7 @@ RETURN NUMBER -- Ha az egyik szó hasonlít a p_szoveg-ben lévő egyik szóra, 
 AS
     v_szoveg VARCHAR2(1000);
     v_keresendo VARCHAR2(1000);
-        
+    
     p_szoveg_szavak NUMBER;
     p_keresendo_szavak NUMBER;
     
@@ -67,7 +67,7 @@ BEGIN
     IF p_tolerancia = 1 THEN
         v_tolarencia := 60; -- Nagy
     END IF;
-    
+
     -- Betűk ASCII kódúra konvertálása
     SELECT CONVERT(p_szoveg, 'US7ASCII') INTO v_szoveg FROM DUAL;
     SELECT CONVERT(p_keresendo, 'US7ASCII') INTO v_keresendo FROM DUAL;
@@ -77,60 +77,35 @@ BEGIN
     SELECT REGEXP_COUNT(v_keresendo, '\w+') INTO p_keresendo_szavak FROM dual;
 
     FOR i IN 1..p_szoveg_szavak LOOP
-        FOR j IN 1..p_keresendo_szavak LOOP
-            IF UTL_MATCH.JARO_WINKLER_SIMILARITY(
-                REGEXP_SUBSTR(LOWER(v_szoveg), '\w+', 1, i),
-                REGEXP_SUBSTR(LOWER(v_keresendo), '\w+', 1, j)) >= v_tolarencia THEN
-                RETURN 1;
-            END IF;
+            FOR j IN 1..p_keresendo_szavak LOOP
+                    IF UTL_MATCH.JARO_WINKLER_SIMILARITY(
+                               REGEXP_SUBSTR(LOWER(v_szoveg), '\w+', 1, i),
+                               REGEXP_SUBSTR(LOWER(v_keresendo), '\w+', 1, j)) >= v_tolarencia
+                    OR
+                        LOWER(v_szoveg) LIKE '%' || LOWER(v_keresendo) || '%'
+                    THEN
+                        RETURN 1;
+                    END IF;
+                END LOOP;
         END LOOP;
-    END LOOP;
 
     RETURN 0;
 END;
 /
 
 
-CREATE OR REPLACE PROCEDURE KepListaKategoria (
-    /* 0 - Minden kép
-     * 1.. - Kategoria ID
-     */
-    p_kategoria IN NUMBER DEFAULT 0,
-    
-    /* 0 - Legújabb elől
-     * 1 - Legrégebbi elől
-     */
-    p_rendez IN NUMBER DEFAULT 0,
-    c_kepek OUT SYS_REFCURSOR
-)
-AS
-BEGIN
-    IF p_kategoria = 0 THEN
-        IF p_rendez = 1 THEN
-            OPEN c_kepek FOR SELECT * FROM Kep ORDER BY idopont;
-        ELSE
-            OPEN c_kepek FOR SELECT * FROM Kep ORDER BY idopont DESC;
-        END IF;
-    ELSE
-        IF p_rendez = 1 THEN
-            OPEN c_kepek FOR
-                SELECT * FROM Kep WHERE kategoria_id = p_kategoria ORDER BY idopont;
-        ELSE
-            OPEN c_kepek FOR
-                SELECT * FROM Kep WHERE kategoria_id = p_kategoria ORDER BY idopont DESC;
-        END IF;
-    END IF;
-END;
-/
-
-
-CREATE OR REPLACE PROCEDURE KepListaCim (
+CREATE OR REPLACE PROCEDURE KepKeresesCim (
     p_cim IN VARCHAR2,
 
     /* 0 - Legújabb elől
      * 1 - Legrégebbi elől
      */
-    p_rendez IN NUMBER DEFAULT 0,
+    p_rendez IN NUMBER,
+
+    /* 0 - Kis tolarencia
+     * 1 - Nagy tolarencia
+     */
+    p_tolarencia IN NUMBER,
     c_kepek OUT SYS_REFCURSOR
 )
 AS
@@ -138,22 +113,94 @@ BEGIN
 
     IF p_rendez = 1 THEN
         OPEN c_kepek FOR
-            SELECT * FROM Kep WHERE HASONLO(cim, p_cim, 0) = 1 ORDER BY idopont;
+            SELECT * FROM Kep WHERE HASONLO(cim, p_cim, p_tolarencia) = 1 ORDER BY idopont;
     ELSE
         OPEN c_kepek FOR
-            SELECT * FROM Kep WHERE HASONLO(cim, p_cim, 0) = 1 ORDER BY idopont DESC;
+            SELECT * FROM Kep WHERE HASONLO(cim, p_cim, p_tolarencia) = 1 ORDER BY idopont DESC;
     END IF;
 END;
 /
 
 
-CREATE OR REPLACE PROCEDURE KepListaKulcsszo (
+CREATE OR REPLACE PROCEDURE KepKeresesFelhasznalo (
+    p_nev IN VARCHAR2,
+
+    /* 0 - Legújabb elől
+     * 1 - Legrégebbi elől
+     */
+    p_rendez IN NUMBER,
+
+    /* 0 - Kis tolarencia
+     * 1 - Nagy tolarencia
+     */
+    p_tolarencia IN NUMBER,
+    c_kepek OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+
+    IF p_rendez = 1 THEN
+        OPEN c_kepek FOR
+            SELECT Kep.* FROM Kep
+                LEFT JOIN Felhasznalo ON Kep.felhasznalo_id = Felhasznalo.id
+            WHERE HASONLO(Felhasznalo.nev, p_nev, p_tolarencia) = 1
+            ORDER BY idopont;
+    ELSE
+        OPEN c_kepek FOR
+            SELECT Kep.* FROM Kep
+                LEFT JOIN Felhasznalo ON Kep.felhasznalo_id = Felhasznalo.id
+            WHERE HASONLO(Felhasznalo.nev, p_nev, p_tolarencia) = 1
+            ORDER BY idopont DESC;
+    END IF;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE KepKeresesKategoria (
+    p_kategoria IN VARCHAR2,
+
+    /* 0 - Legújabb elől
+     * 1 - Legrégebbi elől
+     */
+    p_rendez IN NUMBER,
+
+    /* 0 - Kis tolarencia
+     * 1 - Nagy tolarencia
+     */
+    p_tolarencia IN NUMBER,
+    c_kepek OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    IF p_rendez = 1 THEN
+        OPEN c_kepek FOR
+            SELECT Kep.* FROM Kep
+                LEFT JOIN Kategoria ON Kep.kategoria_id = Kategoria.id
+            WHERE HASONLO(Kategoria.nev, p_kategoria, p_tolarencia) = 1
+            ORDER BY idopont;
+    ELSE
+        OPEN c_kepek FOR
+            SELECT * FROM Kep
+                LEFT JOIN Kategoria ON Kep.kategoria_id = Kategoria.id
+            WHERE HASONLO(Kategoria.nev, p_kategoria, p_tolarencia) = 1
+            ORDER BY idopont DESC;
+    END IF;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE KepKeresesKulcsszo (
     p_kulcsszo IN VARCHAR2,
 
     /* 0 - Legújabb elől
      * 1 - Legrégebbi elől
      */
-    p_rendez IN NUMBER DEFAULT 0,
+    p_rendez IN NUMBER,
+
+    /* 0 - Kis tolarencia
+     * 1 - Nagy tolarencia
+     */
+    p_tolarencia IN NUMBER,
     c_kepek OUT SYS_REFCURSOR
 )
 AS
@@ -161,30 +208,35 @@ BEGIN
 
     IF p_rendez = 1 THEN
         OPEN c_kepek FOR
-            SELECT * FROM Kep
-                LEFT JOIN KepKulcsszo kk on Kep.id = kk.kep_id
-                LEFT JOIN KULCSSZO kszo on kszo.id = kk.kulcsszo_id
-                WHERE HASONLO(kszo.nev, p_kulcsszo, 0) = 1
-                ORDER BY idopont;
+            SELECT Kep.* FROM Kep
+                LEFT JOIN KepKulcsszo on Kep.id = KepKulcsszo.kep_id
+                LEFT JOIN Kulcsszo on Kulcsszo.id = KepKulcsszo.kulcsszo_id
+            WHERE HASONLO(Kulcsszo.nev, p_kulcsszo, p_tolarencia) = 1
+            ORDER BY idopont;
     ELSE
         OPEN c_kepek FOR
-            SELECT * FROM Kep
-                LEFT JOIN KepKulcsszo kk on Kep.id = kk.kep_id
-                LEFT JOIN KULCSSZO kszo on kszo.id = kk.kulcsszo_id
-                WHERE HASONLO(kszo.nev, p_kulcsszo, 0) = 1
-                ORDER BY idopont DESC;
+            SELECT Kep.* FROM Kep
+                LEFT JOIN KepKulcsszo on Kep.id = KepKulcsszo.kep_id
+                LEFT JOIN Kulcsszo on Kulcsszo.id = KepKulcsszo.kulcsszo_id
+            WHERE HASONLO(Kulcsszo.nev, p_kulcsszo, p_tolarencia) = 1
+            ORDER BY idopont DESC;
     END IF;
 END;
 /
 
 
-CREATE OR REPLACE PROCEDURE KepListaTelepules (
+CREATE OR REPLACE PROCEDURE KepKeresesTelepules (
     p_telepules IN VARCHAR2,
 
     /* 0 - Legújabb elől
      * 1 - Legrégebbi elől
      */
-    p_rendez IN NUMBER DEFAULT 0,
+    p_rendez IN NUMBER,
+
+    /* 0 - Kis tolarencia
+     * 1 - Nagy tolarencia
+     */
+    p_tolarencia IN NUMBER,
     c_kepek OUT SYS_REFCURSOR
 )
 AS
@@ -192,13 +244,13 @@ BEGIN
 
     IF p_rendez = 1 THEN
         OPEN c_kepek FOR
-            SELECT * FROM Kep
-            WHERE HASONLO(telepules, p_telepules, 0) = 1
+            SELECT Kep.* FROM Kep
+                WHERE HASONLO(telepules, p_telepules, p_tolarencia) = 1
             ORDER BY idopont;
     ELSE
         OPEN c_kepek FOR
-            SELECT * FROM Kep
-            WHERE HASONLO(telepules, p_telepules, 0) = 1
+            SELECT Kep.* FROM Kep
+                WHERE HASONLO(telepules, p_telepules, p_tolarencia) = 1
             ORDER BY idopont DESC;
     END IF;
 END;
