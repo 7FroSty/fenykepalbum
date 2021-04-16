@@ -6,6 +6,7 @@ import hu.fenykep.demo.model.Kep;
 import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -22,7 +23,19 @@ public class KategoriaRepository {
             rs.getString("nev")
     );
 
-    public List<Kategoria> findAll(){ return jdbcTemplate.query("SELECT * FROM Kategoria", kategoriaRowMapper);}
+    private final RowMapper<Kategoria> kategoriaDbRowMapper = (rs, rowNum) -> new Kategoria(
+            rs.getInt("id"),
+            rs.getString("nev"),
+            rs.getInt("kepdb")
+    );
+
+    public List<Kategoria> findAll() {
+        return jdbcTemplate.query("SELECT kat.id, kat.nev, COUNT(kep.id) AS kepdb " +
+            "FROM Kategoria kat " +
+            "    JOIN Kep ON kep.kategoria_id = kat.id " +
+            "GROUP BY kat.id, kat.nev " +
+            "ORDER BY kat.nev ASC", kategoriaDbRowMapper);
+    }
 
     public Kategoria findKategoriaById(int id) {
         try {
@@ -32,7 +45,7 @@ public class KategoriaRepository {
                     }, new int[]{
                             OracleTypes.NUMBER
                     }, kategoriaRowMapper);
-        }catch (DataAccessException dae) {
+        }catch (EmptyResultDataAccessException e) {
             System.out.println("Ez a Kategória nem létezik.");
         }
         return null;

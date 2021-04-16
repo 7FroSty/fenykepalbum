@@ -1,9 +1,6 @@
 package hu.fenykep.demo.repository;
 
-import hu.fenykep.demo.model.Ertekeles;
-import hu.fenykep.demo.model.Felhasznalo;
-import hu.fenykep.demo.model.Kep;
-import hu.fenykep.demo.model.Komment;
+import hu.fenykep.demo.model.*;
 import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -66,6 +63,10 @@ public class KepRepository {
             rs.getTimestamp("idopont"),
             rs.getString("telepules"));
 
+    private final RowMapper<Telepules> telepulesRowMapper = (rs, i) -> new Telepules(
+            rs.getString("nev"),
+            rs.getInt("kepdb"));
+
 
     private SimpleJdbcCall getJdbcCallCursorKep() {
         return new SimpleJdbcCall(jdbcTemplate)
@@ -74,7 +75,30 @@ public class KepRepository {
 
 
     public List<Kep> findAll() {
-        return jdbcTemplate.query("SELECT * FROM Kep", kepRowMapper);
+        return jdbcTemplate.query("SELECT * FROM Kep ORDER BY idopont DESC", kepRowMapper);
+    }
+
+    /* asd */
+    public List<Telepules> findAllTelepules() {
+        return jdbcTemplate.query("SELECT INITCAP(telepules) AS nev, COUNT(telepules) as kepdb " +
+                "FROM Kep " +
+                "GROUP BY INITCAP(telepules) " +
+                "ORDER BY nev", telepulesRowMapper);
+    }
+
+    public List<Kep> findAllByKategoriaId(int id) {
+        return jdbcTemplate.query("SELECT * FROM Kep WHERE kategoria_id = ? ORDER BY idopont DESC",
+                new Object[] { id }, new int[]{ OracleTypes.NUMBER }, kepRowMapper);
+    }
+
+    public List<Kep> findAllByFelhasznaloId(int id) {
+        return jdbcTemplate.query("SELECT * FROM Kep WHERE felhasznalo_id = ? ORDER BY idopont DESC",
+                new Object[] { id }, new int[]{ OracleTypes.NUMBER }, kepRowMapper);
+    }
+
+    public List<Kep> findAllByTelepulesNev(String nev) {
+        return jdbcTemplate.query("SELECT * FROM Kep WHERE LOWER(telepules) = ? ORDER BY idopont DESC",
+                new Object[] { nev.toLowerCase() }, new int[]{ OracleTypes.VARCHAR }, kepRowMapper);
     }
 
     public Kep findById(int id) {
@@ -155,6 +179,28 @@ public class KepRepository {
         SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepListaKulcsszo")
                 .declareParameters(
                         new SqlParameter("p_kulcsszo", OracleTypes.VARCHAR),
+                        new SqlParameter("p_rendez", OracleTypes.NUMBER),
+                        new SqlParameter("p_tolarencia", OracleTypes.NUMBER)
+                );
+
+        // Kis tolarencia
+        List<Kep> kepek = (List<Kep>) jdbcCall.execute(kulcsszo, legujabbElol ? 0 : 1, 0).get("c_kepek");
+
+        if (kepek.size() == 0) {
+            // Nagy tolarencia
+            kepek = (List<Kep>) jdbcCall.execute(kulcsszo, legujabbElol ? 0 : 1, 1).get("c_kepek");
+        }
+        return kepek;
+    }
+
+
+    public List<Kep> executeKepListaTelepules(String kulcsszo) {
+        return executeKepListaTelepules(kulcsszo, true);
+    }
+    public List<Kep> executeKepListaTelepules(String kulcsszo, boolean legujabbElol) {
+        SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepListaTelepules")
+                .declareParameters(
+                        new SqlParameter("p_telepules", OracleTypes.VARCHAR),
                         new SqlParameter("p_rendez", OracleTypes.NUMBER),
                         new SqlParameter("p_tolarencia", OracleTypes.NUMBER)
                 );

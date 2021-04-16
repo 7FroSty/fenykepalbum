@@ -176,3 +176,52 @@ BEGIN
     END IF;
 END;
 /
+
+
+CREATE OR REPLACE PROCEDURE KepListaTelepules (
+    p_telepules IN VARCHAR2,
+
+    /* 0 - Legújabb elől
+     * 1 - Legrégebbi elől
+     */
+    p_rendez IN NUMBER DEFAULT 0,
+    c_kepek OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+
+    IF p_rendez = 1 THEN
+        OPEN c_kepek FOR
+            SELECT * FROM Kep
+            WHERE HASONLO(telepules, p_telepules, 0) = 1
+            ORDER BY idopont;
+    ELSE
+        OPEN c_kepek FOR
+            SELECT * FROM Kep
+            WHERE HASONLO(telepules, p_telepules, 0) = 1
+            ORDER BY idopont DESC;
+    END IF;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE KepErtekeles (
+    p_felhasznalo_id IN NUMBER,
+    p_kep_id IN NUMBER,
+    p_csillagok IN NUMBER
+)
+AS
+BEGIN
+    IF p_csillagok < 0 OR p_csillagok > 5 THEN
+        RAISE_APPLICATION_ERROR(-20100, 'Hibás csillag mennyiség');
+    ELSIF p_csillagok = 0 THEN
+        DELETE FROM Ertekeles WHERE kep_id = p_kep_id AND felhasznalo_id = p_felhasznalo_id;
+    ELSE
+        INSERT INTO Ertekeles(felhasznalo_id, kep_id, csillagok) VALUES(p_felhasznalo_id, p_kep_id, p_csillagok);
+    END IF;
+
+EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        UPDATE Ertekeles SET csillagok = p_csillagok WHERE felhasznalo_id = p_felhasznalo_id AND kep_id = p_kep_id;
+END;
+/

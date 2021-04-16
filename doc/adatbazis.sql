@@ -15,6 +15,7 @@ DROP SEQUENCE felhasznalo_seq;
 DROP SEQUENCE kategoria_seq;
 DROP SEQUENCE kulcsszo_seq;
 DROP SEQUENCE kep_seq;
+DROP SEQUENCE komment_seq;
 DROP SEQUENCE bejegyzes_seq;
 DROP SEQUENCE verseny_seq;
 DROP SEQUENCE nevezes_seq;
@@ -24,6 +25,7 @@ CREATE SEQUENCE felhasznalo_seq START WITH 1000;
 CREATE SEQUENCE kategoria_seq START WITH 1000;
 CREATE SEQUENCE kulcsszo_seq START WITH 1000;
 CREATE SEQUENCE kep_seq START WITH 1000;
+CREATE SEQUENCE komment_seq START WITH 1000;
 CREATE SEQUENCE bejegyzes_seq START WITH 1000;
 CREATE SEQUENCE verseny_seq START WITH 1000;
 CREATE SEQUENCE nevezes_seq START WITH 1000;
@@ -86,11 +88,12 @@ CREATE TABLE Ertekeles(
 );
 
 CREATE TABLE Komment(
+    id NUMBER(10) NOT NULL DEFAULT komment_seq.NEXTVAL NOT NULL,
     felhasznalo_id NUMBER(10) NOT NULL,
     kep_id NUMBER(10) NOT NULL,
     szoveg VARCHAR2(1000) NOT NULL,
     idopont TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT komment_pk PRIMARY KEY(felhasznalo_id, kep_id),
+    CONSTRAINT komment_pk PRIMARY KEY(id),
     CONSTRAINT komment_fk_felhasznalo_id FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
     CONSTRAINT komment_fk_kep_id FOREIGN KEY(kep_id) REFERENCES Kep(id) ON DELETE CASCADE
 );

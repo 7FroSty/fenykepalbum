@@ -71,7 +71,9 @@
         <h2 th:text="${kep.getCim()}"></h2>
 
         <img th:src="'data:image/png;base64,' + ${kep.getTartalom()}">
-        <div>Feltöltötte: <span th:text="${kep.getFelhasznalo().getNev()}"></span></div>
+        <div>Feltöltötte: <a th:href="@{/felhasznalo/profil/{id}(id=${kep.getFelhasznalo_id()})}"
+                             th:text="${kep.getFelhasznalo().getNev()}"></a>
+        </div>
         <br>
         <div>Ekkor: <span th:text="${kep.getIdopont()}"></span></div>
         <div>Csillagok átlag: <span th:text="${kep.getCsillagok()}"></span></div>

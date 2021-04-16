@@ -7,6 +7,7 @@ import oracle.jdbc.OracleType;
 import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -63,11 +64,16 @@ public class FelhasznaloRepository {
     }
 
     public Felhasznalo getFelhasznaloByEmail(String email) {
-        return jdbcTemplate.queryForObject("SELECT * FROM Felhasznalo WHERE email = ?", new Object[]{
-                        email
-                }, new int[]{
-                        OracleType.VARCHAR2.getVendorTypeNumber()
-                }, felhasznaloRowMapper);
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM Felhasznalo WHERE email = ?", new Object[]{
+                    email
+            }, new int[]{
+                    OracleType.VARCHAR2.getVendorTypeNumber()
+            }, felhasznaloRowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println("Nincs ilyen felhasznalo");
+        }
+        return null;
     }
 
     public Felhasznalo getFelhasznaloById(int id) throws DataAccessException {
@@ -75,20 +81,25 @@ public class FelhasznaloRepository {
     }
 
     public Felhasznalo getFelhasznaloById(int id, boolean safe) throws DataAccessException {
-        if(safe) {
-            return jdbcTemplate.queryForObject("SELECT * FROM Felhasznalo WHERE id = ?", new Object[]{
+        try {
+            if(safe) {
+                return jdbcTemplate.queryForObject("SELECT * FROM Felhasznalo WHERE id = ?", new Object[]{
+                        id
+                }, new int[]{
+                        OracleType.NUMBER.getVendorTypeNumber()
+                }, felhasznaloRowMapper);
+            }
+
+            // Jelszó és település adat nélküli
+            return jdbcTemplate.queryForObject("SELECT id, nev, email, admin FROM Felhasznalo WHERE id = ?", new Object[]{
                     id
             }, new int[]{
                     OracleType.NUMBER.getVendorTypeNumber()
-            }, felhasznaloRowMapper);
+            }, felhasznaloSafeRowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println("Nincs ilyen felhasznalo");
         }
-
-        // Jelszó és település adat nélküli
-        return jdbcTemplate.queryForObject("SELECT id, nev, email, admin FROM Felhasznalo WHERE id = ?", new Object[]{
-                id
-        }, new int[]{
-                OracleType.NUMBER.getVendorTypeNumber()
-        }, felhasznaloSafeRowMapper);
+        return null;
     }
 
     public void updateFelhasznaloAdatok(Felhasznalo felhasznalo) throws DataAccessException{

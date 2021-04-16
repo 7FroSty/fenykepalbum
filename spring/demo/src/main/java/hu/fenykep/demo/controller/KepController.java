@@ -97,34 +97,28 @@ public class KepController {
     }
 
     @GetMapping("/kep/kategoriak")
-    public String kategoriak() {
+    public String kategoriak(Model model) {
+        model.addAttribute("kategoriak", kategoriaRepository.findAll());
         return "/kep/kategoriak";
     }
 
     @GetMapping("/kep/telepulesek")
-    public String telepulesek() {
+    public String telepulesek(Model model) {
+        model.addAttribute("telepulesek", kepRepository.findAllTelepules());
         return "/kep/telepulesek";
     }
 
-    // összes kép listázása
-    @GetMapping("/kep/kepek")
-    public String kepListaOsszes(Model model) {
-        model.addAttribute("kepek", kepRepository.findAll());
-        model.addAttribute("kepSzuro", "Minden kép");
-        return "/kep/listazas";
-    }
 
     // Kép megtekintése
     @GetMapping("/kep/megtekintes/{id}")
     public String kepMegtekintesId(@PathVariable("id") Integer id, Model model) {
         Kep kep = kepRepository.findById(id);
-        kepRepository.getKepAdatok(kep);
-
-        model.addAttribute("kep", kep);
-
-        List<Komment> kommentek = kommentRepository.getKepKommentek(kep);
-        model.addAttribute("kommentek", kommentek);
-
+        if(kep != null) {
+            kepRepository.getKepAdatok(kep);
+            List<Komment> kommentek = kommentRepository.getKepKommentek(kep);
+            model.addAttribute("kommentek", kommentek);
+            model.addAttribute("kep", kep);
+        }
         return "/kep/megtekintes";
     }
 
@@ -140,6 +134,57 @@ public class KepController {
             System.out.println("Hiba történt értékelés közben.");
         }
         return "redirect:/kep/megtekintes/" + id;
+    }
+
+    // összes kép listázása
+    @GetMapping("/kep/kepek")
+    public String kepListaOsszes(Model model) {
+        model.addAttribute("kepek", kepRepository.findAll());
+        model.addAttribute("kepSzuro", "Minden kép");
+        return "/kep/listazas";
+    }
+
+    // összes kép listázása egy adott kategóriából
+    @GetMapping("/kep/kepek/kategoria/{id}")
+    public String kepListaByKategoriaId(@PathVariable("id") Integer id, Model model) {
+        Kategoria kategoria = kategoriaRepository.findKategoriaById(id);
+
+        String kategoriaStr = "Nincs ilyen kategória";
+        if(kategoria != null) {
+            kategoriaStr = "Kategória: " + kategoria.getNev();
+            model.addAttribute("kepek", kepRepository.findAllByKategoriaId(id));
+        }
+        model.addAttribute("kepSzuro", kategoriaStr);
+        return "/kep/listazas";
+    }
+
+    // összes kép listázása egy adott felhasználótól
+    @GetMapping("/kep/kepek/felhasznalo/{id}")
+    public String kepListaByFelhasznaloId(@PathVariable("id") Integer id, Model model) {
+        Felhasznalo felhasznalo = felhasznaloRepository.getFelhasznaloById(id, true);
+
+        String felhasznaloStr = "Nincs ilyen felhasználó";
+        if(felhasznalo != null) {
+            felhasznaloStr = "Képek tőle: " + felhasznalo.getNev();
+            model.addAttribute("kepek", kepRepository.findAllByFelhasznaloId(id));
+        }
+        model.addAttribute("kepSzuro", felhasznaloStr);
+        return "/kep/listazas";
+    }
+
+    // összes kép listázása település alapján.
+    // Itt pontos egyezés alapján
+    @GetMapping("/kep/kepek/telepules/{nev}")
+    public String kepListaByTelepulesNev(@PathVariable("nev") String nev, Model model) {
+        List<Kep> kepek = kepRepository.findAllByTelepulesNev(nev);
+
+        String telepulesStr = "Nincs kép itt: " + nev;
+        if(kepek.size() != 0) {
+            telepulesStr = "Képek itt: " + nev;
+            model.addAttribute("kepek", kepek);
+        }
+        model.addAttribute("kepSzuro", telepulesStr);
+        return "/kep/listazas";
     }
 
     // Saját képek

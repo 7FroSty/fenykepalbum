@@ -49,5 +49,11 @@
               </li>
           </ul>
       </nav>
+      <div id="telepulesek">
+          <div th:each="telepules : ${telepulesek}">
+              <a th:href="@{/kep/kepek/telepules/{nev}(nev=${telepules.getNev()})}"
+                 th:text="${telepules.getNev()} + ' ('+${telepules.getKepdb()}+'db kép)'"></a>
+          </div>
+      </div>
     </body>
 </html>
