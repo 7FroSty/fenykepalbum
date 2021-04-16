@@ -136,11 +136,11 @@ public class KepRepository {
     }
 
 
-    public List<Kep> executeKepListaCim(String cim) {
-        return executeKepListaCim(cim, true);
+    public List<Kep> executeKepKeresesCim(String cim) {
+        return executeKepKeresesCim(cim, true);
     }
-    public List<Kep> executeKepListaCim(String cim, boolean legujabbElol) {
-        SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepListaCim")
+    public List<Kep> executeKepKeresesCim(String cim, boolean legujabbElol) {
+        SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepKeresesCim")
                 .declareParameters(
                         new SqlParameter("p_cim", OracleTypes.VARCHAR),
                         new SqlParameter("p_rendez", OracleTypes.NUMBER),
@@ -158,25 +158,55 @@ public class KepRepository {
     }
 
 
-    public List<Kep> executeKepListaKategoria(int kategoriaId) {
-        return executeKepListaKategoria(kategoriaId, true);
+    public List<Kep> executeKepKeresesFelhasznalo(String felhasznalo) {
+        return executeKepKeresesFelhasznalo(felhasznalo, true);
     }
-    public List<Kep> executeKepListaKategoria(int kategoriaId, boolean legujabbElol) {
-        SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepListaKategoria")
+    public List<Kep> executeKepKeresesFelhasznalo(String felhasznalo, boolean legujabbElol) {
+        SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepKeresesFelhasznalo")
                 .declareParameters(
-                        new SqlParameter("p_kategoria", OracleTypes.NUMBER),
-                        new SqlParameter("p_rendez", OracleTypes.NUMBER)
+                        new SqlParameter("p_nev", OracleTypes.VARCHAR),
+                        new SqlParameter("p_rendez", OracleTypes.NUMBER),
+                        new SqlParameter("p_tolarencia", OracleTypes.NUMBER)
                 );
 
-        return (List<Kep>) jdbcCall.execute(kategoriaId, legujabbElol ? 0 : 1).get("c_kepek");
+        // Kis tolarencia
+        List<Kep> kepek = (List<Kep>) jdbcCall.execute(felhasznalo, legujabbElol ? 0 : 1, 0).get("c_kepek");
+
+        if (kepek.size() == 0) {
+            // Nagy tolarencia
+            kepek = (List<Kep>) jdbcCall.execute(felhasznalo, legujabbElol ? 0 : 1, 1).get("c_kepek");
+        }
+        return kepek;
     }
 
 
-    public List<Kep> executeKepListaKulcsszo(String kulcsszo) {
-        return executeKepListaKulcsszo(kulcsszo, true);
+    public List<Kep> executeKepKeresesKategoria(String kategoria) {
+        return executeKepKeresesKategoria(kategoria, true);
     }
-    public List<Kep> executeKepListaKulcsszo(String kulcsszo, boolean legujabbElol) {
-        SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepListaKulcsszo")
+    public List<Kep> executeKepKeresesKategoria(String kategoria, boolean legujabbElol) {
+        SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepKeresesKategoria")
+                .declareParameters(
+                        new SqlParameter("p_kategoria", OracleTypes.VARCHAR),
+                        new SqlParameter("p_rendez", OracleTypes.NUMBER),
+                        new SqlParameter("p_tolarencia", OracleTypes.NUMBER)
+                );
+
+        // Kis tolarencia
+        List<Kep> kepek = (List<Kep>) jdbcCall.execute(kategoria, legujabbElol ? 0 : 1, 0).get("c_kepek");
+
+        if (kepek.size() == 0) {
+            // Nagy tolarencia
+            kepek = (List<Kep>) jdbcCall.execute(kategoria, legujabbElol ? 0 : 1, 1).get("c_kepek");
+        }
+        return kepek;
+    }
+
+
+    public List<Kep> executeKepKeresesKulcsszo(String kulcsszo) {
+        return executeKepKeresesKulcsszo(kulcsszo, true);
+    }
+    public List<Kep> executeKepKeresesKulcsszo(String kulcsszo, boolean legujabbElol) {
+        SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepKeresesKulcsszo")
                 .declareParameters(
                         new SqlParameter("p_kulcsszo", OracleTypes.VARCHAR),
                         new SqlParameter("p_rendez", OracleTypes.NUMBER),
@@ -194,11 +224,11 @@ public class KepRepository {
     }
 
 
-    public List<Kep> executeKepListaTelepules(String kulcsszo) {
-        return executeKepListaTelepules(kulcsszo, true);
+    public List<Kep> executeKepKeresesTelepules(String kulcsszo) {
+        return executeKepKeresesTelepules(kulcsszo, true);
     }
-    public List<Kep> executeKepListaTelepules(String kulcsszo, boolean legujabbElol) {
-        SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepListaTelepules")
+    public List<Kep> executeKepKeresesTelepules(String kulcsszo, boolean legujabbElol) {
+        SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepKeresesTelepules")
                 .declareParameters(
                         new SqlParameter("p_telepules", OracleTypes.VARCHAR),
                         new SqlParameter("p_rendez", OracleTypes.NUMBER),

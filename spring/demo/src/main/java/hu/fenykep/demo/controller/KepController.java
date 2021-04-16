@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -187,24 +190,49 @@ public class KepController {
         return "/kep/listazas";
     }
 
-    // Saját képek
-    /*@GetMapping("/kep/kepek/felhasznalo/")
-    public String kepListaFelhasznalo(Authentication authentication) {
-        if(authentication != null && authentication.isAuthenticated()) {
-            return "redirect:/kep/kepek/felhasznalo/" + ((Felhasznalo) authentication.getPrincipal()).getId();
+    // Keresés
+
+    @PostMapping("/kep/kereses")
+    public String kepKeresesPost(@RequestParam("kereses") String kereses,
+                                 @RequestParam("szoveg") String szoveg,
+                                 Model model) {
+        List<Kep> kepek = new ArrayList<>();
+
+        String szuroStr = "";
+        switch (kereses) {
+            case "cim":
+                kepek.addAll(kepRepository.executeKepKeresesCim(szoveg));
+                szuroStr += "Keresés Címre: ";
+                break;
+            case "felhasznalo":
+                kepek.addAll(kepRepository.executeKepKeresesFelhasznalo(szoveg));
+                szuroStr += "Keresés Felhasználóra: ";
+                break;
+            case "kategoria":
+                kepek.addAll(kepRepository.executeKepKeresesKategoria(szoveg));
+                szuroStr += "Keresés Kategóriára: ";
+                break;
+            case "kulcsszo":
+                kepek.addAll(kepRepository.executeKepKeresesKulcsszo(szoveg));
+                szuroStr += "Keresés Kulcsszóra: ";
+                break;
+            case "telepules":
+                kepek.addAll(kepRepository.executeKepKeresesTelepules(szoveg));
+                szuroStr += "Keresés Településre: ";
+                break;
+            default:
+                kepek.addAll(kepRepository.findAll());
+                break;
         }
-        return "/kep/kepkkek";
-    }
+        szuroStr += szoveg;
 
-    @GetMapping("/kep/kepek/felhasznalo/{id}")
-    public String kepListaFelhasznaloId(@PathVariable("id") Integer id) {
-        // get kepek by felhasznalo id
-        return "/kep/kekkkkpek";
-    }
+        model.addAttribute("kereses", kereses);
+        model.addAttribute("keresesSzoveg", szoveg);
 
-    @GetMapping("/kep/kepek/kategoria/{id}")
-    public String kepListaKategoriaId(@PathVariable("id") Integer id) {
-        // get kepek by kategoria id
-        return "/kep/kekasdpek";
-    }*/
+        System.out.println("Kereses: " + kereses + ", szoveg: " + szoveg);
+
+        model.addAttribute("kepek", kepek);
+        model.addAttribute("kepSzuro", szuroStr);
+        return "/kep/listazas";
+    }
 }

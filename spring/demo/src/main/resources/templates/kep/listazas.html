@@ -53,14 +53,15 @@
                     <a class="nav-link" th:href="@{/kep/telepulesek}">Települések</a>
                 </li>
                 <form class="nav-item form-inline" th:action="@{/kep/kereses}" method="post">
-                    <select class="form-select lista mr-2" name="kereses">
+                    <select id="kereses" class="form-select lista mr-2" name="kereses">
                         <option value="cim">Cím</option>
                         <option value="felhasznalo">Felhasználó</option>
                         <option value="kategoria">Kategória</option>
                         <option value="kulcsszo">Kulcsszó</option>
                         <option value="telepules">Település</option>
                     </select>
-                    <input class="form-control" type="search" placeholder="Keresés" aria-label="Search">
+                    <input class="form-control" type="search" name="szoveg" placeholder="Keresés" aria-label="Search"
+                           th:value="${keresesSzoveg != null} ? ${keresesSzoveg} : ''">
                     <button type="submit" class="btn nav-link" name="submit">Keresés</button>
                 </form>
             </ul>
@@ -78,5 +79,11 @@
                 </div>
             </div>
         </div>
+    <script th:inline="javascript">
+        const par = /*[[${kereses}]]*/ null;
+        if(par !== null) {
+            document.getElementById("kereses").value = par;
+        }
+    </script>
     </body>
 </html>
