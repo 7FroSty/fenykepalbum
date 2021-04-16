@@ -5,9 +5,13 @@ import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class KommentRepository {
@@ -53,5 +57,22 @@ public class KommentRepository {
                 new int[] { OracleTypes.NUMBER },
                 kommentFelhasznaloRowMapper
         );
+    }
+
+    public Map<String, Object> executeKommentFeltoltes(String szoveg, int k_id, int f_id){
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("KommentFeltoltes");
+
+        jdbcCall.declareParameters(
+                new SqlParameter("p_szoveg", OracleTypes.VARCHAR),
+                new SqlParameter("p_kep_id", OracleTypes.NUMBER),
+                new SqlParameter("p_felhasznalo_id", OracleTypes.NUMBER)
+        );
+
+        return jdbcCall.execute(szoveg, k_id, f_id);
+    }
+
+    public void kommentTorles(int id){
+        jdbcTemplate.update("DELETE FROM Komment WHERE id = "+id);
     }
 }

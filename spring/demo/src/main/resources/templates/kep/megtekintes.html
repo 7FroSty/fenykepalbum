@@ -96,15 +96,25 @@
     <div id="kep-kommentek">
         <div class="komment my-3 border border-primary"
             th:each="komment : ${kommentek}">
+            <div th:if="${felhasznalo != null} and (${komment.getFelhasznalo_id() == felhasznalo.getId()} or ${felhasznalo.isAdmin()})">
+                <form th:action="@{/kommenttorles}" method="get" enctype="multipart/form-data">
+                    <input type="hidden" name="id" th:value="${komment.getId()}">
+                    <input type="hidden" name="kep_id" th:value="${kep.getId()}">
+                    <button type="submit" class="btn gomb" name="submit">Törlés</button>
+                </form>
+            </div>
             <p class="text-left m-1" th:text="${komment.getFelhasznalo().getNev()}">NÉV</p>
             <p class="text-sm-left m-1" th:text="${komment.getIdopont()}">IDŐPONT</p>
             <div class="komment-szoveg text-left" th:text="${komment.getSzoveg()}">SZÖVEG</div>
         </div>
     </div>
 
-    <div id="komment-iras">
-        <form th:action="@{/kep/komment}" method="post">
-
+    <div id="komment-iras" th:if="${felhasznalo != null}">
+        <form th:action="@{/kommentiras}" method="get">
+            <input type="text" name="szoveg">
+            <input type="hidden" name="kep_id" th:value="${kep.getId()}">
+            <input type="hidden" name="felhasznalo_id" th:value="${felhasznalo.getId()}">
+            <button type="submit" class="btn gomb" name="submit">Komment elküldése</button>
         </form>
     </div>
 </div>
