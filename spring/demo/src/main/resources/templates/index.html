@@ -34,7 +34,7 @@
         </nav>
         <div class="container">
             <span th:if="${felhasznalo != null} and ${felhasznalo.isAdmin}">
-                <form th:action="@{/bejegyzesFeltoltes}" method="post" enctype="multipart/form-data">
+                <form th:action="@{/bejegyzesFeltoltes}" method="post">
                     <div class="form-group">
                         <label>Cím:</label>
                         <input type="text" class="form-control" name="cim" required>
@@ -44,7 +44,7 @@
                         <textarea type="text" class="form-control" name="tartalom" required></textarea>
                     </div>
                     <input type="hidden" name="admin_id" th:value="*{felhasznalo.getId()}" required>
-                    <button type="submit" class="btn gomb" name="submit">Feltöltés</button>
+                    <button type="submit" class="btn gomb shadow-none" name="submit">Feltöltés</button>
                 </form>
             </span>
             <th:block th:each="bejegyzes : ${bejegyzesek}">
@@ -54,13 +54,13 @@
                     <br>
                     <span><small th:text="'Dátum: '+${bejegyzes.getDateAsString()}"></small></span>
                     <span th:if="${felhasznalo != null} and ${felhasznalo.isAdmin()}">
-                        <form th:action="@{/bejegyzesModositas}" method="get" enctype="multipart/form-data">
+                        <form class="bejegyzesgomb" th:action="@{/bejegyzesModositas}" method="get">
                             <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}">
-                            <button type="submit" class="btn gomb" name="submit">Módosítás</button>
+                            <button type="submit" class="btn gomb shadow-none" name="submit">Módosítás</button>
                         </form>
-                        <form th:action="@{/bejegyzesTorles}" method="post" enctype="multipart/form-data">
+                        <form class="bejegyzesgomb" th:action="@{/bejegyzesTorles}" method="post">
                             <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}">
-                            <button type="submit" class="btn gomb" name="submit">Törlés</button>
+                            <button type="submit" class="btn gomb shadow-none" name="submit">Törlés</button>
                         </form>
                     </span>
                     <hr>

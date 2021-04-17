@@ -36,6 +36,10 @@ p{
     font-variant: normal;
 }
 
+form{
+    padding: 10px;
+}
+
 .form-group{
     text-align: left;
 }
@@ -65,4 +69,8 @@ p{
 .gomb:hover{
     color: #EBE589;
     background-color: #779721;
+}
+
+.bejegyzesgomb{
+    padding: 5px 10px 5px 0px;
 }

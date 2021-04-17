@@ -9,9 +9,10 @@
         <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
         <title>Profil - HUmmingbird</title>
     </head>
-    <style>
+    <style type="text/css">
         .adat{
             font-variant: normal;
+
         }
     </style>
     <body>
@@ -44,22 +45,25 @@
                     Profil
                 </h2>
                 <p>Név: <span class="adat" th:text="${felhasznalo.getNev()}"></span></p>
-                <p>Email: <span class="adat" th:text="${felhasznalo.getEmail()}"></span></p>
+                <p>E-mail cím: <span class="adat" th:text="${felhasznalo.getEmail()}"></span></p>
                 <p>Irányítószám: <span class="adat" th:text="${felhasznalo.getIranyitoszam()}"></span></p>
                 <p>Település: <span class="adat" th:text="${felhasznalo.getTelepules()}"></span></p>
-                <p>Utca/házszám: <span class="adat" th:text="${felhasznalo.getUtca()}"></span>
+                <p>Utca/házszám:
+                    <span class="adat" th:text="${felhasznalo.getUtca()}"></span>
                     <span class="adat" th:text="${felhasznalo.getHazszam()}"></span>
                 </p>
-                <a th:href="@{/kep/kepek/felhasznalo/{id}(id=${felhasznalo.getId()})}">Feltöltött képek</a>
-                <p>Admin: <span class="adat" th:text="*{felhasznalo.isAdmin}"></span></p>
-                <form th:if="${sajatProfil}" th:action="@{/felhasznalo/profilModositas}">
-                    <button type="submit" class="btn gomb" name="submit">Adatok módosítása</button>
+                <p>Jog:
+                    <span class="adat" th:if="${!felhasznalo.isAdmin()}">Felhasználó</span>
+                    <span class="adat" th:if="${felhasznalo.isAdmin()}">Admin</span>
+                </p>
+                <form th:if="${sajatProfil}" th:action="@{/kep/kepek/felhasznalo/{id}(id=${felhasznalo.getId()})}">
+                    <button type="submit" class="btn gomb shadow-none" name="submit">Feltöltött képek</button>
                 </form>
-                <form th:if="${sajatProfil} and ${felhasznalo.isAdmin()}" th:action="@{/felhasznalo/admin}">
-                    <button type="submit" class="btn gomb" name="submit">Admin panel</button>
+                <form th:if="${sajatProfil}" th:action="@{/felhasznalo/profilModositas}">
+                    <button type="submit" class="btn gomb shadow-none" name="submit">Adatok módosítása</button>
                 </form>
                 <form th:if="${sajatProfil}" th:action="@{/felhasznalo/kijelentkezes}">
-                    <button type="submit" class="btn gomb" name="submit">Kijelentkezés</button>
+                    <button type="submit" class="btn gomb shadow-none" name="submit">Kijelentkezés</button>
                 </form>
             </div>
         </div>

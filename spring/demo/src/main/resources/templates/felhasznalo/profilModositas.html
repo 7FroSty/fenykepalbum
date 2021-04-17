@@ -9,9 +9,12 @@
     <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
     <title>Profil módosítás - HUmmingbird</title>
 </head>
-<style>
-    .adat{
+<style type="text/css">
+    #emailcim{
         font-variant: normal;
+    }
+    .modositasfajta{
+        text-decoration: underline;
     }
 </style>
 <body>
@@ -40,13 +43,15 @@
 <div class="container">
     <div th:if="${felhasznalo != null}">
         <h2>
-            Profil Módosítás
+            Profil módosítás
         </h2>
-        <p>Email: <span class="adat" th:text="${felhasznalo.getEmail()}"></span></p>
-        <p>Profil adatok módosítása</p>
-        <p th:if="${modositashiba != null}" th:text="${modositashiba}"></p>
-        <p th:if="${modositassiker != null}" th:text="${modositassiker}"></p>
+        <h4 class="modositasfajta">Profil adatok módosítása</h4>
+        <p class="text-danger" th:if="${modositashiba != null}" th:text="${modositashiba}"></p>
+        <p class="text-success" th:if="${modositassiker != null}" th:text="${modositassiker}"></p>
         <form th:action="@{/felhasznalo/profilModositasAdatokPost}" th:object="${felhasznalo}" method="post">
+            <p style="text-align: left">E-mail cím:
+                <span id="emailcim" th:text="${felhasznalo.getEmail()}"></span>
+            </p>
             <div class="form-group">
                 <label>Név:</label>
                 <input type="text" class="form-control" name="nev" th:value="*{getNev()}" required>
@@ -67,18 +72,16 @@
                 <label>Házszám:</label>
                 <input type="text" class="form-control" name="hazszam" th:value="*{getHazszam()}" required>
             </div>
-            <button type="submit" class="btn gomb" name="submit-btn">Módosítás</button>
+            <button type="submit" class="btn gomb shadow-none" name="submit-btn">Módosítás</button>
         </form>
-        <p>Jelszó módosítása</p>
+        <br>
+        <h4 class="modositasfajta">Jelszó módosítása</h4>
         <form th:action="@{/felhasznalo/profilModositasJelszoPost}" th:object="${felhasznalo}" method="post">
             <div class="form-group">
                 <label>Jelszó:</label>
                 <input type="password" class="form-control" name="jelszo" required>
             </div>
-            <button type="submit" class="btn gomb" name="submit-btn">Jelszó módosítás</button>
-        </form>
-        <form th:action="@{/felhasznalo/kijelentkezes}">
-            <button type="submit" class="btn gomb" name="submit">Kijelentkezés</button>
+            <button type="submit" class="btn gomb shadow-none" name="submit-btn">Jelszó módosítás</button>
         </form>
     </div>
 </div>
