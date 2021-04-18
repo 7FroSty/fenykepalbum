@@ -1,0 +1,36 @@
+.container{
+    background-color: #75CDB3;
+    border: 5px solid #6A385D;
+    border-radius: 5px;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    width: auto;
+    text-align: center;
+    font-size: 20px;
+    overflow-wrap: break-word;
+}
+
+.row{
+    padding: 20px 0px;
+
+}
+
+.col{
+    padding: 10px;
+    border-right: 2px solid #543F65;
+}
+
+.col:nth-child(5n+5){
+    border: none;
+}
+
+.link{
+    color: #543F65;
+    font-variant: normal;
+    font-weight: 600;
+}
+
+.link:hover{
+    text-decoration: none;
+    color: #E50B7B;
+}

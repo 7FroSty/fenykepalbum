@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
-        <link rel="stylesheet" type="text/css" th:href="@{/form.css}">
         <link rel="stylesheet" type="text/css" th:href="@{/kepmenu.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/kategoria_telepules.css}">
         <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
         <title>Kategóriák - HUmmingbird</title>
     </head>
@@ -49,10 +49,13 @@
                 </li>
             </ul>
         </nav>
-        <div id="kategoriak">
-            <div th:each="kategoria : ${kategoriak}">
-                <a th:href="@{/kep/kepek/kategoria/{id}(id=${kategoria.getId()})}"
-                   th:text="${kategoria.getNev()} + ' ('+${kategoria.getKepdb()}+'db kép)'"></a>
+        <div class="container">
+            <div class="row row-cols-5">
+                <div class="col" th:each="kategoria : ${kategoriak}">
+                    <a class="link" th:href="@{/kep/kepek/kategoria/{id}(id=${kategoria.getId()})}"
+                       th:text="${kategoria.getNev()} + ' ('+${kategoria.getKepdb()}+'db kép)'">
+                    </a>
+                </div>
             </div>
         </div>
     </body>

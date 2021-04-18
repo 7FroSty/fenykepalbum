@@ -47,17 +47,6 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/kep/telepulesek}">Települések</a>
                 </li>
-                <form class="nav-item form-inline" th:action="@{/kep/kereses}" method="post">
-                    <select class="form-select lista mr-2" name="kereses">
-                        <option value="cim">Cím</option>
-                        <option value="felhasznalo">Felhasználó</option>
-                        <option value="kategoria">Kategória</option>
-                        <option value="kulcsszo">Kulcsszó</option>
-                        <option value="telepules">Település</option>
-                    </select>
-                    <input class="form-control" type="search" placeholder="Keresés" aria-label="Search">
-                    <button type="submit" class="btn nav-link" name="submit">Keresés</button>
-                </form>
             </ul>
         </nav>
         <div class="container-fluid">
