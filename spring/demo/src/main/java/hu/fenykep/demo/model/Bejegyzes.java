@@ -22,7 +22,7 @@ public class Bejegyzes {
     }
 
     public String getDateAsString() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String strDate = dateFormat.format(this.idopont);
         return strDate;
     }

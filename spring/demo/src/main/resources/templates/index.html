@@ -47,26 +47,24 @@
                     <button type="submit" class="btn gomb shadow-none" name="submit">Feltöltés</button>
                 </form>
             </span>
-            <th:block th:each="bejegyzes : ${bejegyzesek}">
-                <article>
-                    <h2 th:text="${bejegyzes.getCim()}"></h2>
-                    <span><small th:text="'Szerző: '+${admin.getFelhasznaloById(bejegyzes.getFelhasznalo_id()).getNev()}"></small></span>
-                    <br>
-                    <span><small th:text="'Dátum: '+${bejegyzes.getDateAsString()}"></small></span>
-                    <span th:if="${felhasznalo != null} and ${felhasznalo.isAdmin()}">
-                        <form class="bejegyzesgomb" th:action="@{/bejegyzesModositas}" method="get">
-                            <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}">
-                            <button type="submit" class="btn gomb shadow-none" name="submit">Módosítás</button>
-                        </form>
-                        <form class="bejegyzesgomb" th:action="@{/bejegyzesTorles}" method="post">
-                            <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}">
-                            <button type="submit" class="btn gomb shadow-none" name="submit">Törlés</button>
-                        </form>
-                    </span>
-                    <hr>
-                    <p th:text="${bejegyzes.getSzoveg()}"></p>
-                </article>
-            </th:block>
+            <article th:block th:each="bejegyzes : ${bejegyzesek}">
+                <h2 th:text="${bejegyzes.getCim()}"></h2>
+                <span><small th:text="'Szerző: '+${admin.getFelhasznaloById(bejegyzes.getFelhasznalo_id()).getNev()}"></small></span>
+                <br>
+                <span><small th:text="'Dátum: '+${bejegyzes.getDateAsString()}"></small></span>
+                <span th:if="${felhasznalo != null} and ${felhasznalo.isAdmin()}">
+                    <form class="bejegyzesgomb" th:action="@{/bejegyzesModositas}" method="get">
+                        <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}">
+                        <button type="submit" class="btn gomb shadow-none" name="submit">Módosítás</button>
+                    </form>
+                    <form class="bejegyzesgomb" th:action="@{/bejegyzesTorles}" method="post">
+                        <input type="hidden" name="bejegyzesId" th:value="${bejegyzes.getId()}">
+                        <button type="submit" class="btn gomb shadow-none" name="submit">Törlés</button>
+                    </form>
+                </span>
+                <hr>
+                <p style="font-variant: normal;" th:text="${bejegyzes.getSzoveg()}"></p>
+            </article>
         </div>
     </body>
 </html>
