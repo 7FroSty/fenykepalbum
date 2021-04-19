@@ -1,6 +1,8 @@
 package hu.fenykep.demo.model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Kep implements Serializable {
@@ -26,6 +28,12 @@ public class Kep implements Serializable {
         this.tartalom = tartalom;
         this.idopont = idopont;
         this.telepules = telepules;
+    }
+
+    public String getDateAsString() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String strDate = dateFormat.format(this.idopont);
+        return strDate;
     }
 
     public double getCsillagok() {
