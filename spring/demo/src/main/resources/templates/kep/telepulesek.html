@@ -53,7 +53,7 @@
           <div class="row row-cols-5">
               <div class="col" th:each="telepules : ${telepulesek}">
                   <a class="link" th:href="@{/kep/kepek/telepules/{nev}(nev=${telepules.getNev()})}"
-                     th:text="${telepules.getNev()} + ' ('+${telepules.getKepdb()}+' kép)'">
+                     th:utext="${telepules.getNev()} + '<br />' + ' ('+${telepules.getKepdb()}+' kép)'">
                   </a>
               </div>
           </div>

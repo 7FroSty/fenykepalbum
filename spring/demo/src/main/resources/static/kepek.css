@@ -47,6 +47,7 @@ h2{
     color: #543F65;
     font-size: 1vw;
     font-variant: none;
+    overflow-wrap: break-word;
 }
 
 .pagination{

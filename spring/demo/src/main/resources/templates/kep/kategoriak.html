@@ -53,7 +53,7 @@
             <div class="row row-cols-5">
                 <div class="col" th:each="kategoria : ${kategoriak}">
                     <a class="link" th:href="@{/kep/kepek/kategoria/{id}(id=${kategoria.getId()})}"
-                       th:text="${kategoria.getNev()} + ' ('+${kategoria.getKepdb()}+'db kép)'">
+                       th:utext="${kategoria.getNev()} + '<br />' + ' ('+${kategoria.getKepdb()}+' kép)'">
                     </a>
                 </div>
             </div>
