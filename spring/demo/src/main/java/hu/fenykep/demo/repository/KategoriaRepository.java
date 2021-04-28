@@ -32,7 +32,7 @@ public class KategoriaRepository {
     public List<Kategoria> findAll() {
         return jdbcTemplate.query("SELECT kat.id, kat.nev, COUNT(kep.id) AS kepdb " +
             "FROM Kategoria kat " +
-            "    JOIN Kep ON kep.kategoria_id = kat.id " +
+            "LEFT JOIN Kep ON kep.kategoria_id = kat.id " +
             "GROUP BY kat.id, kat.nev " +
             "ORDER BY kat.nev ASC", kategoriaDbRowMapper);
     }
