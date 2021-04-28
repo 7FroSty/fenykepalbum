@@ -46,17 +46,17 @@
                 </h2>
                 <p>Név: <span class="adat" th:text="${felhasznalo.getNev()}"></span></p>
                 <p>E-mail cím: <span class="adat" th:text="${felhasznalo.getEmail()}"></span></p>
-                <p>Irányítószám: <span class="adat" th:text="${felhasznalo.getIranyitoszam()}"></span></p>
-                <p>Település: <span class="adat" th:text="${felhasznalo.getTelepules()}"></span></p>
-                <p>Utca/házszám:
+                <p th:if="${sajatProfil}" >Irányítószám: <span class="adat" th:text="${felhasznalo.getIranyitoszam()}"></span></p>
+                <p th:if="${sajatProfil}" >Település: <span class="adat" th:text="${felhasznalo.getTelepules()}"></span></p>
+                <p th:if="${sajatProfil}" >Utca/házszám:
                     <span class="adat" th:text="${felhasznalo.getUtca()}"></span>
                     <span class="adat" th:text="${felhasznalo.getHazszam()}"></span>
                 </p>
                 <p>Jog:
-                    <span class="adat" th:if="${!felhasznalo.isAdmin()}">Felhasználó</span>
+                    <span class="adat" th:if="!${felhasznalo.isAdmin()}">Felhasználó</span>
                     <span class="adat" th:if="${felhasznalo.isAdmin()}">Admin</span>
                 </p>
-                <form th:if="${sajatProfil}" th:action="@{/kep/kepek/felhasznalo/{id}(id=${felhasznalo.getId()})}">
+                <form th:action="@{/kep/kepek/felhasznalo/{id}(id=${felhasznalo.getId()})}">
                     <button type="submit" class="btn gomb shadow-none" name="submit">Feltöltött képek</button>
                 </form>
                 <form th:if="${sajatProfil}" th:action="@{/felhasznalo/profilModositas}">

@@ -3,22 +3,22 @@
     border: 5px solid #6A385D;
     border-radius: 5px;
     margin-top: 50px;
+    margin-bottom: 25px;
     width: 85%;
     text-align: center;
     font-size: 20px;
 }
-.kepnavbar{
-    width: 78%;
-}
 
 #megtekintettkep{
-    margin: 20px;
+    margin: 25px;
     border: 3px solid #6A385D;
     border-radius: 5px;
+    max-width: 85%;
 }
 
 h2{
     font-variant: normal;
+    font-weight: 600;
     text-decoration: none;
 }
 
@@ -43,6 +43,14 @@ form{
     background-color: #779721;
 }
 
+#kommentgomb{
+    padding: 5px 10px 5px 0px;
+}
+
+#kommentiras{
+    text-align: left;
+}
+
 .link{
     color: #543F65;
 }
@@ -56,6 +64,18 @@ form{
     font-size: 30px;
 }
 
-#komment-iras{
-    font-variant: normal;
+article{
+    background-color: #EFB261;
+    width: 95%;
+    margin: 25px auto;
+    padding: 0 10px;
+    border: 2px solid #6A385D;
+    border-radius: 5px;
+    overflow-wrap: break-word;
+    text-align: left;
+}
+
+hr{
+    width: 100%;
+    border: 1px solid #6A385D;
 }

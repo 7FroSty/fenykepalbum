@@ -1,5 +1,7 @@
 package hu.fenykep.demo.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Komment {
@@ -16,6 +18,12 @@ public class Komment {
         this.kep_id = kep_id;
         this.szoveg = szoveg;
         this.idopont = idopont;
+    }
+
+    public String getDateAsString() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String strDate = dateFormat.format(this.idopont);
+        return strDate;
     }
 
     public Felhasznalo getFelhasznalo() {
