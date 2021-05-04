@@ -100,7 +100,16 @@ public class KepController {
     }
 
     @GetMapping("/kep/kategoriak")
-    public String kategoriak(Model model) {
+    public String kategoriak(Model model, Authentication authentication) {
+        try {
+            Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+            model.addAttribute("felhasznalo", felhasznalo);
+
+            System.out.println(felhasznalo.isAdmin());
+
+        }catch (Exception e){
+        }
+
         model.addAttribute("kategoriak", kategoriaRepository.findAll());
         return "/kep/kategoriak";
     }
