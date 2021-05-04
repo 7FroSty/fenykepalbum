@@ -10,6 +10,14 @@
     overflow-wrap: break-word;
 }
 
+form{
+    padding: 10px;
+}
+
+span{
+    text-align: left;
+}
+
 .row{
     padding: 20px 0px;
 
@@ -33,4 +41,17 @@
 .link:hover{
     text-decoration: none;
     color: #E50B7B;
+}
+
+.gomb{
+    color: #EBE589;
+    font-size: 20px;
+    background-color: #5A7A41;
+    border-color: #6A385D;
+    border-width: 2px;
+}
+
+.gomb:hover{
+    color: #EBE589;
+    background-color: #779721;
 }

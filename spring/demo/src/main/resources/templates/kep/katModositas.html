@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org/">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/kepmenu.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/bejegyzes.css}">
+    <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
+    <title>Kategória módosítás - HUmmingbird</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md justify-content-center">
+      <li class="navbar-brand">
+        <img th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
+      </li>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/index}">Főoldal</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/kep/kepek}">Képek</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/versenyek}">Versenyek</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/felhasznalo/bejelentkezes}">Profil</a>
+        </li>
+      </ul>
+      <li class="navbar-brand">
+        <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
+      </li>
+    </nav>
+    <nav class="navbar navbar-expand-xl justify-content-center kepnavbar">
+      <ul class="navbar-nav kepnav">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/kep/kepFeltoltes}">Képfeltöltés</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/kep/kepek}">Összes kép</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/kep/kategoriak}">Kategóriák</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/kep/telepulesek}">Települések</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="container">
+      <form th:action="@{/katModositasExecute}" method="post">
+        <div class="form-group">
+          <label>Név:</label>
+          <input type="text" class="form-control" name="nev" th:value="${kategoria.getNev()}">
+        </div>
+        <input type="hidden" name="id" th:value="${kategoria.getId()}">
+        <button type="submit" class="btn gomb shadow-none" name="submit">Módosítás</button>
+      </form>
+    </div>
+  </body>
+</html>

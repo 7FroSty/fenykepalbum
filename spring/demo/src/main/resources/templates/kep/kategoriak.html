@@ -49,7 +49,7 @@
                 </li>
             </ul>
         </nav>
-        <div>
+        <div class="container">
             <span th:if="${felhasznalo != null} and ${felhasznalo.isAdmin()}">
                 <form th:action="@{/kategoriaFeltoltes}" method="post">
                     <div class="form-group">
@@ -60,23 +60,21 @@
                     <button type="submit" class="btn gomb shadow-none" name="submit">Feltöltés</button>
                 </form>
             </span>
-        </div>
-        <div class="container">
             <div class="row row-cols-5">
                 <div class="col" th:each="kategoria : ${kategoriak}">
                     <a class="link" th:href="@{/kep/kepek/kategoria/{id}(id=${kategoria.getId()})}"
                        th:utext="${kategoria.getNev()} + '<br />' + ' ('+${kategoria.getKepdb()}+' kép)'">
                     </a>
-                    <span th:if="${felhasznalo != null} and ${felhasznalo.isAdmin()}">
-                    <form class="bejegyzesgomb" th:action="@{/katModositas}" method="get">
-                        <input type="hidden" name="katId" th:value="${kategoria.getId()}">
-                        <button type="submit" class="btn gomb shadow-none" name="submit">Módosítás</button>
-                    </form>
-                    <form class="bejegyzesgomb" th:action="@{/katTorles}" method="post">
-                        <input type="hidden" name="id" th:value="${kategoria.getId()}">
-                        <button type="submit" class="btn gomb shadow-none" name="submit">Törlés</button>
-                    </form>
-                </span>
+                    <div th:if="${felhasznalo != null} and ${felhasznalo.isAdmin()}">
+                        <form class="bejegyzesgomb" th:action="@{/katModositas}" method="get">
+                            <input type="hidden" name="katId" th:value="${kategoria.getId()}">
+                            <button type="submit" class="btn gomb shadow-none" name="submit">Módosítás</button>
+                        </form>
+                        <form class="bejegyzesgomb" th:action="@{/katTorles}" method="post">
+                            <input type="hidden" name="id" th:value="${kategoria.getId()}">
+                            <button type="submit" class="btn gomb shadow-none" name="submit">Törlés</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

@@ -96,7 +96,7 @@ public class KepController {
 
         kepRepository.executeKepFeltoltes(Integer.parseInt(felhasznalo_id), kategoria_id, cim, encodedString, date, telepules);
 
-        return "redirect:/";
+        return "redirect:/kep/kepek";
     }
 
     @GetMapping("/kep/kategoriak")
