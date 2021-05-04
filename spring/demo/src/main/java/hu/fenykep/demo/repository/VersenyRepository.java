@@ -6,6 +6,7 @@ import hu.fenykep.demo.model.Nevezes;
 import hu.fenykep.demo.model.Verseny;
 import oracle.jdbc.OracleType;
 import oracle.jdbc.OracleTypes;
+import org.bouncycastle.util.Times;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -42,10 +43,10 @@ public class VersenyRepository {
             StringBuilder buffer = new StringBuilder();
             int ch;
             while ((ch = r.read()) != -1) {
-                buffer.append((char)ch);
+                buffer.append((char) ch);
             }
             return buffer.toString();
-        } catch (IOException | SQLException ignored){
+        } catch (IOException | SQLException ignored) {
 
         }
         return "";
@@ -62,10 +63,12 @@ public class VersenyRepository {
             rs.getInt("szavazat_db")
     );
 
-    public List<Verseny> findAll(){ return jdbcTemplate.query("SELECT * FROM Verseny", versenyRowMapper); }
+    public List<Verseny> findAll() {
+        return jdbcTemplate.query("SELECT * FROM Verseny", versenyRowMapper);
+    }
 
-    public Verseny findById(int id){
-      try {
+    public Verseny findById(int id) {
+        try {
             return jdbcTemplate.queryForObject("SELECT * FROM Verseny WHERE id = ?", new Object[]{
                     id
             }, new int[]{
@@ -109,5 +112,17 @@ public class VersenyRepository {
         System.out.println(versenyek.size());
 
         return versenyek;
+    }
+
+    public void insertVerseny(String cim, String szoveg, Timestamp kezdeti, Timestamp vege) {
+        jdbcTemplate.update("INSERT INTO VERSENY(CIM, SZOVEG, SZAVAZAS_KEZDETE, SZAVAZAS_VEGE) VALUES(?, ?, ?, ?)",
+                new Object[]{
+                        cim, szoveg, kezdeti, vege
+                }, new int[]{
+                        OracleTypes.VARCHAR,
+                        OracleTypes.VARCHAR,
+                        OracleTypes.TIMESTAMP,
+                        OracleTypes.TIMESTAMP
+                });
     }
 }
