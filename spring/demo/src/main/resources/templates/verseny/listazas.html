@@ -5,10 +5,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/bejegyzes.css}">
         <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
         <title>Versenyek - HUmmingbird</title>
     </head>
     <style>
+        .link{
+            color: #543F65;
+        }
+
+        .link:hover{
+            color: #E50B7B;
+            text-decoration: none;
+        }
     </style>
     <body>
         <nav class="navbar navbar-expand-md justify-content-center">
@@ -33,34 +42,41 @@
                 <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
             </li>
         </nav>
-        <div class="container-fluid">
-            <div class="verseny-meghirdetes" th:if="*{felhasznalo != null and felhasznalo.isAdmin()}">
-                <form method="post" th:action="@{/versenyek/meghirdetes}">
-                    <label for="cim">Cím:</label>
-                    <input type="text" name="cim" id="cim">
-
-                    <label for="szoveg">Szöveg:</label>
-                    <textarea name="szoveg" id="szoveg" rows="8" cols="30"></textarea>
-
-                    <label for="ido_kezdeti">Kezdés:</label>
-                    <input type="datetime-local" name="ido_kezdeti" id="ido_kezdeti">
-
-                    <label for="ido_vege">Vége:</label>
-                    <input type="datetime-local" name="ido_vege" id="ido_vege">
-
-                    <input type="submit" value="Meghírdetés">
+        <div class="container">
+            <div th:if="*{felhasznalo != null and felhasznalo.isAdmin()}">
+                <form th:action="@{/versenyek/meghirdetes}" method="post">
+                    <div class="form-group w-50">
+                        <label>Cím:</label>
+                        <input type="text" class="form-control" name="cim" required>
+                    </div>
+                    <div class="form-group w-25">
+                        <label>Kezdete:</label>
+                        <input type="datetime-local" class="form-control" name="ido_kezdeti" required>
+                    </div>
+                    <div class="form-group w-25">
+                        <label>Vége:</label>
+                        <input type="datetime-local" class="form-control" name="ido_vege" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tartalom:</label>
+                        <textarea type="text" class="form-control" name="szoveg" required></textarea>
+                    </div>
+                    <button type="submit" class="btn gomb shadow-none">Meghirdetés</button>
                 </form>
             </div>
-
             <h1 th:if="*{param.teszt != null}" th:text="${param.teszt}"></h1>
-            <div class="verseny card" th:each="verseny : ${versenyek}">
-                <span class="cim" th:text="${verseny.getCim()}"></span>
+            <article th:block  th:each="verseny : ${versenyek}">
+                <h2 th:text="${verseny.getCim()}"></h2>
                 <span th:if="${verseny.isAktiv()}">Aktív</span>
                 <span th:if="!${verseny.isAktiv()}">Nem aktív</span>
-                <span th:text="${verseny.getSzavazas_kezdete()}"></span>
-                <span th:text="${verseny.getSzavazas_vege()}"></span>
-                <div class="szoveg" th:text="${verseny.getSzoveg()}"></div>
-            </div>
+                <br>
+                <span><small th:text="'Kezdete: ' + ${verseny.getSzavazas_kezdete()}"></small></span>
+                <br>
+                <span><small th:text="'Vége: ' + ${verseny.getSzavazas_vege()}"></small></span>
+                <hr>
+                <p style="font-variant: normal;" th:text="${verseny.getSzoveg()}"></p>
+                <p><a class="link" th:href="@{/versenyek/megtekintes/{id}(id=${verseny.getId()})}">Link a verseny oldalára</a></p>
+            </article>
         </div>
     </body>
 </html>

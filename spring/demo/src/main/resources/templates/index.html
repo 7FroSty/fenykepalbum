@@ -33,9 +33,9 @@
             </li>
         </nav>
         <div class="container">
-            <span th:if="${felhasznalo != null} and ${felhasznalo.isAdmin}">
+            <div th:if="${felhasznalo != null} and ${felhasznalo.isAdmin}">
                 <form th:action="@{/bejegyzesFeltoltes}" method="post">
-                    <div class="form-group">
+                    <div class="form-group w-50">
                         <label>Cím:</label>
                         <input type="text" class="form-control" name="cim" required>
                     </div>
@@ -46,7 +46,7 @@
                     <input type="hidden" name="admin_id" th:value="*{felhasznalo.getId()}" required>
                     <button type="submit" class="btn gomb shadow-none" name="submit">Feltöltés</button>
                 </form>
-            </span>
+            </div>
             <article th:block th:each="bejegyzes : ${bejegyzesek}">
                 <h2 th:text="${bejegyzes.getCim()}"></h2>
                 <span><small th:text="'Szerző: '+${admin.getFelhasznaloById(bejegyzes.getFelhasznalo_id()).getNev()}"></small></span>

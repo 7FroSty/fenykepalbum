@@ -14,7 +14,12 @@ form{
     padding: 10px;
 }
 
-span{
+.form-group{
+    min-width: 250px;
+}
+
+
+#feltoltes{
     text-align: left;
 }
 
