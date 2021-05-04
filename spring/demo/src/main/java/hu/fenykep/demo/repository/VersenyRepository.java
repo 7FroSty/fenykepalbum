@@ -24,8 +24,8 @@ public class VersenyRepository {
             rs.getInt("id"),
             rs.getString("cim"),
             rs.getString("szoveg"),
-            rs.getDate("szavazas_kezdete"),
-            rs.getDate("szavazas_vege")
+            rs.getTimestamp("szavazas_kezdete"),
+            rs.getTimestamp("szavazas_vege")
     );
 
     public List<Verseny> findAll(){ return jdbcTemplate.query("SELECT * FROM Verseny", versenyRowMapper); }
@@ -36,7 +36,7 @@ public class VersenyRepository {
 
     public List<Verseny> getActiveVersenyek() {
         SimpleJdbcCall jdbcCall = getJdbcCallCursorVerseny().withProcedureName("AktivVersenyek");
-        jdbcCall.addDeclaredParameter(new SqlParameter("p_datum", OracleType.DATE.getVendorTypeNumber()));
+        jdbcCall.addDeclaredParameter(new SqlParameter("p_datum", OracleType.TIMESTAMP.getVendorTypeNumber()));
 
         Timestamp date = new Timestamp(System.currentTimeMillis());
 

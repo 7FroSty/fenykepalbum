@@ -33,5 +33,34 @@
                 <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
             </li>
         </nav>
+        <div class="container-fluid">
+            <div class="verseny-meghirdetes" th:if="*{felhasznalo != null and felhasznalo.isAdmin()}">
+                <form method="post" th:action="@{/versenyek/meghirdetes}">
+                    <label for="cim">Cím:</label>
+                    <input type="text" name="cim" id="cim">
+
+                    <label for="szoveg">Szöveg:</label>
+                    <textarea name="szoveg" id="szoveg" rows="8" cols="30"></textarea>
+
+                    <label for="ido_kezdeti">Kezdés:</label>
+                    <input type="datetime-local" name="ido_kezdeti" id="ido_kezdeti">
+
+                    <label for="ido_vege">Vége:</label>
+                    <input type="datetime-local" name="ido_vege" id="ido_vege">
+
+                    <input type="submit" value="Meghírdetés">
+                </form>
+            </div>
+
+            <h1 th:if="*{param.teszt != null}" th:text="${param.teszt}"></h1>
+            <div class="verseny card" th:each="verseny : ${versenyek}">
+                <span class="cim" th:text="${verseny.getCim()}"></span>
+                <span th:if="${verseny.isAktiv()}">Aktív</span>
+                <span th:if="!${verseny.isAktiv()}">Nem aktív</span>
+                <span th:text="${verseny.getSzavazas_kezdete()}"></span>
+                <span th:text="${verseny.getSzavazas_vege()}"></span>
+                <div class="szoveg" th:text="${verseny.getSzoveg()}"></div>
+            </div>
+        </div>
     </body>
 </html>

@@ -28,6 +28,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             LOG.info("Vendeg AccessDeniedException: " +
                     request.getRequestURI());
         }
+        accessDeniedException.printStackTrace();
         response.sendRedirect(request.getContextPath() + "/error/accessDenied");
     }
 }

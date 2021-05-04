@@ -46,11 +46,6 @@ public class HtmlController {
         return "redirect:/";
     }
 
-    @GetMapping("/versenyek")
-    public String versenyek() {
-        return "/versenyek";
-    }
-
     @GetMapping("/bejegyzesModositas")
     public String bejegyzesModositas(Model model, @RequestParam("bejegyzesId") int id, Authentication authentication){
         try {
