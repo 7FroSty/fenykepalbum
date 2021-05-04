@@ -1,31 +1,27 @@
 package hu.fenykep.demo.model;
 
 public class Nevezes {
-    private int id;
-    private int verseny_id;
-    private int kep_id;
+    private Kep kep;
+    private int szavazat_db;
 
-    public void setId(int id) {
-        this.id = id;
+    public Nevezes(Kep kep, int szavazat_db) {
+        this.kep = kep;
+        this.szavazat_db = szavazat_db;
     }
 
-    public int getId() {
-        return id;
+    public Kep getKep() {
+        return kep;
     }
 
-    public void setKep_id(int kep_id) {
-        this.kep_id = kep_id;
+    public void setKep(Kep kep) {
+        this.kep = kep;
     }
 
-    public int getKep_id() {
-        return kep_id;
+    public int getSzavazat_db() {
+        return szavazat_db;
     }
 
-    public int getVerseny_id() {
-        return verseny_id;
-    }
-
-    public void setVerseny_id(int verseny_id) {
-        this.verseny_id = verseny_id;
+    public void setSzavazat_db(int szavazat_db) {
+        this.szavazat_db = szavazat_db;
     }
 }
