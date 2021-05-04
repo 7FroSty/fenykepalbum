@@ -1,6 +1,8 @@
 package hu.fenykep.demo.controller;
 
 import hu.fenykep.demo.model.Felhasznalo;
+import hu.fenykep.demo.model.Kep;
+import hu.fenykep.demo.model.Nevezes;
 import hu.fenykep.demo.model.Verseny;
 import hu.fenykep.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.spring5.expression.Mvc;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +50,6 @@ public class VersenyController {
         Felhasznalo felhasznalo = authentication == null ? null : (Felhasznalo) authentication.getPrincipal();
 
         List<Verseny> versenyList = versenyRepository.findAll();
-        model.addAttribute("felhasznalo", felhasznalo);
         model.addAttribute("versenyek", versenyList);
         return "/verseny/listazas";
     }
@@ -62,5 +64,18 @@ public class VersenyController {
         modelMap.addAttribute("teszt", "töszt");
         modelMap.addAttribute("felhasznalo", felhasznalo);
         return new ModelAndView("redirect:/versenyek", modelMap);
+    }
+
+    @GetMapping("/versenyek/megtekintes/{id}")
+    public String versenyMegtekintes(@PathVariable("id") Integer id,
+                                     Model model, Authentication authentication) {
+        Felhasznalo felhasznalo = authentication == null ? null : (Felhasznalo) authentication.getPrincipal();
+
+        Verseny verseny = versenyRepository.findById(id);
+        List<Nevezes> nevezesek = versenyRepository.findNevezesekById(id);
+
+        model.addAttribute("nevezesek", nevezesek);
+        model.addAttribute("verseny", verseny);
+        return "/verseny/megtekintes";
     }
 }
