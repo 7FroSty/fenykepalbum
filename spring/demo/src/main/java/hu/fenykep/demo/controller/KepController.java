@@ -96,11 +96,20 @@ public class KepController {
 
         kepRepository.executeKepFeltoltes(Integer.parseInt(felhasznalo_id), kategoria_id, cim, encodedString, date, telepules);
 
-        return "redirect:/";
+        return "redirect:/kep/kepek";
     }
 
     @GetMapping("/kep/kategoriak")
-    public String kategoriak(Model model) {
+    public String kategoriak(Model model, Authentication authentication) {
+        try {
+            Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+            model.addAttribute("felhasznalo", felhasznalo);
+
+            System.out.println(felhasznalo.isAdmin());
+
+        }catch (Exception e){
+        }
+
         model.addAttribute("kategoriak", kategoriaRepository.findAll());
         return "/kep/kategoriak";
     }

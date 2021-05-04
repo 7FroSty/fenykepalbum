@@ -4,12 +4,12 @@ import hu.fenykep.demo.model.Bejegyzes;
 import hu.fenykep.demo.model.Felhasznalo;
 import hu.fenykep.demo.repository.BejegyzesRepository;
 import hu.fenykep.demo.repository.FelhasznaloRepository;
+import hu.fenykep.demo.repository.KategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -21,6 +21,9 @@ public class HtmlController {
 
     @Autowired
     private BejegyzesRepository bejegyzesRepository;
+
+    @Autowired
+    private KategoriaRepository kategoriaRepository;
 
     @GetMapping("/")
     public String index(Model model, Authentication authentication) throws Exception {
@@ -59,5 +62,20 @@ public class HtmlController {
         }
         model.addAttribute("bejegyzes", bejegyzesRepository.getBejegyzesById(id));
         return "/bejegyzesModositas";
+    }
+
+    @GetMapping("/katModositas")
+    public String katModositas(Model model, @RequestParam("katId") int id, Authentication authentication){
+        try {
+            Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
+            if(!felhasznalo.isAdmin()){
+                return "redirect:/";
+            }
+
+        }catch (Exception e){
+            return "redirect:/felhasznalo/bejelentkezes";
+        }
+        model.addAttribute("kategoria", kategoriaRepository.findKategoriaById(id));
+        return "/kep/katModositas";
     }
 }
