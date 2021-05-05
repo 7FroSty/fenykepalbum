@@ -8,9 +8,36 @@
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/kepmenu.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/kepek.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/bejegyzes.css}">
     <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
-    <title>Verseny - Nevezett képek</title>
+    <title>Nevezett képek - HUmmingbird</title>
 </head>
+<style>
+    h2{
+        margin-bottom: 0;
+    }
+
+    article{
+        width: 100%;
+    }
+
+    .article-row{
+        padding-left: 35px;
+        padding-right: 35px;
+    }
+
+    .szavazas{
+        font-weight: 600;
+        color: #543F65;
+        font-size: 1vw;
+        overflow-wrap: break-word;
+    }
+
+    .szavazas:hover{
+        text-decoration: none;
+        color: #E50B7B;
+    }
+</style>
 <body>
 <nav class="navbar navbar-expand-md justify-content-center">
     <li class="navbar-brand">
@@ -35,15 +62,18 @@
     </li>
 </nav>
 <div class="container-fluid">
-    <div class="row">
-        <div class="verseny card">
-            <span class="cim" th:text="${verseny.getCim()}"></span>
+    <div class="row article-row">
+        <article>
+            <h2 th:text="${verseny.getCim()}"></h2>
             <span th:if="${verseny.isAktiv()}">Aktív</span>
             <span th:if="!${verseny.isAktiv()}">Nem aktív</span>
-            <span th:text="${verseny.getSzavazas_kezdete()}"></span>
-            <span th:text="${verseny.getSzavazas_vege()}"></span>
-            <div class="szoveg" th:text="${verseny.getSzoveg()}"></div>
-        </div>
+            <br>
+            <span><small th:text="'Kezdete: ' + ${verseny.getSzavazas_kezdete()}"></small></span>
+            <br>
+            <span><small th:text="'Vége: ' + ${verseny.getSzavazas_vege()}"></small></span>
+            <hr>
+            <p style="font-variant: normal;" th:text="${verseny.getSzoveg()}"></p>
+        </article>
     </div>
     <div class="row">
         <div class="col-sm-5cols my-2" th:each="nevezes : ${nevezesek}">
@@ -51,9 +81,9 @@
                 <a th:href="@{/kep/megtekintes/{id}(id=${nevezes.getKep().getId()})}">
                     <img th:src="'data:image/png;base64,' + ${nevezes.getKep().getTartalom()}" class="img-fluid">
                 </a>
-                <span class="cim" th:text="${nevezes.getKep().getCim()}"></span>
-                <span th:text="${nevezes.getSzavazat_db()} + 'db szavazat'"></span>
-                <a th:href="@{/versenyek/szavazas/{n_id}(n_id=${nevezes.getId()})}">Szavazás</a>
+                <span class="cim" th:utext="${nevezes.getKep().getCim()} + '<br />' + ' ('+${nevezes.getSzavazat_db()}+' kép)'"></span>
+                <br>
+                <a class="szavazas" th:href="@{/versenyek/szavazas/{n_id}(n_id=${nevezes.getId()})}">Szavazás</a>
             </div>
         </div>
     </div>
