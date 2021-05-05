@@ -64,7 +64,7 @@
                     <button type="submit" class="btn gomb shadow-none">Meghirdetés</button>
                 </form>
             </div>
-            <h1 th:if="*{param.teszt != null}" th:text="${param.teszt}"></h1>
+            <h1 th:if="*{param.hiba != null}" th:text="${param.hiba}"></h1>
             <article th:block  th:each="verseny : ${versenyek}">
                 <h2 th:text="${verseny.getCim()}"></h2>
                 <span th:if="${verseny.isAktiv()}">Aktív</span>

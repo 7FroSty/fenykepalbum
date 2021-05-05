@@ -50,6 +50,7 @@ public class VersenyController {
         Felhasznalo felhasznalo = authentication == null ? null : (Felhasznalo) authentication.getPrincipal();
 
         List<Verseny> versenyList = versenyRepository.findAll();
+        model.addAttribute("felhasznalo", felhasznalo);
         model.addAttribute("versenyek", versenyList);
         return "/verseny/listazas";
     }

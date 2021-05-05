@@ -60,3 +60,7 @@ form{
     color: #EBE589;
     background-color: #779721;
 }
+
+.btn-sm{
+    font-size: 12px;
+}

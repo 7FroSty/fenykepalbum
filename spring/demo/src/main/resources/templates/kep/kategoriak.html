@@ -66,13 +66,13 @@
                        th:utext="${kategoria.getNev()} + '<br />' + ' ('+${kategoria.getKepdb()}+' kép)'">
                     </a>
                     <div th:if="${felhasznalo != null} and ${felhasznalo.isAdmin()}">
-                        <form class="bejegyzesgomb" th:action="@{/katModositas}" method="get">
+                        <form th:action="@{/katModositas}" method="get">
                             <input type="hidden" name="katId" th:value="${kategoria.getId()}">
-                            <button type="submit" class="btn gomb shadow-none" name="submit">Módosítás</button>
+                            <button type="submit" class="btn gomb shadow-none btn-sm" name="submit">Módosítás</button>
                         </form>
-                        <form class="bejegyzesgomb" th:action="@{/katTorles}" method="post">
+                        <form th:action="@{/katTorles}" method="post">
                             <input type="hidden" name="id" th:value="${kategoria.getId()}">
-                            <button type="submit" class="btn gomb shadow-none" name="submit">Törlés</button>
+                            <button type="submit" class="btn gomb shadow-none btn-sm" name="submit">Törlés</button>
                         </form>
                     </div>
                 </div>
