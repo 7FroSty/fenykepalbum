@@ -6,6 +6,7 @@ import hu.fenykep.demo.model.Nevezes;
 import hu.fenykep.demo.model.Verseny;
 import oracle.jdbc.OracleType;
 import oracle.jdbc.OracleTypes;
+import org.bouncycastle.util.Times;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -42,16 +43,17 @@ public class VersenyRepository {
             StringBuilder buffer = new StringBuilder();
             int ch;
             while ((ch = r.read()) != -1) {
-                buffer.append((char)ch);
+                buffer.append((char) ch);
             }
             return buffer.toString();
-        } catch (IOException | SQLException ignored){
+        } catch (IOException | SQLException ignored) {
 
         }
         return "";
     }
 
     private final RowMapper<Nevezes> nevezesRowMapper = (rs, i) -> new Nevezes(
+            rs.getInt("n_id"),
             new Kep(rs.getInt("id"),
                     rs.getInt("felhasznalo_id"),
                     rs.getInt("kategoria_id"),
@@ -62,10 +64,12 @@ public class VersenyRepository {
             rs.getInt("szavazat_db")
     );
 
-    public List<Verseny> findAll(){ return jdbcTemplate.query("SELECT * FROM Verseny", versenyRowMapper); }
+    public List<Verseny> findAll() {
+        return jdbcTemplate.query("SELECT * FROM Verseny", versenyRowMapper);
+    }
 
-    public Verseny findById(int id){
-      try {
+    public Verseny findById(int id) {
+        try {
             return jdbcTemplate.queryForObject("SELECT * FROM Verseny WHERE id = ?", new Object[]{
                     id
             }, new int[]{
@@ -79,7 +83,7 @@ public class VersenyRepository {
 
     public List<Nevezes> findNevezesekById(int verseny_id) {
         try {
-            return jdbcTemplate.query("SELECT K.*, " +
+            return jdbcTemplate.query("SELECT N.ID AS N_ID, K.*, " +
                     "(SELECT COUNT(*) FROM SZAVAZAT WHERE SZAVAZAT.NEVEZES_ID = N.ID) AS szavazat_db FROM VERSENY " +
                     "RIGHT JOIN NEVEZES N on VERSENY.ID = N.VERSENY_ID " +
                     "LEFT JOIN KEP K on K.ID = N.KEP_ID " +
@@ -109,5 +113,27 @@ public class VersenyRepository {
         System.out.println(versenyek.size());
 
         return versenyek;
+    }
+
+    public void insertVerseny(String cim, String szoveg, Timestamp kezdeti, Timestamp vege) {
+        jdbcTemplate.update("INSERT INTO VERSENY(CIM, SZOVEG, SZAVAZAS_KEZDETE, SZAVAZAS_VEGE) VALUES(?, ?, ?, ?)",
+                new Object[]{
+                        cim, szoveg, kezdeti, vege
+                }, new int[]{
+                        OracleTypes.VARCHAR,
+                        OracleTypes.VARCHAR,
+                        OracleTypes.TIMESTAMP,
+                        OracleTypes.TIMESTAMP
+                });
+    }
+
+    public void insertSzavazat(int nevezes_id, Felhasznalo felhasznalo) {
+        jdbcTemplate.update("INSERT INTO SZAVAZAT(NEVEZES_ID, FELHASZNALO_ID) VALUES(?, ?)",
+                new Object[]{
+                        nevezes_id, felhasznalo.getId()
+                }, new int[]{
+                        OracleTypes.NUMBER,
+                        OracleTypes.NUMBER,
+                });
     }
 }
