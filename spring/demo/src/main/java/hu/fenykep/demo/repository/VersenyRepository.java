@@ -53,6 +53,7 @@ public class VersenyRepository {
     }
 
     private final RowMapper<Nevezes> nevezesRowMapper = (rs, i) -> new Nevezes(
+            rs.getInt("n_id"),
             new Kep(rs.getInt("id"),
                     rs.getInt("felhasznalo_id"),
                     rs.getInt("kategoria_id"),
@@ -82,7 +83,7 @@ public class VersenyRepository {
 
     public List<Nevezes> findNevezesekById(int verseny_id) {
         try {
-            return jdbcTemplate.query("SELECT K.*, " +
+            return jdbcTemplate.query("SELECT N.ID AS N_ID, K.*, " +
                     "(SELECT COUNT(*) FROM SZAVAZAT WHERE SZAVAZAT.NEVEZES_ID = N.ID) AS szavazat_db FROM VERSENY " +
                     "RIGHT JOIN NEVEZES N on VERSENY.ID = N.VERSENY_ID " +
                     "LEFT JOIN KEP K on K.ID = N.KEP_ID " +
@@ -123,6 +124,16 @@ public class VersenyRepository {
                         OracleTypes.VARCHAR,
                         OracleTypes.TIMESTAMP,
                         OracleTypes.TIMESTAMP
+                });
+    }
+
+    public void insertSzavazat(int nevezes_id, Felhasznalo felhasznalo) {
+        jdbcTemplate.update("INSERT INTO SZAVAZAT(NEVEZES_ID, FELHASZNALO_ID) VALUES(?, ?)",
+                new Object[]{
+                        nevezes_id, felhasznalo.getId()
+                }, new int[]{
+                        OracleTypes.NUMBER,
+                        OracleTypes.NUMBER,
                 });
     }
 }

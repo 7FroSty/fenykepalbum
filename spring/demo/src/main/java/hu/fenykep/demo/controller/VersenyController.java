@@ -77,4 +77,14 @@ public class VersenyController {
         model.addAttribute("verseny", verseny);
         return "/verseny/megtekintes";
     }
+
+    @GetMapping("/versenyek/szavazas/{id}")
+    @PreAuthorize("hasRole('FELHASZNALO')")
+    public String versenySzavazas(@PathVariable("id") Integer n_id, Authentication authentication) {
+        Felhasznalo felhasznalo = authentication == null ? null : (Felhasznalo) authentication.getPrincipal();
+
+        versenyRepository.insertSzavazat(n_id, felhasznalo);
+        return "redirect:/versenyek";
+    }
+
 }

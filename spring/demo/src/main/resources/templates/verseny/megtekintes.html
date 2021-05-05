@@ -53,6 +53,7 @@
                 </a>
                 <span class="cim" th:text="${nevezes.getKep().getCim()}"></span>
                 <span th:text="${nevezes.getSzavazat_db()} + 'db szavazat'"></span>
+                <a th:href="@{/versenyek/szavazas/{n_id}(n_id=${nevezes.getId()})}">Szavazás</a>
             </div>
         </div>
     </div>

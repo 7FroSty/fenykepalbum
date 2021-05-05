@@ -1,12 +1,22 @@
 package hu.fenykep.demo.model;
 
 public class Nevezes {
+    private int id;
     private Kep kep;
     private int szavazat_db;
 
-    public Nevezes(Kep kep, int szavazat_db) {
+    public Nevezes(int id, Kep kep, int szavazat_db) {
+        this.id = id;
         this.kep = kep;
         this.szavazat_db = szavazat_db;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Kep getKep() {
