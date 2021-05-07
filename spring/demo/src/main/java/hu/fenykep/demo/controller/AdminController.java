@@ -1,7 +1,6 @@
 package hu.fenykep.demo.controller;
 
 import hu.fenykep.demo.model.Felhasznalo;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

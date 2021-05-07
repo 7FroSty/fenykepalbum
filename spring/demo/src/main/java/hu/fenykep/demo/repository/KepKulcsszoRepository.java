@@ -1,6 +1,5 @@
 package hu.fenykep.demo.repository;
 
-import hu.fenykep.demo.model.Kategoria;
 import hu.fenykep.demo.model.KepKulcsszo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

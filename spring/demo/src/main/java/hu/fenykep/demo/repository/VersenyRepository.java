@@ -6,7 +6,6 @@ import hu.fenykep.demo.model.Nevezes;
 import hu.fenykep.demo.model.Verseny;
 import oracle.jdbc.OracleType;
 import oracle.jdbc.OracleTypes;
-import org.bouncycastle.util.Times;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,7 +21,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class VersenyRepository {

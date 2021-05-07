@@ -1,20 +1,16 @@
 package hu.fenykep.demo.repository;
 
-import hu.fenykep.demo.model.Bejegyzes;
 import hu.fenykep.demo.model.Ertekeles;
 import hu.fenykep.demo.model.Felhasznalo;
 import hu.fenykep.demo.model.Kep;
 import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Repository

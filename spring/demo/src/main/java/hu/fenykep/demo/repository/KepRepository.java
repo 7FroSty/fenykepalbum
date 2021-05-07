@@ -1,6 +1,8 @@
 package hu.fenykep.demo.repository;
 
-import hu.fenykep.demo.model.*;
+import hu.fenykep.demo.model.Ertekeles;
+import hu.fenykep.demo.model.Kep;
+import hu.fenykep.demo.model.Telepules;
 import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -16,7 +18,8 @@ import java.io.Reader;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings({"DuplicatedCode", "unchecked"})
 @Repository

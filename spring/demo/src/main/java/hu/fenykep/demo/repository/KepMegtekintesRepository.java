@@ -1,9 +1,6 @@
 package hu.fenykep.demo.repository;
 
-import hu.fenykep.demo.model.Bejegyzes;
-import hu.fenykep.demo.model.Kep;
 import hu.fenykep.demo.model.KepMegtekintes;
-import hu.fenykep.demo.model.Telepules;
 import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

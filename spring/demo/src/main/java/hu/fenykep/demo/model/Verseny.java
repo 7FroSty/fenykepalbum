@@ -1,7 +1,6 @@
 package hu.fenykep.demo.model;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class Verseny {
     private int id;
