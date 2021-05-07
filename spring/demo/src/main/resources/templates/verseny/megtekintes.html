@@ -81,7 +81,7 @@
                 <a th:href="@{/kep/megtekintes/{id}(id=${nevezes.getKep().getId()})}">
                     <img th:src="'data:image/png;base64,' + ${nevezes.getKep().getTartalom()}" class="img-fluid">
                 </a>
-                <span class="cim" th:utext="${nevezes.getKep().getCim()} + '<br />' + ' ('+${nevezes.getSzavazat_db()}+' kép)'"></span>
+                <span class="cim" th:utext="${nevezes.getKep().getCim()} + '<br />' + ' ('+${nevezes.getSzavazat_db()}+' szavazat)'"></span>
                 <br>
                 <a class="szavazas" th:href="@{/versenyek/szavazas/{n_id}(n_id=${nevezes.getId()})}">Szavazás</a>
             </div>

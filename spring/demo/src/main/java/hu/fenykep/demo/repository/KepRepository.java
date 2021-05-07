@@ -265,4 +265,5 @@ public class KepRepository {
     public void kepTorles(int id){
         jdbcTemplate.update("DELETE FROM Kep WHERE id = "+id);
     }
+
 }

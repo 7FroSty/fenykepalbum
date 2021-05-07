@@ -82,8 +82,11 @@ public class VersenyController {
     @PreAuthorize("hasRole('FELHASZNALO')")
     public String versenySzavazas(@PathVariable("id") Integer n_id, Authentication authentication) {
         Felhasznalo felhasznalo = authentication == null ? null : (Felhasznalo) authentication.getPrincipal();
+        try {
+            versenyRepository.insertSzavazat(n_id, felhasznalo);
+        } catch (Exception e){
 
-        versenyRepository.insertSzavazat(n_id, felhasznalo);
+        }
         return "redirect:/versenyek";
     }
 

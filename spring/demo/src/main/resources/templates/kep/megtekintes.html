@@ -62,6 +62,7 @@
             <div>Feltöltötte:
                 <a class="link" style="font-variant: normal;" th:href="@{/felhasznalo/profil/{id}(id=${kep.getFelhasznalo_id()})}" th:text="${kep.getFelhasznalo().getNev()}"></a>
             </div>
+            <div>Megtekinések száma: <span th:text="${megtekintesek}"></span></div>
             <div>Ekkor: <span th:text="${kep.getDateAsString()}"></span></div>
             <div>Csillagok átlag: <span th:text="${kep.getCsillagok()}"></span></div>
             <a class="link" th:href="@{/kep/ertekeles/{id}/csillag/{csillag}(id=${kep.getId()}, csillag=0)}">Értékelés törlése</a>

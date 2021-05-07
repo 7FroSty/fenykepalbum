@@ -29,6 +29,9 @@ public class KepController {
     private KepRepository kepRepository;
 
     @Autowired
+    private KepMegtekintesRepository kepMegtekintesRepository;
+
+    @Autowired
     private KategoriaRepository kategoriaRepository;
 
     @Autowired
@@ -82,11 +85,13 @@ public class KepController {
     }
 
     @PostMapping("/feltoltes")
-    public String kepFeltoltes(@RequestParam("kep") MultipartFile kep,
+    public String kepFeltoltes(Model model,
+                               @RequestParam("kep") MultipartFile kep,
                                @RequestParam("cim") String cim,
                                @RequestParam("telepules") String telepules,
                                @RequestParam("kategoria") int kategoria_id,
-                               @RequestParam("felhasznalo_id") String felhasznalo_id) throws IOException {
+                               @RequestParam("felhasznalo_id") int felhasznalo_id,
+                               @RequestParam("verseny") int verseny_id) throws IOException {
         System.out.println("kep feltoltese...");
 
         byte[] fileContent = kep.getBytes();
@@ -94,7 +99,21 @@ public class KepController {
 
         Timestamp date = new Timestamp(System.currentTimeMillis());
 
-        kepRepository.executeKepFeltoltes(Integer.parseInt(felhasznalo_id), kategoria_id, cim, encodedString, date, telepules);
+        kepRepository.executeKepFeltoltes(felhasznalo_id, kategoria_id, cim, encodedString, date, telepules);
+
+        List<Kep> kepek = kepRepository.findAllByFelhasznaloId(felhasznalo_id);
+
+        for(Kep temp : kepek){
+            if(temp.getCim().equals(cim) && temp.getKategoria_id() == kategoria_id
+            && temp.getTelepules().equals(telepules)){
+                versenyRepository.kepNevezese(temp.getId(), verseny_id);
+                return "redirect:/kep/kepek";
+            }
+        }
+
+        model.addAttribute("hiba", true);
+
+        System.out.println("nem sikerult nevezni a versenyre");
 
         return "redirect:/kep/kepek";
     }
@@ -129,8 +148,14 @@ public class KepController {
             try {
                 Felhasznalo felhasznalo = (Felhasznalo) authentication.getPrincipal();
                 model.addAttribute("felhasznalo", felhasznalo);
+
+                kepMegtekintesRepository.addMegtekintes(felhasznalo.getId(), id);
+
             }catch (Exception e){
             }
+            List<KepMegtekintes> temp = kepMegtekintesRepository.countMegtekintes(id);
+            model.addAttribute("megtekintesek", temp.size());
+
             kepRepository.getKepAdatok(kep);
             List<Komment> kommentek = kommentRepository.getKepKommentek(kep);
             model.addAttribute("kommentek", kommentek);
@@ -157,6 +182,7 @@ public class KepController {
     @GetMapping("/kep/kepek")
     public String kepListaOsszes(Model model) {
         model.addAttribute("kepek", kepRepository.findAll());
+        model.getAttribute("hiba");
         model.addAttribute("kepSzuro", "Minden kép");
         return "/kep/listazas";
     }

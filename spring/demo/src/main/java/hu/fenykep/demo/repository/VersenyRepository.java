@@ -136,4 +136,14 @@ public class VersenyRepository {
                         OracleTypes.NUMBER,
                 });
     }
+
+    public void kepNevezese(int kep_id, int verseny_id){
+        jdbcTemplate.update("INSERT INTO NEVEZES(VERSENY_ID, KEP_ID) VALUES(?, ?)",
+                new Object[]{
+                        verseny_id, kep_id
+                }, new int[]{
+                        OracleTypes.NUMBER,
+                        OracleTypes.NUMBER,
+                });
+    }
 }

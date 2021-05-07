@@ -38,6 +38,9 @@
                 <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
             </li>
         </nav>
+        <div th:if="${hiba != null} and ${hiba}">
+            HIBA
+        </div>
         <nav class="navbar navbar-expand-xl justify-content-center kepnavbar">
             <ul class="navbar-nav kepnav">
                 <li class="nav-item">
