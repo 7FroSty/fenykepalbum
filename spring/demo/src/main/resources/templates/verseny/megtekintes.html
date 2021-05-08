@@ -58,7 +58,7 @@
             <div class="row">
                 <div class="col-sm-5cols my-2" th:each="nevezes : ${nevezesek}">
                     <div class="thumbnail">
-                        <a th:href="@{/kep/megtekintes/{id}(id=${nevezes.getKep().getId()})}">
+                        <a th:target="_blank" th:href="@{/kep/megtekintes/{id}(id=${nevezes.getKep().getId()})}">
                             <img th:src="'data:image/png;base64,' + ${nevezes.getKep().getTartalom()}" class="img-fluid">
                         </a>
                         <span class="cim" th:utext="${nevezes.getKep().getCim()} + '<br />' + ' ('+${nevezes.getSzavazat_db()}+' szavazat)'"></span>
