@@ -5,6 +5,7 @@ import hu.fenykep.demo.model.Nevezes;
 import hu.fenykep.demo.model.Verseny;
 import hu.fenykep.demo.repository.VersenyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -66,22 +69,46 @@ public class VersenyController {
 
         Verseny verseny = versenyRepository.findById(id);
         List<Nevezes> nevezesek = versenyRepository.findNevezesekById(id);
+        List<Nevezes> szavazottNevezesek = new ArrayList<>();
+        for (Nevezes nevezes : nevezesek) {
+            if(versenyRepository.isSzavazott(felhasznalo, nevezes)) {
+                szavazottNevezesek.add(nevezes);
+            }
+        }
+
 
         model.addAttribute("nevezesek", nevezesek);
+        model.addAttribute("szavazott", szavazottNevezesek);
         model.addAttribute("verseny", verseny);
         return "/verseny/megtekintes";
     }
 
     @GetMapping("/versenyek/szavazas/{id}")
     @PreAuthorize("hasRole('FELHASZNALO')")
-    public String versenySzavazas(@PathVariable("id") Integer n_id, Authentication authentication) {
+    public String versenySzavazas(@PathVariable("id") Integer n_id, Authentication authentication, HttpServletRequest request) {
         Felhasznalo felhasznalo = authentication == null ? null : (Felhasznalo) authentication.getPrincipal();
         try {
-            versenyRepository.insertSzavazat(n_id, felhasznalo);
-        } catch (Exception e){
+            if(felhasznalo != null) {
+                versenyRepository.insertSzavazat(n_id, felhasznalo);
+            }
+        } catch (DataAccessException e){
 
         }
-        return "redirect:/versenyek";
+        return "redirect:" + request.getHeader("referer");
+    }
+
+    @GetMapping("/versenyek/szavazasTorles/{id}")
+    @PreAuthorize("hasRole('FELHASZNALO')")
+    public String versenySzavazasTorles(@PathVariable("id") Integer n_id, Authentication authentication, HttpServletRequest request) {
+        Felhasznalo felhasznalo = authentication == null ? null : (Felhasznalo) authentication.getPrincipal();
+        try {
+            if (felhasznalo != null) {
+                versenyRepository.deleteSzavazat(n_id, felhasznalo);
+            }
+        } catch (DataAccessException e) {
+
+        }
+        return "redirect:" + request.getHeader("referer");
     }
 
 }

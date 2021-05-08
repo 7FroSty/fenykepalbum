@@ -7,7 +7,9 @@ import hu.fenykep.demo.model.Verseny;
 import oracle.jdbc.OracleType;
 import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameter;
@@ -16,11 +18,13 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class VersenyRepository {
@@ -125,7 +129,7 @@ public class VersenyRepository {
                 });
     }
 
-    public void insertSzavazat(int nevezes_id, Felhasznalo felhasznalo) {
+    public void insertSzavazat(int nevezes_id, Felhasznalo felhasznalo) throws DataAccessException {
         jdbcTemplate.update("INSERT INTO SZAVAZAT(NEVEZES_ID, FELHASZNALO_ID) VALUES(?, ?)",
                 new Object[]{
                         nevezes_id, felhasznalo.getId()
@@ -133,6 +137,16 @@ public class VersenyRepository {
                         OracleTypes.NUMBER,
                         OracleTypes.NUMBER,
                 });
+    }
+
+    public void deleteSzavazat(int nevezes_id, Felhasznalo felhasznalo) throws DataAccessException {
+        jdbcTemplate.update("DELETE FROM SZAVAZAT WHERE NEVEZES_ID = ? AND FELHASZNALO_ID = ?",
+                new Object[]{
+                        nevezes_id, felhasznalo.getId()
+                }, new int[]{
+                OracleTypes.NUMBER,
+                OracleTypes.NUMBER,
+        });
     }
 
     public void kepNevezese(int kep_id, int verseny_id){
@@ -143,5 +157,20 @@ public class VersenyRepository {
                         OracleTypes.NUMBER,
                         OracleTypes.NUMBER,
                 });
+    }
+
+    public boolean isSzavazott(Felhasznalo felhasznalo, Nevezes nevezes) {
+        if (felhasznalo == null || nevezes == null) return false;
+        try {
+            Map<String, Object> rs = jdbcTemplate.queryForMap("SELECT COUNT(*) AS db FROM SZAVAZAT WHERE NEVEZES_ID = ? AND FELHASZNALO_ID = ?",
+                    new Object[]{
+                            nevezes.getId(), felhasznalo.getId()
+                    }, new int[]{
+                            OracleTypes.NUMBER, OracleTypes.NUMBER
+                    });
+            return ((BigDecimal) rs.get("db")).equals(BigDecimal.ONE);
+        } catch (IncorrectResultSizeDataAccessException e) {
+        }
+        return false;
     }
 }

@@ -83,7 +83,8 @@
                 </a>
                 <span class="cim" th:utext="${nevezes.getKep().getCim()} + '<br />' + ' ('+${nevezes.getSzavazat_db()}+' szavazat)'"></span>
                 <br>
-                <a class="szavazas" th:href="@{/versenyek/szavazas/{n_id}(n_id=${nevezes.getId()})}">Szavazás</a>
+                <a class="szavazas" th:if="${szavazott.contains(nevezes)}" th:href="@{/versenyek/szavazasTorles/{n_id}(n_id=${nevezes.getId()})}">Szavazás törlése</a>
+                <a class="szavazas" th:if="!${szavazott.contains(nevezes)}" th:href="@{/versenyek/szavazas/{n_id}(n_id=${nevezes.getId()})}">Szavazás</a>
             </div>
         </div>
     </div>

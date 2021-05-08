@@ -17,13 +17,6 @@ public class KepMegtekintesRepository {
 
     private final RowMapper<KepMegtekintes> kepMegtekintesRowMapper = (rs, i) -> new KepMegtekintes();
 
-    public List<KepMegtekintes> findAll(){
-        List<KepMegtekintes> result = jdbcTemplate.query(
-                "SELECT * FROM KepMegtekintes",
-                (rs, rowNum) -> new KepMegtekintes()
-        );
-        return result;
-    }
     public void addMegtekintes(int felhasznalo_id, int kep_id){
         jdbcTemplate.update("INSERT INTO KEPMEGTEKINTES(FELHASZNALO_ID, KEP_ID) VALUES(?, ?)",
                 new Object[]{
