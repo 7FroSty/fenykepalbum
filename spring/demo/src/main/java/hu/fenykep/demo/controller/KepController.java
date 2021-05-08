@@ -178,9 +178,20 @@ public class KepController {
     // összes kép listázása
     @GetMapping("/kep/kepek")
     public String kepListaOsszes(Model model) {
-        model.addAttribute("kepek", kepRepository.findAll());
+        model.addAttribute("kepek", kepRepository.findAll(1));
         model.getAttribute("hiba");
         model.addAttribute("kepSzuro", "Minden kép");
+        model.addAttribute("page", 1);
+        return "/kep/listazas";
+    }
+
+    // összes kép listázása
+    @GetMapping("/kep/kepek/{page}")
+    public String kepListaOsszesoldal(@PathVariable("page") Integer page, Model model) {
+        model.addAttribute("kepek", kepRepository.findAll(page));
+        model.getAttribute("hiba");
+        model.addAttribute("kepSzuro", "Minden kép, " + page + ". oldal");
+        model.addAttribute("page", page);
         return "/kep/listazas";
     }
 
@@ -258,7 +269,7 @@ public class KepController {
                 szuroStr += "Keresés Településre: ";
                 break;
             default:
-                kepek.addAll(kepRepository.findAll());
+                kepek.addAll(kepRepository.findAll(1));
                 break;
         }
         szuroStr += szoveg;

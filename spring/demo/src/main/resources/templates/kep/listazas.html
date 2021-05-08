@@ -71,11 +71,9 @@
         </nav>
         <div class="container-fluid">
             <h2 th:if="${kepSzuro}" th:text="${kepSzuro}"></h2>
-            <ul class="pagination justify-content-center">
-                <li class="page-item"><a class="page-link" href="#"><<</a></li>
-                <li class="page-item"><a class="page-link" href="#"><</a></li>
-                <li class="page-item"><a class="page-link" href="#">></a></li>
-                <li class="page-item"><a class="page-link" href="#">>></a></li>
+            <ul class="pagination justify-content-center" th:if="${page != null}">
+                <li class="page-item"><a class="page-link" th:href="@{/kep/kepek/{page}(page=${page} - 1)}">&lt;</a></li>
+                <li class="page-item"><a class="page-link" th:href="@{/kep/kepek/{page}(page=${page} + 1)}">&gt;</a></li>
             </ul>
             <div class="row">
                 <div class="col-sm-5cols my-2" th:each="kep : ${kepek}">
@@ -87,11 +85,9 @@
                     </div>
                 </div>
             </div>
-            <ul class="pagination justify-content-center">
-                <li class="page-item"><a class="page-link" href="#"><<</a></li>
-                <li class="page-item"><a class="page-link" href="#"><</a></li>
-                <li class="page-item"><a class="page-link" href="#">></a></li>
-                <li class="page-item"><a class="page-link" href="#">>></a></li>
+            <ul class="pagination justify-content-center" th:if="${page != null}">
+                <li class="page-item"><a class="page-link" th:href="@{/kep/kepek/{page}(page=${page} - 1)}">&lt;</a></li>
+                <li class="page-item"><a class="page-link" th:href="@{/kep/kepek/{page}(page=${page} + 1)}">&gt;</a></li>
             </ul>
         </div>
     <script th:inline="javascript">

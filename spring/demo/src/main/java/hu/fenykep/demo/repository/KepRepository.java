@@ -6,16 +6,15 @@ import hu.fenykep.demo.model.Telepules;
 import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.SqlOutParameter;
-import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.sql.Clob;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
@@ -77,13 +76,17 @@ public class KepRepository {
     }
 
 
-    public List<Kep> findAll() {
-        return jdbcTemplate.query("SELECT * FROM Kep ORDER BY idopont DESC", kepRowMapper);
+    public List<Kep> findAll(int page) {
+        return jdbcTemplate.query("SELECT * FROM Kep ORDER BY idopont DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY",
+                new Object[]{
+                        (page - 1) * 10, 10
+                }, new int[]{
+                        OracleTypes.NUMBER, OracleTypes.NUMBER
+                }, kepRowMapper);
     }
 
-    /* asd */
     public List<Telepules> findAllTelepules() {
-        return jdbcTemplate.query("SELECT INITCAP(telepules) AS nev, COUNT(telepules) as kepdb " +
+        return jdbcTemplate.query("SELECT INITCAP(telepules) AS nev, COUNT(telepules) AS kepdb " +
                 "FROM Kep " +
                 "GROUP BY INITCAP(telepules) " +
                 "ORDER BY nev", telepulesRowMapper);
