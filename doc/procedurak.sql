@@ -277,3 +277,90 @@ EXCEPTION
         UPDATE Ertekeles SET csillagok = p_csillagok WHERE felhasznalo_id = p_felhasznalo_id AND kep_id = p_kep_id;
 END;
 /
+
+
+CREATE OR REPLACE PROCEDURE KATFELTOLTES (
+    p_kat_nev IN Kategoria.nev%TYPE
+) AS
+BEGIN
+    INSERT INTO Kategoria(nev)
+        VALUES(p_kat_nev);
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE KATFRISSITES (
+    p_kat_nev IN Kategoria.nev%TYPE,
+    p_kat_id IN kategoria.id%TYPE
+) AS
+BEGIN
+    UPDATE kategoria
+        SET nev = p_kat_nev
+        WHERE id = p_kat_id;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE KATTORLES (
+    p_kat_id IN kategoria.id%TYPE
+) AS
+BEGIN
+    DELETE
+    FROM
+        kategoria
+    WHERE
+        id = p_kat_id;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE AktivVersenyek (
+    p_datum IN DATE,
+
+    c_versenyek OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN c_versenyek FOR
+        SELECT * FROM Verseny WHERE szavazas_kezdete <= TO_DATE(p_datum) AND szavazas_vege >= TO_DATE(p_datum);
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE BEJEGYZESFELTOLTES (
+    p_cim IN bejegyzes.cim%TYPE,
+    p_tartalom IN bejegyzes.szoveg%TYPE,
+    p_id IN bejegyzes.felhasznalo_id%TYPE
+) AS
+BEGIN
+    INSERT INTO Bejegyzes(cim, szoveg, felhasznalo_id)
+        VALUES(p_cim, p_tartalom, p_id);
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE BEJEGYZESMODOSITAS (
+    p_cim IN bejegyzes.cim%TYPE,
+    p_szoveg IN bejegyzes.szoveg%TYPE,
+    p_id IN bejegyzes.felhasznalo_id%TYPE
+) AS
+BEGIN
+    UPDATE Bejegyzes
+    SET cim = p_cim,
+        szoveg = p_szoveg
+    WHERE
+        id = p_id;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE KOMMENTFELTOLTES (
+    p_szoveg IN komment.szoveg%TYPE,
+    p_kep_id IN komment.kep_id%TYPE,
+    p_felhasznalo_id IN komment.felhasznalo_id%TYPE
+) AS
+BEGIN
+    INSERT INTO Komment(szoveg, kep_id, felhasznalo_id)
+        VALUES(p_szoveg, p_kep_id, p_felhasznalo_id);
+END;
+/

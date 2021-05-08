@@ -88,7 +88,7 @@ CREATE TABLE Ertekeles(
 );
 
 CREATE TABLE Komment(
-    id NUMBER(10) NOT NULL DEFAULT komment_seq.NEXTVAL NOT NULL,
+    id NUMBER(10) DEFAULT komment_seq.NEXTVAL NOT NULL,
     felhasznalo_id NUMBER(10) NOT NULL,
     kep_id NUMBER(10) NOT NULL,
     szoveg VARCHAR2(1000) NOT NULL,
@@ -123,7 +123,8 @@ CREATE TABLE Verseny(
     szoveg VARCHAR2(1000) NOT NULL,
     szavazas_kezdete TIMESTAMP NOT NULL,
     szavazas_vege TIMESTAMP NOT NULL,
-    CONSTRAINT verseny_pk_id PRIMARY KEY(id)
+    CONSTRAINT verseny_pk_id PRIMARY KEY(id),
+    CHECK ( szavazas_kezdete < szavazas_vege )
 );
 
 CREATE TABLE Nevezes(
