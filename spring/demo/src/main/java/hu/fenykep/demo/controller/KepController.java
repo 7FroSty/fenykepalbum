@@ -43,6 +43,12 @@ public class KepController {
     @Autowired
     private KommentRepository kommentRepository;
 
+    @Autowired
+    private KepKulcsszoRepository kepKulcsszoRepository;
+
+    @Autowired
+    private KulcsszoRepository kulcsszoRepository;
+
     @GetMapping("/kep/kepFeltoltes")
     @PreAuthorize("hasRole('FELHASZNALO')")
     public String kep(Model model, Authentication authentication) {
@@ -88,8 +94,11 @@ public class KepController {
                                @RequestParam("telepules") String telepules,
                                @RequestParam("kategoria") int kategoria_id,
                                @RequestParam("felhasznalo_id") int felhasznalo_id,
-                               @RequestParam("verseny") int verseny_id) throws IOException {
+                               @RequestParam("verseny") int verseny_id,
+                               @RequestParam("kulcsszavak") String kulcsszavak) throws IOException {
         System.out.println("kep feltoltese...");
+
+        String[] kulcsszo = kulcsszavak.split(" ");
 
         byte[] fileContent = kep.getBytes();
         String encodedString = Base64.getEncoder().encodeToString(fileContent);
@@ -103,6 +112,13 @@ public class KepController {
         for(Kep temp : kepek){
             if(temp.getCim().equals(cim) && temp.getKategoria_id() == kategoria_id
             && temp.getTelepules().equals(telepules)){
+                for(String kulcs : kulcsszo){
+                    Kulcsszo ksz = kulcsszoRepository.addKulcsszo(kulcs);
+                    System.out.println(ksz.getId());
+                    if(ksz!=null) {
+                        kepKulcsszoRepository.addKulcsszoToKep(temp.getId(), ksz.getId());
+                    }
+                }
                 versenyRepository.kepNevezese(temp.getId(), verseny_id);
                 return "redirect:/kep/kepek";
             }
@@ -155,6 +171,15 @@ public class KepController {
 
             kepRepository.getKepAdatok(kep);
             List<Komment> kommentek = kommentRepository.getKepKommentek(kep);
+
+            String ksz="";
+            List<Kulcsszo> foo = kulcsszoRepository.findKulcsszoByKepId(kep.getId());
+
+            for(Kulcsszo i: foo){
+                ksz+=i.getNev()+", ";
+            }
+
+            model.addAttribute("kulcsszavak", ksz);
             model.addAttribute("kommentek", kommentek);
             model.addAttribute("kep", kep);
         }

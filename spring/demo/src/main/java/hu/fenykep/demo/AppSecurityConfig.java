@@ -57,6 +57,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionAuthenticationErrorUrl("/felhasznalo/bejelentkezes");
 
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+
     }
 
     @Bean

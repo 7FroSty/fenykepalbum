@@ -4,6 +4,15 @@ public class Kulcsszo {
     private int id;
     private String nev;
 
+    public Kulcsszo(){
+
+    }
+
+    public Kulcsszo(int id, String nev) {
+        this.id=id;
+        this.nev=nev;
+    }
+
     public int getId() {
         return id;
     }
