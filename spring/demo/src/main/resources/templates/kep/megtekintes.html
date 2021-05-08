@@ -11,7 +11,7 @@
         <title th:text="${kep != null} ? (${kep.getCim()} + ' - HUmmingbird') : 'Kép - HUmmingbird'"></title>
     </head>
     <style>
-        .sa{
+        .adatok{
             font-variant: normal;
         }
     </style>
@@ -69,12 +69,12 @@
                 <div>Feltöltötte:
                     <a class="link" th:href="@{/felhasznalo/profil/{id}(id=${kep.getFelhasznalo_id()})}" th:text="${kep.getFelhasznalo().getNev()}"></a>
                 </div>
-                <div>Ekkor: <span class="sa" th:text="${kep.getDateAsString()}"></span></div>
-                <div>Település: <span class="sa" th:text="${kep.getTelepules()}"></span></div>
-                <div>Kategória: <span class="sa" th:text="${kep.getKategoria().getNev()}"></span></div>
-                <div>Kulcsszavak: <span class="sa" th:text="${kulcsszavak}"></span></div>
-                <div>Megtekinések száma: <span class="sa" th:text="${megtekintesek}"></span></div>
-                <div>Csillagok átlag: <span class="sa" th:text="${kep.getCsillagok()}"></span></div>
+                <div>Ekkor: <span th:text="${kep.getDateAsString()}"></span></div>
+                <div>Település: <span class="adatok" th:text="${kep.getTelepules()}"></span></div>
+                <div>Kategória: <span class="adatok" th:text="${kep.getKategoria().getNev()}"></span></div>
+                <div>Kulcsszavak: <span class="adatok" th:text="${kulcsszavak}"></span></div>
+                <div>Megtekinések száma: <span th:text="${megtekintesek}"></span></div>
+                <div>Csillagok átlag: <span th:text="${kep.getCsillagok()}"></span></div>
 
 
             <a class="link" th:href="@{/kep/ertekeles/{id}/csillag/{csillag}(id=${kep.getId()}, csillag=0)}">Értékelés törlése</a>

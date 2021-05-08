@@ -10,27 +10,7 @@
         <title>Főoldal - HUmmingbird</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-md justify-content-center">
-            <li class="navbar-brand">
-                <img th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
-            </li>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/index}">Főoldal</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/kep/kepek}">Képek</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/versenyek}">Versenyek</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/felhasznalo/bejelentkezes}">Profil</a>
-                </li>
-            </ul>
-            <li class="navbar-brand">
-                <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
-            </li>
+        <nav th:replace="/fomenu :: fomenu">
         </nav>
         <div class="container">
             <div th:if="${felhasznalo != null} and ${felhasznalo.isAdmin}">
