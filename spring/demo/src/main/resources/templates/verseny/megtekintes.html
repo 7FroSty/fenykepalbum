@@ -1,93 +1,73 @@
 <!DOCTYPE html>
 <html lang="hu" xmlns:th="http://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/kepmenu.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/kepek.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/bejegyzes.css}">
-    <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
-    <title>Nevezett képek - HUmmingbird</title>
-</head>
-<style>
-    h2{
-        margin-bottom: 0;
-    }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+              integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/kepmenu.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/kepek.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/bejegyzes.css}">
+        <link rel="icon" sizes="24x24" th:href="@{/HUmmingbird.png}">
+        <title>Nevezett képek - HUmmingbird</title>
+    </head>
+    <style>
+        h2{
+            margin-bottom: 0;
+        }
 
-    article{
-        width: 100%;
-    }
+        article{
+            width: 100%;
+        }
 
-    .article-row{
-        padding-left: 35px;
-        padding-right: 35px;
-    }
+        .article-row{
+            padding-left: 35px;
+            padding-right: 35px;
+        }
 
-    .szavazas{
-        font-weight: 600;
-        color: #543F65;
-        font-size: 1vw;
-        overflow-wrap: break-word;
-    }
+        .szavazas{
+            font-weight: 600;
+            color: #543F65;
+            font-size: 1vw;
+            overflow-wrap: break-word;
+        }
 
-    .szavazas:hover{
-        text-decoration: none;
-        color: #E50B7B;
-    }
-</style>
-<body>
-<nav class="navbar navbar-expand-md justify-content-center">
-    <li class="navbar-brand">
-        <img th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
-    </li>
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/index}">Főoldal</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/kep/kepek}">Képek</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/versenyek}">Versenyek</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/felhasznalo/bejelentkezes}">Profil</a>
-        </li>
-    </ul>
-    <li class="navbar-brand">
-        <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
-    </li>
-</nav>
-<div class="container-fluid">
-    <div class="row article-row">
-        <article>
-            <h2 th:text="${verseny.getCim()}"></h2>
-            <span th:if="${verseny.isAktiv()}">Aktív</span>
-            <span th:if="!${verseny.isAktiv()}">Nem aktív</span>
-            <br>
-            <span><small th:text="'Kezdete: ' + ${verseny.getSzavazas_kezdete()}"></small></span>
-            <br>
-            <span><small th:text="'Vége: ' + ${verseny.getSzavazas_vege()}"></small></span>
-            <hr>
-            <p style="font-variant: normal;" th:text="${verseny.getSzoveg()}"></p>
-        </article>
-    </div>
-    <div class="row">
-        <div class="col-sm-5cols my-2" th:each="nevezes : ${nevezesek}">
-            <div class="thumbnail">
-                <a th:href="@{/kep/megtekintes/{id}(id=${nevezes.getKep().getId()})}">
-                    <img th:src="'data:image/png;base64,' + ${nevezes.getKep().getTartalom()}" class="img-fluid">
-                </a>
-                <span class="cim" th:utext="${nevezes.getKep().getCim()} + '<br />' + ' ('+${nevezes.getSzavazat_db()}+' szavazat)'"></span>
-                <br>
-                <a class="szavazas" th:if="${szavazott.contains(nevezes)}" th:href="@{/versenyek/szavazasTorles/{n_id}(n_id=${nevezes.getId()})}">Szavazás törlése</a>
-                <a class="szavazas" th:if="!${szavazott.contains(nevezes)}" th:href="@{/versenyek/szavazas/{n_id}(n_id=${nevezes.getId()})}">Szavazás</a>
+        .szavazas:hover{
+            text-decoration: none;
+            color: #E50B7B;
+        }
+    </style>
+    <body>
+        <nav th:replace="/fomenu :: fomenu">
+        </nav>
+        <div class="container-fluid">
+            <div class="row article-row">
+                <article>
+                    <h2 th:text="${verseny.getCim()}"></h2>
+                    <span th:if="${verseny.isAktiv()}">Aktív</span>
+                    <span th:if="!${verseny.isAktiv()}">Nem aktív</span>
+                    <br>
+                    <span><small th:text="'Kezdete: ' + ${verseny.getSzavazas_kezdete()}"></small></span>
+                    <br>
+                    <span><small th:text="'Vége: ' + ${verseny.getSzavazas_vege()}"></small></span>
+                    <hr>
+                    <p style="font-variant: normal;" th:text="${verseny.getSzoveg()}"></p>
+                </article>
+            </div>
+            <div class="row">
+                <div class="col-sm-5cols my-2" th:each="nevezes : ${nevezesek}">
+                    <div class="thumbnail">
+                        <a th:target="_blank" th:href="@{/kep/megtekintes/{id}(id=${nevezes.getKep().getId()})}">
+                            <img th:src="'data:image/png;base64,' + ${nevezes.getKep().getTartalom()}" class="img-fluid">
+                        </a>
+                        <span class="cim" th:utext="${nevezes.getKep().getCim()} + '<br />' + ' ('+${nevezes.getSzavazat_db()}+' szavazat)'"></span>
+                        <br>
+                        <a class="szavazas" th:if="${szavazott.contains(nevezes)}" th:href="@{/versenyek/szavazasTorles/{n_id}(n_id=${nevezes.getId()})}">Szavazás törlése</a>
+                        <a class="szavazas" th:if="!${szavazott.contains(nevezes)}" th:href="@{/versenyek/szavazas/{n_id}(n_id=${nevezes.getId()})}">Szavazás</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-</body>
+    </body>
 </html>

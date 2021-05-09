@@ -11,52 +11,32 @@
         <title>Települések - HUmmingbird</title>
     </head>
     <body>
-      <nav class="navbar navbar-expand-sm justify-content-center">
-          <li class="navbar-brand">
-              <img th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
-          </li>
-          <ul class="navbar-nav">
-              <li class="nav-item">
-                  <a class="nav-link" th:href="@{/index}">Főoldal</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" th:href="@{/kep/kepek}">Képek</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" th:href="@{/versenyek}">Versenyek</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" th:href="@{/felhasznalo/bejelentkezes}">Profil</a>
-              </li>
-          </ul>
-          <li class="navbar-brand">
-              <img id="logoflipped" th:src="@{/HUmmingbird.png}" alt="HUmmingbird">
-          </li>
-      </nav>
-      <nav class="navbar navbar-expand-xl justify-content-center kepnavbar">
-          <ul class="navbar-nav kepnav">
-              <li class="nav-item">
-                  <a class="nav-link" th:href="@{/kep/kepFeltoltes}">Képfeltöltés</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" th:href="@{/kep/kepek}">Összes kép</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" th:href="@{/kep/kategoriak}">Kategóriák</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" th:href="@{/kep/telepulesek}">Települések</a>
-              </li>
-          </ul>
-      </nav>
-      <div class="container">
-          <div class="row row-cols-5">
-              <div class="col" th:each="telepules : ${telepulesek}">
-                  <a class="link" th:href="@{/kep/kepek/telepules/{nev}(nev=${telepules.getNev()})}"
-                     th:utext="${telepules.getNev()} + '<br />' + ' ('+${telepules.getKepdb()}+' kép)'">
-                  </a>
-              </div>
-          </div>
-      </div>
+        <nav th:replace="/fomenu :: fomenu">
+        </nav>
+        <nav class="navbar navbar-expand-xl justify-content-center kepnavbar">
+            <ul class="navbar-nav kepnav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/kep/kepFeltoltes}">Képfeltöltés</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/kep/kepek}">Összes kép</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/kep/kategoriak}">Kategóriák</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/kep/telepulesek}">Települések</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="row row-cols-5">
+                <div class="col" th:each="telepules : ${telepulesek}">
+                    <a class="link" th:href="@{/kep/kepek/telepules/{nev}(nev=${telepules.getNev()})}"
+                       th:utext="${telepules.getNev()} + '<br />' + ' ('+${telepules.getKepdb()}+' kép)'">
+                    </a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

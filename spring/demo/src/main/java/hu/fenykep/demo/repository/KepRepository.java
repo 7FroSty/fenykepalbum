@@ -79,7 +79,7 @@ public class KepRepository {
     public List<Kep> findAll(int page) {
         return jdbcTemplate.query("SELECT * FROM Kep ORDER BY idopont DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY",
                 new Object[]{
-                        (page - 1) * 10, 10
+                        (page - 1) * 15, 15
                 }, new int[]{
                         OracleTypes.NUMBER, OracleTypes.NUMBER
                 }, kepRowMapper);
