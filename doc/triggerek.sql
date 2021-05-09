@@ -17,3 +17,13 @@ BEGIN
     RAISE_APPLICATION_ERROR(-20000, 'Hibás érték');
 END;
 /
+
+
+CREATE OR REPLACE TRIGGER KategoriaFeltoltesTrigger
+    BEFORE INSERT OR UPDATE
+    ON Kategoria
+    FOR EACH ROW
+BEGIN
+    :NEW.nev := INITCAP(:NEW.nev);
+END;
+/

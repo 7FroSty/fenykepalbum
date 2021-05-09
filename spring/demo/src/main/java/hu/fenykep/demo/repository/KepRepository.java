@@ -230,10 +230,10 @@ public class KepRepository {
     }
 
 
-    public List<Kep> executeKepKeresesTelepules(String kulcsszo) {
-        return executeKepKeresesTelepules(kulcsszo, true);
+    public List<Kep> executeKepKeresesTelepules(String telepules) {
+        return executeKepKeresesTelepules(telepules, true);
     }
-    public List<Kep> executeKepKeresesTelepules(String kulcsszo, boolean legujabbElol) {
+    public List<Kep> executeKepKeresesTelepules(String telepules, boolean legujabbElol) {
         SimpleJdbcCall jdbcCall = getJdbcCallCursorKep().withProcedureName("KepKeresesTelepules")
                 .declareParameters(
                         new SqlParameter("p_telepules", OracleTypes.VARCHAR),
@@ -242,11 +242,11 @@ public class KepRepository {
                 );
 
         // Kis tolarencia
-        List<Kep> kepek = (List<Kep>) jdbcCall.execute(kulcsszo, legujabbElol ? 0 : 1, 0).get("c_kepek");
+        List<Kep> kepek = (List<Kep>) jdbcCall.execute(telepules, legujabbElol ? 0 : 1, 0).get("c_kepek");
 
         if (kepek.size() == 0) {
             // Nagy tolarencia
-            kepek = (List<Kep>) jdbcCall.execute(kulcsszo, legujabbElol ? 0 : 1, 1).get("c_kepek");
+            kepek = (List<Kep>) jdbcCall.execute(telepules, legujabbElol ? 0 : 1, 1).get("c_kepek");
         }
         return kepek;
     }

@@ -211,14 +211,16 @@ BEGIN
             SELECT Kep.* FROM Kep
                 LEFT JOIN KepKulcsszo on Kep.id = KepKulcsszo.kep_id
                 LEFT JOIN Kulcsszo on Kulcsszo.id = KepKulcsszo.kulcsszo_id
-            WHERE HASONLO(Kulcsszo.nev, p_kulcsszo, p_tolarencia) = 1
+            WHERE Kulcsszo.nev IS NOT NULL AND
+                HASONLO(Kulcsszo.nev, p_kulcsszo, p_tolarencia) = 1
             ORDER BY idopont;
     ELSE
         OPEN c_kepek FOR
             SELECT Kep.* FROM Kep
                 LEFT JOIN KepKulcsszo on Kep.id = KepKulcsszo.kep_id
                 LEFT JOIN Kulcsszo on Kulcsszo.id = KepKulcsszo.kulcsszo_id
-            WHERE HASONLO(Kulcsszo.nev, p_kulcsszo, p_tolarencia) = 1
+            WHERE Kulcsszo.nev IS NOT NULL AND
+                HASONLO(Kulcsszo.nev, p_kulcsszo, p_tolarencia) = 1
             ORDER BY idopont DESC;
     END IF;
 END;
